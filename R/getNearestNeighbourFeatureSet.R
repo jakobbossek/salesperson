@@ -1,7 +1,6 @@
 #' Feature: Statistics of Nearest-Neighbour distances.
 #'
-#' @param x [\code{Network}]\cr
-#'   Network.
+#' @template arg_network
 #' @return [\code{list}]
 #' @export
 getNearestNeighbourFeatureSet = function(x) {

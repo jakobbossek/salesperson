@@ -1,8 +1,7 @@
 #' Feature: fraction of points near bounding boxplot.
 #'
 #FIXME: netgen needs a documentation for 'Network' class objects
-#' @param x [\code{Network}]\cr
-#'   Network.
+#' @template arg_network
 #' @param distance_fraction [\code{numeric}]\cr
 #'   Fraction of distance between min and max coordinates of each dimension
 #'   which should points be allowed lie inbetween.
