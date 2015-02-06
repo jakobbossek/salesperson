@@ -7,11 +7,12 @@ Date: 2015-02-05
 Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role =
     c("aut", "cre")))
 Maintainer: Jakob Bossek <j.bossek@gmail.com>
-URL: https://github.com/jakobbossek/salesperson
-BugReports: https://github.com/jakobbossek/salesperson/issues
+URL: https://github.com/wwu-wi/salesperson/
+BugReports: https://github.com/wwu-wi/salesperson/issues
 License: BSD_3_clause + file LICENSE
 Depends:
-    BBmisc (>= 1.6)
+    BBmisc (>= 1.6),
+    netgen (>= 1.0)
 Imports:
     checkmate (>= 1.5.1)
 Suggests:
