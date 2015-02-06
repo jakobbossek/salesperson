@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+*.Rcheck
+*.Rproj
+todo.md
+test_specific.R

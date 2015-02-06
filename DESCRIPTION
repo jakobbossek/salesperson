@@ -1,0 +1,18 @@
+Package: salesperson
+Type: Package
+Title: Comprehensive Collection of Functions for Solving and Analyzing the Travelling Salesperson Problem.
+Description:
+Version: 1.0
+Date: 2015-02-05
+Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role =
+    c("aut", "cre")))
+Maintainer: Jakob Bossek <j.bossek@gmail.com>
+URL: https://github.com/jakobbossek/salesperson
+BugReports: https://github.com/jakobbossek/salesperson/issues
+License: BSD_3_clause + file LICENSE
+Depends:
+    BBmisc (>= 1.6)
+Imports:
+    checkmate (>= 1.5.1)
+Suggests:
+    testthat
