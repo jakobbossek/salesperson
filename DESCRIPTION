@@ -1,7 +1,7 @@
 Package: salesperson
 Type: Package
-Title: Comprehensive Collection of Functions for Solving and Analyzing the Travelling Salesperson Problem.
-Description:
+Title: Solving and Analyzing the Travelling Salesperson Problem.
+Description: Comprehensive collection of functions for solving and analizing the symmetric Travelling Salesperson Problem (TSP).
 Version: 1.0
 Date: 2015-02-05
 Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role =
@@ -14,6 +14,8 @@ Depends:
     BBmisc (>= 1.6),
     netgen (>= 1.0)
 Imports:
-    checkmate (>= 1.5.1)
+    checkmate (>= 1.5.1),
+    Rcpp
 Suggests:
     testthat
+LinkingTo: Rcpp
