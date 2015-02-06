@@ -22,6 +22,3 @@ install_github("jakobbossek/salesperson")
 ## Contact
 
 Please address questions and missing features about the **salesperson package** to the maintainer Jakob Bossek <j.bossek@gmail.com>. Found some nasty bugs? Please use the [issue tracker](https://github.com/jbossek/salesperson/issues) for this. Pay attention to explain the problem as good as possible. At its best you provide an example, so I can reproduce your problem.
-
-
-
