@@ -40,9 +40,6 @@ NumericVector getAnglesToNearestNeighborsCPP(NumericMatrix coords, NumericMatrix
     for (int i = 0; i < n_nodes; ++i) {
         // get two nearest neighbor nodes as vector of integer values
         std::vector<int> nns = getTwoNearestNeighborNodes(i, dist_mat);
-        for (int i = 0; i < nns.size(); ++i) {
-            Rcout << "Nearest Neighbour: " << nns[i] << std::endl;
-        }
         int nn1 = nns[0];
         int nn2 = nns[1];
 

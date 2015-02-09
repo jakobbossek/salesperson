@@ -6,8 +6,7 @@
 #FIXME: C++ implementation throws seg fault error occasionally
 getDistanceFeatureSet = function(x) {
     assertClass(x, "Network")
-    #FIXME: we need to save dist in Network object
-    dist.obj = dist(x$coordinates)
+    dist.obj = x$distance.matrix
     dist.mat = as.matrix(dist.obj)
     dist.num = as.numeric(dist.obj)
     n.cities = nrow(dist.mat)
