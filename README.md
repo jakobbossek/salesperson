@@ -2,7 +2,7 @@
 
 ## Descritption
 
-Coming soon
+Coming soon ...
 
 ## Installation
 
@@ -10,11 +10,14 @@ Currently there is only this developement version of **salesperson**.
 To install the current developement version of the package, install the [devtools package](http://cran.r-project.org/web/packages/devtools/index.html) by Hadley Wickham, load it and type the following line to a R session:
 
 ```splus
-install_github("wwu-wi/salesperson")
+install_github("wwu-wi/salesperson", auth_token = <PAT>)
 ```
+
+where <PAT> is your *personal access token*.
 
 ## Quickstart
 
+Coming soon ...
 
 ## Contact
 
