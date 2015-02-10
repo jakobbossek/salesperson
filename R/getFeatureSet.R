@@ -32,6 +32,19 @@ getFeatureSet = function(x, black.list = character(0), include.times = FALSE) {
     return(feats)
 }
 
+#FIXME: this needs a better name
+#FIXME: x is a rather ugly name. Use instance.set or something similar?
+#FIXME: how to best store times? As an numeric attribute? Maybe add logical parameter
+# times.are.features which decides whether times are stored as features or separately?
+getFeatureSetMultiple = function(x, black.list = c(), include.times = FALSE) {
+    assertList(x, types = "Network", any.missing = FALSE, min.len = 1L)
+    feats = lapply(x, function(instance) {
+        getFeatureSet(instance, black.list, include.times)
+    })
+    feats = as.data.frame(do.call(rbind, feats))
+    return(feats)
+}
+
 #' Available feature (sub)sets.
 #'
 #' May be used as black list for \code{getFeatureSet}.
