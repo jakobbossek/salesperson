@@ -1,7 +1,7 @@
 #' Feature: statistics of the minimum spanning tree edges.
 #'
 #' @template arg_network
-#' @param epsilon [\numeric(1)]\cr
+#' @param epsilon [\code{numeric(1)}]\cr
 #'   Probability for reachability computation in dbscan clustering method.
 #'   See \code{\link[tspmeta]{feature_cluster}}. Default is 0.01.
 #' @return [\code{list}]

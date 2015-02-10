@@ -10,7 +10,7 @@ getClusterFeatureSet(x, epsilon = 0.01)
 \item{x}{[\code{Network}]\cr
 Network.}
 
-\item{epsilon}{[\numeric(1)]\cr
+\item{epsilon}{[\code{numeric(1)}]\cr
 Probability for reachability computation in dbscan clustering method.
 See \code{\link[tspmeta]{feature_cluster}}. Default is 0.01.}
 }

@@ -12,7 +12,8 @@ BugReports: https://github.com/wwu-wi/salesperson/issues
 License: BSD_3_clause + file LICENSE
 Depends:
     BBmisc (>= 1.6),
-    netgen (>= 1.0)
+    netgen (>= 1.0),
+    tspmeta (>= 1.1)
 Imports:
     checkmate (>= 1.5.1),
     Rcpp

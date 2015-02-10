@@ -38,5 +38,5 @@ getFeatureSet = function(x, black.list = character(0), include.times = FALSE) {
 #' @export
 getAvailableFeatureSets = function() {
     c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
-      "Distance", "MST", "NearestNeighbour")
+      "Distance", "Modes", "MST", "NearestNeighbour")
 }
