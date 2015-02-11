@@ -10,5 +10,7 @@
 getBoundingBoxFeatureSet = function(x, distance_fraction = 0.1) {
     assertClass(x, "Network")
     assertNumber(distance_fraction, lower = 0.00001, upper = 0.4999, na.ok = FALSE)
-    return(getFractionOfPointsNearBoundingBoxCPP(x$coordinates, distance_fraction))
+    measureTime(expression({
+        getFractionOfPointsNearBoundingBoxCPP(x$coordinates, distance_fraction)
+    }))
 }

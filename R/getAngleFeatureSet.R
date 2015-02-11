@@ -5,6 +5,8 @@
 #' @export
 getAngleFeatureSet = function(x) {
     assertClass(x, "Network")
-    angles = getAnglesToNearestNeighborsCPP(x$coordinates, as.matrix(x$distance.matrix))
-    return(computeStatisticsOnNumericVector(angles, "angle"))
+    measureTime(expression({
+        angles = getAnglesToNearestNeighborsCPP(x$coordinates, as.matrix(x$distance.matrix))
+        computeStatisticsOnNumericVector(angles, "angle")
+    }))
 }

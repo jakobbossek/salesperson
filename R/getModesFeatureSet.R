@@ -4,7 +4,10 @@
 #' @return [\code{list}]
 #' @export
 getModesFeatureSet = function(x) {
+    assertClass(x, "Network")
     # here we delegate to tspmeta
-    tsp.instance = tspmeta::tsp_instance(x$coordinates)
-    tspmeta::feature_modes(tsp.instance)
+    measureTime(expression({
+        tsp.instance = tspmeta::tsp_instance(x$coordinates, dists = x$distance.matrix)
+        tspmeta::feature_modes(tsp.instance)
+    }))
 }

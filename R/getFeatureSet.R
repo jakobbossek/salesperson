@@ -4,16 +4,16 @@
 #' @param black.list [\code{character}]\cr
 #'   Optional black list of feature sets which we do not want to compute. Default
 #'   is the empty character vector.
-#' @param include.times [\code{logical(1)}]\cr
+#' @param include.costs [\code{logical(1)}]\cr
 #'   Include the times needed to compute the specific feature sets as additional
 #'   features? Default is \code{FALSE}. Time is measured via \code{proc.time}.
 #' @return [\code{list}]
 #'   Named list of features.
 #' @export
-getFeatureSet = function(x, black.list = character(0), include.times = FALSE) {
+getFeatureSet = function(x, black.list = character(0), include.costs = FALSE) {
     assertClass(x, "Network")
     assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
-    assertFlag(include.times)
+    assertFlag(include.costs)
 
     feature.set.names = getAvailableFeatureSets()
     feature.set.names = setdiff(feature.set.names, black.list)
@@ -26,7 +26,15 @@ getFeatureSet = function(x, black.list = character(0), include.times = FALSE) {
     # a feature set multiple times with different parameters.
     feats = lapply(feature.set.names, function(feature.set.name) {
         feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
-        do.call(feature.fun, list(x = x))
+        feature.set = do.call(feature.fun, list(x = x))
+        # append computational costs to compute feature set as another feature
+        if (include.costs) {
+            costs = list()
+            costs[[paste(feature.set.name, "Costs", sep = "")]] = attr(feature.set, "time.elapsed")
+            feature.set = c(feature.set, costs)
+        }
+        attr(feature.set, "time.elapsed") = NULL
+        feature.set
     })
     feats = do.call(c, feats)
     return(feats)
@@ -36,10 +44,10 @@ getFeatureSet = function(x, black.list = character(0), include.times = FALSE) {
 #FIXME: x is a rather ugly name. Use instance.set or something similar?
 #FIXME: how to best store times? As an numeric attribute? Maybe add logical parameter
 # times.are.features which decides whether times are stored as features or separately?
-getFeatureSetMultiple = function(x, black.list = c(), include.times = FALSE) {
+getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
     assertList(x, types = "Network", any.missing = FALSE, min.len = 1L)
     feats = lapply(x, function(instance) {
-        getFeatureSet(instance, black.list, include.times)
+        getFeatureSet(instance, black.list, include.costs)
     })
     feats = as.data.frame(do.call(rbind, feats))
     return(feats)

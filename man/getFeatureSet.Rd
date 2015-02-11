@@ -4,7 +4,7 @@
 \alias{getFeatureSet}
 \title{Feature: all features.}
 \usage{
-getFeatureSet(x, black.list = character(0), include.times = FALSE)
+getFeatureSet(x, black.list = character(0), include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -14,7 +14,7 @@ Network.}
 Optional black list of feature sets which we do not want to compute. Default
 is the empty character vector.}
 
-\item{include.times}{[\code{logical(1)}]\cr
+\item{include.costs}{[\code{logical(1)}]\cr
 Include the times needed to compute the specific feature sets as additional
 features? Default is \code{FALSE}. Time is measured via \code{proc.time}.}
 }
