@@ -11,7 +11,8 @@
 measureTime = function(expr, envir = parent.frame()) {
     start = proc.time()
     feats = eval(expr, envir = envir)
-    end = proc.time() - start
-    attr(feats, "time_elapsed") = end[3]
+    time.elapsed = proc.time() - start
+    names(time.elapsed) = NULL
+    attr(feats, "time.elapsed") = time.elapsed[3]
     return(feats)
 }
