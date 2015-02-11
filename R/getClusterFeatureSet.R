@@ -9,8 +9,8 @@
 getClusterFeatureSet = function(x, epsilon = 0.01) {
     assertNumber(epsilon, lower = 0.001, upper = 1, na.ok = FALSE)
     # here we delegate to tspmeta
+    tsp.instance = tspmeta::tsp_instance(x$coordinates, dists = x$distance.matrix)
     measureTime(expression({
-        tsp.instance = tspmeta::tsp_instance(x$coordinates, dists = x$distance.matrix)
         tspmeta::feature_cluster(tsp.instance, epsilon = epsilon)
     }))
 }

@@ -7,7 +7,7 @@ getNearestNeighbourFeatureSet = function(x) {
     assertClass(x, "Network")
     #FIXME: dists need to be saved in netgen
     measureTime(expression({
-        nn.dists = getNearestNeighbourDistancesCPP(as.matrix(dist(x$coordinates)))
+        nn.dists = getNearestNeighbourDistancesCPP(as.matrix(x$distance.matrix))
         computeStatisticsOnNumericVector(nn.dists, "nearest_neighbour")
     }))
 }
