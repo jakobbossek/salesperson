@@ -27,14 +27,6 @@ std::vector<int> getTwoNearestNeighborNodes(const unsigned int node_id, const Nu
     return nn_nodes;
 }
 
-double getNormOfNumericVector(NumericVector x, NumericVector y) {
-    double sqsum = 0.0;
-    for (int i = 0; i < x.size(); ++i) {
-        sqsum += pow((y[i] - x[i]), 2);
-    }
-    return sqrt(sqsum);
-}
-
 double computeScalarProduct(std::vector<double> x, std::vector<double> y) {
     double sp = 0.0;
     for (int i = 0; i < x.size(); ++i) {
@@ -56,17 +48,15 @@ double computeShortestAngleBetweenPoints(NumericVector node, NumericVector nn1, 
     std::vector<double> r2(2);
 
     // first we get the two direction vectors
-    double norm_nn1 = getNormOfNumericVector(node, nn1);
-    double norm_nn2 = getNormOfNumericVector(node, nn2);
-    r1[0] = (node[0] - nn1[0]) / norm_nn1;
-    r1[1] = (node[1] - nn1[1]) / norm_nn2;
-    r2[0] = (node[0] - nn2[0]) / norm_nn1;
-    r2[0] = (node[1] - nn2[1]) / norm_nn2;
+    r1[0] = (nn1[0] - node[0]);
+    r1[1] = (nn1[1] - node[1]);
+    r2[0] = (nn2[0] - node[0]);
+    r2[1] = (nn2[1] - node[1]);
 
     // compute scalar product
     double sp = computeScalarProduct(r1, r2);
 
-    // compute directiin vector lengths
+    // compute direction vector lengths //
     double length_r1 = getNormOfVector(r1);
     double length_r2 = getNormOfVector(r2);
 
