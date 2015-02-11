@@ -27,9 +27,60 @@ std::vector<int> getTwoNearestNeighborNodes(const unsigned int node_id, const Nu
     return nn_nodes;
 }
 
+double getNormOfNumericVector(NumericVector x, NumericVector y) {
+    double sqsum = 0.0;
+    for (int i = 0; i < x.size(); ++i) {
+        sqsum += pow((y[i] - x[i]), 2);
+    }
+    return sqrt(sqsum);
+}
+
+double computeScalarProduct(std::vector<double> x, std::vector<double> y) {
+    double sp = 0.0;
+    for (int i = 0; i < x.size(); ++i) {
+        sp += x[i] * y[i];
+    }
+    return sp;
+}
+
+double getNormOfVector(std::vector<double> x) {
+    double sqsum = 0.0;
+    for (int i = 0; i < x.size(); ++i) {
+        sqsum += pow(x[i], 2);
+    }
+    return sqrt(sqsum);
+}
+
 double computeShortestAngleBetweenPoints(NumericVector node, NumericVector nn1, NumericVector nn2) {
-    // FIXME: add implementation
-    return 1.1;
+    std::vector<double> r1(2);
+    std::vector<double> r2(2);
+
+    // first we get the two direction vectors
+    double norm_nn1 = getNormOfNumericVector(node, nn1);
+    double norm_nn2 = getNormOfNumericVector(node, nn2);
+    r1[0] = (node[0] - nn1[0]) / norm_nn1;
+    r1[1] = (node[1] - nn1[1]) / norm_nn2;
+    r2[0] = (node[0] - nn2[0]) / norm_nn1;
+    r2[0] = (node[1] - nn2[1]) / norm_nn2;
+
+    // compute scalar product
+    double sp = computeScalarProduct(r1, r2);
+
+    // compute directiin vector lengths
+    double length_r1 = getNormOfVector(r1);
+    double length_r2 = getNormOfVector(r2);
+
+    double angle = sp / (length_r1 * length_r2);
+
+    // finally compute angle
+    // check for special cases (orthogonality, ...)
+    if (angle >= 1.0) {
+        return 0.0;
+    }
+    if (angle <= -1.0) {
+        return 3.141592;
+    }
+    return acos(angle);
 }
 
 // [[Rcpp::export]]
@@ -43,8 +94,6 @@ NumericVector getAnglesToNearestNeighborsCPP(NumericMatrix coords, NumericMatrix
         int nn1 = nns[0];
         int nn2 = nns[1];
 
-        // compute angle between them
-        // FIXME: Rcpp syntactic sugar: get row of matrix. What type is it? NumericVector?
         angles[i] = computeShortestAngleBetweenPoints(coords(i, _), coords(nn1, _), coords(nn2, _));
     }
     return angles;
