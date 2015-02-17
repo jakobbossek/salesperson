@@ -62,7 +62,7 @@ List getDistanceFeatureSetCPP(const NumericMatrix d, const NumericVector dd) {
 
     // get unique dists
     std::set<double> unique_dists = getUniqueDistances(dd);
-    fraction_of_distinct_distances = unique_dists.size() / dd_length;
+    fraction_of_distinct_distances = (double)unique_dists.size() / (double)dd_length;
 
     // get distances shorter than mean distance
     fraction_shorter_mean_distance = 0;
