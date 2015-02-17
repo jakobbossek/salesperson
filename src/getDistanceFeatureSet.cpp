@@ -58,7 +58,7 @@ List getDistanceFeatureSetCPP(const NumericMatrix d, const NumericVector dd) {
     // get shortest lengthes
     NumericVector ddd = clone(dd);
     std::partial_sort(ddd.begin(), ddd.begin() + n_cities, ddd.end());
-    sum_of_lowest_edge_values = std::accumulate(ddd.begin(), ddd.end() + n_cities, 0.0);
+    sum_of_lowest_edge_values = std::accumulate(ddd.begin(), ddd.begin() + n_cities, 0.0);
 
     // get unique dists
     std::set<double> unique_dists = getUniqueDistances(dd);
