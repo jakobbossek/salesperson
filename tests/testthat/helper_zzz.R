@@ -10,12 +10,12 @@ set.seed(1)
 #
 #
 #
-# o
-# (0,0)
+# o       o
+# (0,0)   (1,0)
 # @return [Network]
 generateSimpleTestNetwork = function() {
     x = list()
-    x$coordinates = matrix(c(0, 0, 1, 1, 0, 1), ncol = 2, byrow = TRUE)
+    x$coordinates = matrix(c(0, 0, 1, 1, 0, 1, 1, 0), ncol = 2, byrow = TRUE)
     x$distance.matrix = dist(x$coordinates)
     class(x) = "Network"
     return(x)
