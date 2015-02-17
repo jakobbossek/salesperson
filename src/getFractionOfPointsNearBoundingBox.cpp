@@ -23,12 +23,12 @@ std::vector<double> computeRangeForDimension(const NumericMatrix mat, int dim) {
 }
 
 // [[Rcpp::export]]
-List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distance_fraction) {
+List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distanceFraction) {
     std::vector<double> range_x = computeRangeForDimension(coords, 0);
     std::vector<double> range_y = computeRangeForDimension(coords, 1);
 
-    double distance_x = (range_x[1] - range_x[0]) * distance_fraction;
-    double distance_y = (range_y[1] - range_y[0]) * distance_fraction;
+    double distance_x = (range_x[1] - range_x[0]) * distanceFraction;
+    double distance_y = (range_y[1] - range_y[0]) * distanceFraction;
 
     double x_min = range_x[0] + distance_x;
     double y_min = range_y[0] + distance_y;
@@ -44,7 +44,7 @@ List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distance
         }
     }
 
-    std::string feature_name = "fraction_of_nodes_outside_near_bounding_box_" + std::to_string(distance_fraction);
+    std::string feature_name = "fraction_of_nodes_outside_near_bounding_box_" + std::to_string(distanceFraction);
 
     return List::create(
         _[feature_name] = NumericVector::create(n_out_of_bounds / n_cities)
