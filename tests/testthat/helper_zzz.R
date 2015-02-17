@@ -29,8 +29,6 @@ generateSimpleTestNetwork = function() {
 #   Name of the feature set (for debugging).
 expect_feature_list = function(x, feature.set) {
     expect_true(is.list(x))
-    expect_true(!is.null(attr(x, "time.elapsed")))
-    expect_true(is.numeric(attr(x, "time.elapsed")))
     for (i in 1:length(x)) {
         expect_true(is.numeric(x[[i]]),
             info = sprintf("Feature '%s' of feature set '%s' is NOT numeric.",
