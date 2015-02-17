@@ -4,7 +4,7 @@
 \alias{getClusterFeatureSet}
 \title{Feature: statistics of the minimum spanning tree edges.}
 \usage{
-getClusterFeatureSet(x, epsilon = 0.01)
+getClusterFeatureSet(x, epsilon = 0.01, include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -13,6 +13,9 @@ Network.}
 \item{epsilon}{[\code{numeric(1)}]\cr
 Probability for reachability computation in dbscan clustering method.
 See \code{\link[tspmeta]{feature_cluster}}. Default is 0.01.}
+
+\item{include.costs}{[\code{logical(1)}]\cr
+Should costs be included as an additional feature? Default is \code{FALSE}.}
 }
 \value{
 [\code{list}]

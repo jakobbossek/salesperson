@@ -7,12 +7,19 @@
 #' @param include.costs [\code{logical(1)}]\cr
 #'   Include the times needed to compute the specific feature sets as additional
 #'   features? Default is \code{FALSE}. Time is measured via \code{proc.time}.
+#' @param feature.fun.args [\code{list}]\cr
+#'   List of lists. Each component of the list corresponds to one of the feature sets
+#'   and the subordered list contains vectors of values for each parameter. Name
+#'   the sublists according to \link{getAvailableFeatureSets}.
 #' @return [\code{list}]
 #'   Named list of features.
 #' @export
-getFeatureSet = function(x, black.list = character(0), include.costs = FALSE) {
+getFeatureSet = function(x, black.list = character(0),
+    include.costs = FALSE,
+    feature.fun.args = getDefaultFeatureFunArgs()) {
     assertClass(x, "Network")
     assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
+    assertList(feature.fun.args, types = "list", any.missing = FALSE)
     assertFlag(include.costs)
 
     feature.set.names = getAvailableFeatureSets()
@@ -20,21 +27,19 @@ getFeatureSet = function(x, black.list = character(0), include.costs = FALSE) {
 
     catf("Using the following feature (sub)sets: %s", collapse(feature.set.names, sep = ", "))
 
-    # now call the funs
-    #FIXME: here we currently do not pass any arguments to the separate feature funs.
-    # I.e., 'epsilon' for getClusterFeatureSet. Moreover, it is not possible to compute
-    # a feature set multiple times with different parameters.
     feats = lapply(feature.set.names, function(feature.set.name) {
         feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
-        feature.set = do.call(feature.fun, list(x = x))
-        # append computational costs to compute feature set as another feature
-        if (include.costs) {
-            costs = list()
-            costs[[paste(feature.set.name, "Costs", sep = "")]] = attr(feature.set, "time.elapsed")
-            feature.set = c(feature.set, costs)
+        if (is.null(feature.fun.args[[feature.set.name]])) {
+            do.call(feature.fun, list(x = x, include.costs = include.costs))
+        } else {
+            feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
+                param.list = list(x = x, include.costs = include.costs)
+                param.list = c(param.list, param) 
+                print(param.list)
+                do.call(feature.fun, param.list)
+            })
+            do.call(c, feats2)
         }
-        attr(feature.set, "time.elapsed") = NULL
-        feature.set
     })
     feats = do.call(c, feats)
     return(feats)
@@ -60,4 +65,15 @@ getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
 getAvailableFeatureSets = function() {
     c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
       "Distance", "Modes", "MST", "NearestNeighbour")
+}
+
+#' Returns list of parameters defaults for feature computation.
+#'
+#' @return [\code{list}]
+#' @export
+getDefaultFeatureFunArgs = function() {
+    list(
+        "BoundingBox" = list("distance_fraction" = c(0.1, 0.2, 0.3)),
+        "Cluster" = list("epsilon" = c(0.01, 0.05, 0.1))
+    )
 }

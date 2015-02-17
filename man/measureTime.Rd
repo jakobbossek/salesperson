@@ -4,11 +4,19 @@
 \alias{measureTime}
 \title{Helper for measuring time.}
 \usage{
-measureTime(expr, envir = parent.frame())
+measureTime(expr, feature.set.name, append.as.feature = FALSE,
+  envir = parent.frame())
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr
 Expression the time should be measured.}
+
+\item{feature.set.name}{[\code{character(1)}]\cr
+Name of the corresponding feature set. Used as a prefix for the cost feature.}
+
+\item{append.as.feature}{[\code{logical(1)}]\cr
+Should the computational effort in seconds be saved as an additional feature?
+Default is \code{FALSE}.}
 
 \item{envir}{[\code{environment}]\cr
 Environment in which expr should be evaluated.}

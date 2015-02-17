@@ -1,10 +1,11 @@
 #' Feature: Statistics of Nearest-Neighbour distances.
 #'
 #' @template arg_network
+#' @template arg_include_costs
 #' @return [\code{list}]
 #' @export
 #FIXME: C++ implementation throws seg fault error occasionally
-getDistanceFeatureSet = function(x) {
+getDistanceFeatureSet = function(x, include.costs = FALSE) {
     assertClass(x, "Network")
     measureTime(expression({
         dist.obj = x$distance.matrix
@@ -14,5 +15,5 @@ getDistanceFeatureSet = function(x) {
         feat.set = getDistanceFeatureSetCPP(dist.mat, dist.num)
         feat.set = c(feat.set, computeStatisticsOnNumericVector(dist.num, "distance"))
         return(feat.set)
-    }))
+    }), "distance", include.costs)
 }

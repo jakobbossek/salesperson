@@ -4,7 +4,8 @@
 \alias{getFeatureSet}
 \title{Feature: all features.}
 \usage{
-getFeatureSet(x, black.list = character(0), include.costs = FALSE)
+getFeatureSet(x, black.list = character(0), include.costs = FALSE,
+  feature.fun.args = getDefaultFeatureFunArgs())
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -17,6 +18,11 @@ is the empty character vector.}
 \item{include.costs}{[\code{logical(1)}]\cr
 Include the times needed to compute the specific feature sets as additional
 features? Default is \code{FALSE}. Time is measured via \code{proc.time}.}
+
+\item{feature.fun.args}{[\code{list}]\cr
+List of lists. Each component of the list corresponds to one of the feature sets
+and the subordered list contains vectors of values for each parameter. Name
+the sublists according to \link{getAvailableFeatureSets}.}
 }
 \value{
 [\code{list}]

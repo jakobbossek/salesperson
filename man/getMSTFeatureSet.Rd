@@ -4,11 +4,14 @@
 \alias{getMSTFeatureSet}
 \title{Feature: statistics of the minimum spanning tree edges.}
 \usage{
-getMSTFeatureSet(x)
+getMSTFeatureSet(x, include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
 Network.}
+
+\item{include.costs}{[\code{logical(1)}]\cr
+Should costs be included as an additional feature? Default is \code{FALSE}.}
 }
 \value{
 [\code{list}]
