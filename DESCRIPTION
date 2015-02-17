@@ -18,5 +18,6 @@ Imports:
     checkmate (>= 1.5.1),
     Rcpp
 Suggests:
-    testthat
+    testthat,
+    netgen (>= 1.0)
 LinkingTo: Rcpp
