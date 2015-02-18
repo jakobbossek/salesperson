@@ -13,6 +13,22 @@
 #'   the sublists according to \link{getAvailableFeatureSets}.
 #' @return [\code{list}]
 #'   Named list of features.
+#' @examples
+#'   library(netgen)
+#'   x = generateRandomNetwork(n.points = 50L)
+#'   # get all features available in salesperson with default parameters
+#'   fs = getFeatureSet(x)
+#'
+#'   # now include the costs of computing (in seconds) for each set of parameters
+#'   # as additional features
+#'   fs = getFeatureSet(x, include.costs = TRUE)
+#'
+#'   # compute all but MST and distance features
+#'   fs = getFeatureSet(x, black.list = c("MST", "Distance"))
+#'
+#'   # now set user-defined parameter values for cluster
+#'   args = list("Cluster" = list("epsilon" = c(0.01, 0.05, 0.1, 0.2, 0.3)))
+#'   fs = getFeatureSet(x, black.list = "BoundingBox", feature.fun.args = args)
 #' @export
 getFeatureSet = function(x, black.list = character(0),
     include.costs = FALSE,
@@ -34,7 +50,7 @@ getFeatureSet = function(x, black.list = character(0),
         } else {
             feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
                 param.list = list(x = x, include.costs = include.costs)
-                param.list = c(param.list, param) 
+                param.list = c(param.list, param)
                 print(param.list)
                 do.call(feature.fun, param.list)
             })

@@ -31,4 +31,21 @@ the sublists according to \link{getAvailableFeatureSets}.}
 \description{
 Feature: all features.
 }
+\examples{
+library(netgen)
+  x = generateRandomNetwork(n.points = 50L)
+  # get all features available in salesperson with default parameters
+  fs = getFeatureSet(x)
+
+  # now include the costs of computing (in seconds) for each set of parameters
+  # as additional features
+  fs = getFeatureSet(x, include.costs = TRUE)
+
+  # compute all but MST and distance features
+  fs = getFeatureSet(x, black.list = c("MST", "Distance"))
+
+  # now set user-defined parameter values for cluster
+  args = list("Cluster" = list("epsilon" = c(0.01, 0.05, 0.1, 0.2, 0.3)))
+  fs = getFeatureSet(x, black.list = "BoundingBox", feature.fun.args = args)
+}
 
