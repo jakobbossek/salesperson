@@ -5,11 +5,11 @@ test_that("getDistanceFeatureSet does produce reasonable results", {
     x = generateSimpleTestNetwork()
 
     # "should be" values
-    mst_dists_sum.expected = (getNumberOfNodes(x) - 1L) / (2 * sum(x$distance.matrix))
+    mst_dists_sum.expected = (getNumberOfNodes(x) - 1L) / sum(x$distance.matrix)
 
     # build feature set and check structure
     feature.set = getDistanceFeatureSet(x)
-    expect_feature_list(feature.set, feature.set = "MST")
+    expect_feature_list(feature.set, feature.set = "DISTANCE")
 
     # check if values are correct
 

@@ -5,7 +5,7 @@ test_that("getMSTFeatureSet does produce reasonable results", {
     x = generateSimpleTestNetwork()
 
     # "should be" values
-    mst_dists_sum.expected = (getNumberOfNodes(x) - 1L) / (2 * sum(x$distance.matrix))
+    mst_dists_sum.expected = (getNumberOfNodes(x) - 1L) / sum(x$distance.matrix)
 
     # build feature set and check structure
     feature.set = getMSTFeatureSet(x)

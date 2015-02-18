@@ -10,7 +10,7 @@ getDistanceFeatureSet = function(x, include.costs = FALSE) {
     measureTime(expression({
         dist.obj = x$distance.matrix
         dist.mat = as.matrix(dist.obj)
-        dist.num = as.numeric(dist.obj)
+        dist.num = as.numeric(as.dist(dist.obj))
         n.cities = nrow(dist.mat)
         feat.set = getDistanceFeatureSetCPP(dist.mat, dist.num)
         feat.set = c(feat.set, computeStatisticsOnNumericVector(dist.num, "distance"))

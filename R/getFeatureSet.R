@@ -28,7 +28,7 @@
 #'
 #'   # now set user-defined parameter values for cluster
 #'   args = list("Cluster" = list("epsilon" = c(0.01, 0.05, 0.1, 0.2, 0.3)))
-#'   fs = getFeatureSet(x, black.list = "BoundingBox", feature.fun.args = args)
+#'   fs = getFeatureSet(x, feature.fun.args = args)
 #' @export
 getFeatureSet = function(x, black.list = character(0),
     include.costs = FALSE,
@@ -41,6 +41,9 @@ getFeatureSet = function(x, black.list = character(0),
     feature.set.names = getAvailableFeatureSets()
     feature.set.names = setdiff(feature.set.names, black.list)
 
+    # merge user defined feature-fun args and defaults preferring user-defined
+    feature.fun.args = BBmisc::insert(getDefaultFeatureFunArgs(), feature.fun.args)
+
     catf("Using the following feature (sub)sets: %s", collapse(feature.set.names, sep = ", "))
 
     feats = lapply(feature.set.names, function(feature.set.name) {
@@ -51,7 +54,6 @@ getFeatureSet = function(x, black.list = character(0),
             feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
                 param.list = list(x = x, include.costs = include.costs)
                 param.list = c(param.list, param)
-                print(param.list)
                 do.call(feature.fun, param.list)
             })
             do.call(c, feats2)
