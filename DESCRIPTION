@@ -1,8 +1,8 @@
 Package: salesperson
 Type: Package
-Title: Solving and Analyzing the Travelling Salesperson Problem.
-Description: Comprehensive collection of functions for solving and analizing the symmetric Travelling Salesperson Problem (TSP).
-Version: 1.0
+Title: Computation of Instance Feature Sets and R Interface to the State-of-the-Art Solvers for the Traveling Salesperson Problem.
+Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics, frequently termed instance features.
+Version: 0.1
 Date: 2015-02-05
 Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role =
     c("aut", "cre")))
@@ -16,7 +16,7 @@ Depends:
     tspmeta (>= 1.1)
 Imports:
     checkmate (>= 1.5.1),
-    Rcpp
+    Rcpp (>= 0.11.3)
 Suggests:
     testthat
 LinkingTo: Rcpp
