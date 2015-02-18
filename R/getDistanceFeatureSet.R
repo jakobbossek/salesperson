@@ -4,7 +4,6 @@
 #' @template arg_include_costs
 #' @return [\code{list}]
 #' @export
-#FIXME: C++ implementation throws seg fault error occasionally
 getDistanceFeatureSet = function(x, include.costs = FALSE) {
     assertClass(x, "Network")
     measureTime(expression({
