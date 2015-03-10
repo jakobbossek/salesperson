@@ -6,3 +6,7 @@
 todo.md
 test_specific.R
 RcppExports.*
+*.o
+*.out
+*.out_BestSol
+*.out_Result

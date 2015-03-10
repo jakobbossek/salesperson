@@ -9,3 +9,5 @@ README.md
 test_all.R
 test_specific.R
 .travis.yml
+bin
+solvers
