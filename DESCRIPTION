@@ -13,7 +13,8 @@ License: BSD_3_clause + file LICENSE
 Depends:
     BBmisc (>= 1.6),
     netgen (>= 1.0),
-    tspmeta (>= 1.1)
+    tspmeta (>= 1.1),
+    stringr (>= 0.6.2)
 Imports:
     checkmate (>= 1.5.1),
     Rcpp (>= 0.11.3)
