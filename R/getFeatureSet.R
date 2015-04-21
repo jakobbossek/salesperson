@@ -31,36 +31,36 @@
 #'   fs = getFeatureSet(x, feature.fun.args = args)
 #' @export
 getFeatureSet = function(x, black.list = character(0),
-    include.costs = FALSE,
-    feature.fun.args = getDefaultFeatureFunArgs()) {
-    assertClass(x, "Network")
-    assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
-    assertList(feature.fun.args, types = "list", any.missing = FALSE)
-    assertFlag(include.costs)
+  include.costs = FALSE,
+  feature.fun.args = getDefaultFeatureFunArgs()) {
+  assertClass(x, "Network")
+  assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
+  assertList(feature.fun.args, types = "list", any.missing = FALSE)
+  assertFlag(include.costs)
 
-    feature.set.names = getAvailableFeatureSets()
-    feature.set.names = setdiff(feature.set.names, black.list)
+  feature.set.names = getAvailableFeatureSets()
+  feature.set.names = setdiff(feature.set.names, black.list)
 
-    # merge user defined feature-fun args and defaults preferring user-defined
-    feature.fun.args = BBmisc::insert(getDefaultFeatureFunArgs(), feature.fun.args)
+  # merge user defined feature-fun args and defaults preferring user-defined
+  feature.fun.args = BBmisc::insert(getDefaultFeatureFunArgs(), feature.fun.args)
 
-    catf("Using the following feature (sub)sets: %s", collapse(feature.set.names, sep = ", "))
+  catf("Using the following feature (sub)sets: %s", collapse(feature.set.names, sep = ", "))
 
-    feats = lapply(feature.set.names, function(feature.set.name) {
-        feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
-        if (is.null(feature.fun.args[[feature.set.name]])) {
-            do.call(feature.fun, list(x = x, include.costs = include.costs))
-        } else {
-            feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
-                param.list = list(x = x, include.costs = include.costs)
-                param.list = c(param.list, param)
-                do.call(feature.fun, param.list)
-            })
-            do.call(c, feats2)
-        }
-    })
-    feats = do.call(c, feats)
-    return(feats)
+  feats = lapply(feature.set.names, function(feature.set.name) {
+    feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
+    if (is.null(feature.fun.args[[feature.set.name]])) {
+      do.call(feature.fun, list(x = x, include.costs = include.costs))
+    } else {
+      feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
+        param.list = list(x = x, include.costs = include.costs)
+        param.list = c(param.list, param)
+        do.call(feature.fun, param.list)
+      })
+      do.call(c, feats2)
+    }
+  })
+  feats = do.call(c, feats)
+  return(feats)
 }
 
 #FIXME: this needs a better name
@@ -68,12 +68,12 @@ getFeatureSet = function(x, black.list = character(0),
 #FIXME: how to best store times? As an numeric attribute? Maybe add logical parameter
 # times.are.features which decides whether times are stored as features or separately?
 getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
-    assertList(x, types = "Network", any.missing = FALSE, min.len = 1L)
-    feats = lapply(x, function(instance) {
-        getFeatureSet(instance, black.list, include.costs)
-    })
-    feats = as.data.frame(do.call(rbind, feats))
-    return(feats)
+  assertList(x, types = "Network", any.missing = FALSE, min.len = 1L)
+  feats = lapply(x, function(instance) {
+    getFeatureSet(instance, black.list, include.costs)
+  })
+  feats = as.data.frame(do.call(rbind, feats))
+  return(feats)
 }
 
 #' Available feature (sub)sets.
@@ -81,8 +81,8 @@ getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
 #' May be used as black list for \code{getFeatureSet}.
 #' @export
 getAvailableFeatureSets = function() {
-    c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
-      "Distance", "Modes", "MST", "NearestNeighbour")
+  c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
+    "Distance", "Modes", "MST", "NearestNeighbour")
 }
 
 #' Returns list of parameters defaults for feature computation.
@@ -90,8 +90,8 @@ getAvailableFeatureSets = function() {
 #' @return [\code{list}]
 #' @export
 getDefaultFeatureFunArgs = function() {
-    list(
-        "BoundingBox" = list("distance_fraction" = c(0.1, 0.2, 0.3)),
-        "Cluster" = list("epsilon" = c(0.01, 0.05, 0.1))
-    )
+  list(
+    "BoundingBox" = list("distance_fraction" = c(0.1, 0.2, 0.3)),
+    "Cluster" = list("epsilon" = c(0.01, 0.05, 0.1))
+  )
 }

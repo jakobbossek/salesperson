@@ -4,6 +4,6 @@
 #   Network.
 # @return [tsp_instance]
 netgenToTSPmeta = function(x) {
-    structure(list(coords = x$coordinates, dists = x$distance.matrix),
-        class = c("tsp_instance_euclidean_coords", "tsp_instance_symmetric", "tsp_instance"))
+  structure(list(coords = x$coordinates, dists = x$distance.matrix),
+    class = c("tsp_instance_euclidean_coords", "tsp_instance_symmetric", "tsp_instance"))
 }

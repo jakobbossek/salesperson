@@ -5,13 +5,13 @@
 #' @return [\code{list}]
 #' @export
 getCentroidFeatureSet = function(x, include.costs = FALSE) {
-    assertClass(x, "Network")
-    measureTime(expression({
-        centroid.coordinates = getCentroidCoordinatesCPP(x$coordinates)
-        distances.to.centroid = getDistancesToCentroidCPP(x$coordinates, centroid.coordinates)
-        c(list(
-            "centroid_x" = centroid.coordinates[1],
-            "centroid_y" = centroid.coordinates[2]
-        ), computeStatisticsOnNumericVector(distances.to.centroid, "centroid"))
-    }), "centroid", include.costs)
+  assertClass(x, "Network")
+  measureTime(expression({
+    centroid.coordinates = getCentroidCoordinatesCPP(x$coordinates)
+    distances.to.centroid = getDistancesToCentroidCPP(x$coordinates, centroid.coordinates)
+    c(list(
+      "centroid_x" = centroid.coordinates[1],
+      "centroid_y" = centroid.coordinates[2]
+      ), computeStatisticsOnNumericVector(distances.to.centroid, "centroid"))
+  }), "centroid", include.costs)
 }

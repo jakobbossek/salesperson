@@ -14,12 +14,12 @@
 #'   \dQuote{time_elapsed}.
 #' @export
 measureTime = function(expr, feature.set.name, append.as.feature = FALSE, envir = parent.frame()) {
-    start = proc.time()
-    feats = eval(expr, envir = envir)
-    time.elapsed = (proc.time() - start)[3]
-    names(time.elapsed) = NULL
-    if (append.as.feature) {
-        feats[[paste(feature.set.name, "costs", sep = "_")]] = time.elapsed   
-    }
-    return(feats)
+  start = proc.time()
+  feats = eval(expr, envir = envir)
+  time.elapsed = (proc.time() - start)[3]
+  names(time.elapsed) = NULL
+  if (append.as.feature) {
+    feats[[paste(feature.set.name, "costs", sep = "_")]] = time.elapsed
+  }
+  return(feats)
 }

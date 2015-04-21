@@ -5,10 +5,10 @@
 #' @return [\code{list}]
 #' @export
 getConvexHullFeatureSet = function(x, include.costs = FALSE) {
-    assertClass(x, "Network")
-    # here we delegate to tspmeta
-    tsp.instance = netgenToTSPmeta(x)
-    measureTime(expression({
-        tspmeta::feature_chull(tsp.instance)
-    }), "chull", include.costs)
+  assertClass(x, "Network")
+  # here we delegate to tspmeta
+  tsp.instance = netgenToTSPmeta(x)
+  measureTime(expression({
+    tspmeta::feature_chull(tsp.instance)
+  }), "chull", include.costs)
 }

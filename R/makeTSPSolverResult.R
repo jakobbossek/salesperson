@@ -25,21 +25,21 @@
 # @export
 makeTSPSolverResult = function(instance.name, solver,
   tour.length = NA, tour = NA, runtime = NA, error = NULL) {
-    assertCharacter(instance.name, len = 1L)
-    assertCharacter(solver, len = 1L)
-    !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
-    !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
-    !is.na(runtime) && assertNumber(runtime, na.ok = FALSE)
-    if (!isPermutation(tour)) {
-        stopf("Passed tour is not a permutation of the nodes!")
-    }
-    makeS3Obj(
-        instance.name = instance.name,
-        solver = solver,
-        tour.length = tour.length,
-        tour = tour,
-        runtime = runtime,
-        error = error,
-        classes = "TSPSolverResult"
-    )
+  assertCharacter(instance.name, len = 1L)
+  assertCharacter(solver, len = 1L)
+  !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
+  !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
+  !is.na(runtime) && assertNumber(runtime, na.ok = FALSE)
+  if (!isPermutation(tour)) {
+    stopf("Passed tour is not a permutation of the nodes!")
+  }
+  makeS3Obj(
+    instance.name = instance.name,
+    solver = solver,
+    tour.length = tour.length,
+    tour = tour,
+    runtime = runtime,
+    error = error,
+    classes = "TSPSolverResult"
+  )
 }
