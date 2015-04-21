@@ -11,3 +11,4 @@ test_specific.R
 .travis.yml
 bin
 solvers
+man-roxygen
