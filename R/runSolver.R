@@ -1,79 +1,7 @@
-# Extracts tour from TSPlib file.
-#
-# Since we need only the tour and the tour length, this functions skips the
-# specification part.
-#
-# @param file.path [\code{character(1)}]\cr
-#   Path to TSPlib tour file.
-# @return [\code{integer}]
-#   Permutation of the nodes.
-readTSPlibTOURFile = function(file.path) {
-  assertFile(file.path, access = "r")
-  con = file(file.path, "r")
-  on.exit(close(con))
-
-  lines = readLines(con)
-  #FIXME: actually we do not need the specifications. We could skip that.
-  obj = list()
-  i = 1L
-  while (stringr::str_detect(lines[i], ":")) {
-    spec = unlist(strsplit(lines[i], "[[:space:]]*:[[:space:]]*"))
-    obj[[spec[1]]] = spec[2]
-    i = i + 1L
-  }
-  # skip TOUR_SECTION line
-  i = i + 1L
-  tour = numeric()
-  #INFO: LKH tours contain the negative of the first node ID as the last element
-  while (lines[i] != "EOF" && as.numeric(lines[i]) > 0) {
-    tour = c(tour, as.integer(lines[i]))
-    i = i + 1L
-  }
-  return(tour)
-}
-
-# Returns all currently available solver names.
-#
-# @return [\code{character}]
-# @export
-getAvailableSolverNames = function() {
-  c("eax", "eax-restart", "lkh", "lkh-restart")
-}
-
-# Check if vector contains permutation of number 1:n
-#
-# @param x [\code{numeric}]\cr
-#   Vector to check.
-# @param source [\code{numeric}]\cr
-#   Vector which we want to compare with. Default is 1, ..., length(x).
-# @return [\code{logical(1)}]
-# @export
-isPermutation = function(x, source = seq(length(x))) {
-  all(source == sort(x))
-}
-
-# Print TSPSolverResult to stdout.
-#
-# @param x [TSPSolverResult]
-print.TSPSolverResult = function(x) {
-  if (!is.null(x$error)) {
-    catf("Instance '%s' could not be solved due to an error!", x$instance.name)
-    catf("Error message: %s", as.character(x$error))
-  } else {
-    catf("Solved instance '%s' successfully!", x$instance.name)
-    catf("Used solver:  %s", toupper(x$solver))
-    catf("Elapsed time: %.2f [seconds]", x$runtime)
-    catf("Tour length:  %.2f", x$tour.length)
-    max.idx = min(length(x$tour), 10L)
-    catf("Head of tour: %s", paste(collapse(x$tour[1:max.idx], sep = ", "), ", ...", sep = ""))
-  }
-}
-
 # Run solver on instance.
 #
 # @param instance [\code{character(1)}]\cr
 #   File path to TSPlib file.
-#FIXME: add the possibility to pass netgen Networks
 # @param solver [\code{character(1)}]\cr
 #   Name of solver to use. See \code{\link{getAvailableSolverNames}} for the
 #   currently available solvers.
@@ -82,11 +10,13 @@ print.TSPSolverResult = function(x) {
 # @return [\code{TSPSolverResult}]
 #   Result object of type \code{TSPSolverResult}. See \code{\link{makeTSPSolverResult}}.
 # @export
+#FIXME: add the possibility to pass netgen Networks
 runTSPSolver = function(instance, solver, ...) {
   # sanity checks
   assertCharacter(instance, len = 1L, any.missing = FALSE)
   assertChoice(solver, choices = getAvailableSolverNames())
 
+  # start time measuring
   start.time = proc.time()
 
   # dispatching
@@ -96,14 +26,16 @@ runTSPSolver = function(instance, solver, ...) {
     res = runLKHSolver(instance, solver, ...)
   }
 
+  # actual time measuring
   end.time = proc.time()
   runtime = (end.time - start.time)[3]
 
+  # wrap it up in a nice result object
   makeTSPSolverResult(
     instance.name = instance,
     solver = solver,
-    tour.length = if (!is.null(res$tour.length)) res$tour.length else NA,
-    tour = if (!is.null(res$tour)) res$tour else NA,
+    tour.length = coalesce(res$tour.length, NA),
+    tour = coalesce(res$tour, NA),
     runtime = runtime
   )
 }
@@ -160,6 +92,7 @@ runEAXSolver = function(instance, solver, ...) {
   #temp.file = tempfile("EAX_")
   temp.file = paste(instance, ".out", sep = "")
   #FIXME: add possibility to pass arguments to EAX
+  #FIXME: meaning of all these parameters?
   eax.args = c(1, temp.file, 100, 30, instance, 0, 3)
   if (solver == "eax-restart") {
     eax.args = c(eax.args, 1)

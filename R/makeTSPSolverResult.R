@@ -1,4 +1,21 @@
-# Generate result object.
+# TSP-Solver result object.
+#
+# Contains information returned by a solver on a specific problem instance.
+# Includes the following elements:
+# \describe{
+#   \item{instance.name}{Name of the instance solved.}
+#   \item{solver}{Solver name used to solve the instance.}
+#   \item{tour.length}{Tour length}
+#   \item{tour}{Permutation of the nodes.}
+#   \item{runtime}{Running time measured via \code{proc.time}}
+#   \item{error}{Error message, which occured during optimization.}
+# }
+# @rdname TSPSolverResult
+# @name TSPSolverResult
+# @export
+NULL
+
+# Generator for TSPSolverResult objects.
 #
 # @param instance.name [\code{character(1)}]\cr
 #   Instance name.
@@ -13,16 +30,7 @@
 # @param error [\code{character(1)}]\cr
 #   Error message in case of solver failing on instance.
 # @return [\code{TSPSolverResult}]
-#   Result object which contains
-#   \describe{
-#     \item{instance.name}{Name of the instance solved.}
-#     \item{solver}{Solver name used to solve the instance.}
-#     \item{tour.length}{Tour length}
-#     \item{tour}{Permutation of the nodes.}
-#     \item{runtime}{Running time measured via \code{proc.time}}
-#     \item{error}{Error message, which occured during optimization.}
-#   }
-# @export
+#   Result object.
 makeTSPSolverResult = function(instance.name, solver,
   tour.length = NA, tour = NA, runtime = NA, error = NULL) {
   assertCharacter(instance.name, len = 1L)
@@ -42,4 +50,23 @@ makeTSPSolverResult = function(instance.name, solver,
     error = error,
     classes = "TSPSolverResult"
   )
+}
+
+# Print TSPSolverResult to stdout.
+#
+# @param x [\code{\link{TSPSolverResult}}]\cr
+#   Result object.
+# @export
+print.TSPSolverResult = function(x) {
+  if (!is.null(x$error)) {
+    catf("Instance '%s' could not be solved due to an error!", x$instance.name)
+    catf("Error message: %s", as.character(x$error))
+  } else {
+    catf("Solved instance '%s' successfully!", x$instance.name)
+    catf("Used solver:  %s", toupper(x$solver))
+    catf("Elapsed time: %.2f [seconds]", x$runtime)
+    catf("Tour length:  %.2f", x$tour.length)
+    max.idx = min(length(x$tour), 10L)
+    catf("Head of tour: %s", paste(collapse(x$tour[1:max.idx], sep = ", "), ", ...", sep = ""))
+  }
 }
