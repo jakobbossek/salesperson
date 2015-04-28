@@ -8,12 +8,15 @@
 # @param solver [\code{character(1)}]\cr
 #   Name of solver to use. See \code{\link{getAvailableSolverNames}} for the
 #   currently available solvers.
+# @param control [\code{list}]\cr
+#   Named list of further arguments passed down the the solver.
 # @param ... [any]
-#   Further parameters for the chosen solver. Not used.
+#   Further parameters for the chosen solver. Merged with \code{control} and
+#   passed to the server.
 # @return [\code{TSPSolverResult}]
 #   Result object of type \code{TSPSolverResult}. See \code{\link{makeTSPSolverResult}}.
 # @export
-runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", ...) {
+runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(), ...) {
   # sanity checks
   if (is.null(x.path)) {
     if (is.null(x)) {
@@ -24,21 +27,31 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", ...) {
     assertClass(x, "Network")
     #x.path = tempfile("TSPlib_")
     x.path = "TSPlibFile.tsp"
-    catf("Exporting to %s", x.path)
+    messagef("Exporting to %s", x.path)
     exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, digits = 0L)
   }
-  print(x.path)
   #assertFile(x.path, access = "r")
   assertChoice(solver, choices = getAvailableSolverNames())
 
   # start time measuring
   start.time = proc.time()
 
+  # Merge control arguments
+  control = c(control, list(...))
+
   # dispatching
-  if (solver %in% c("eax", "eax-restart")) {
-    res = runEAXSolver(x.path, solver, ...)
-  } else if (solver %in% c("lkh", "lkh-restart")) {
-    res = runLKHSolver(x.path, solver, ...)
+  if (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart")) {
+    # get path to solver and make a first check. We need further checks in the
+    # corrsponding solver functions.
+    solver.bin = solverPaths()[[solver]]
+    if (is.null(solver.bin)) {
+      stopf("No path specified to executable of solver '%s'. Use the solverPaths function to set a path.")
+    }
+    if (solver %in% c("eax", "eax-restart")) {
+      res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
+    } else if (solver %in% c("lkh", "lkh-restart")) {
+      res = runLKHSolver(x.path, control, solver.bin)
+    }
   }
 
   # actual time measuring
@@ -58,21 +71,15 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", ...) {
 # Run LKH specific stuff.
 #
 # @interface see runTSPSolver
-runLKHSolver = function(instance, solver, ...) {
-  #FIXME: LKH-1.3 support really neccessary?
-  if (solver == "lkh") {
-    lkh.bin = "/Users/jboss/repositories/git/salesperson/bin/lkh-2.0.7/osx/lkh"
-  } else {
-    lkh.bin = "/Users/jboss/repositories/git/salesperson/bin/lkh-2.0.7-restart/osx/lkh"
-  }
+runLKHSolver = function(instance, control, lkh.bin) {
   param.file = paste(instance, ".par", sep="")
-  lkh.args = c(param.file, 9999999)
+  lkh.args = c(param.file, 9)
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   output.file = paste(instance, ".out", sep = "")
-  write(c(paste("PROBLEM_FILE =", instance), paste("OUTPUT_TOUR_FILE =", output.file), "RUNS = 1", "SEED = 1", "MAX_TRIALS = 100000000"), file = param.file)
-  res = suppressWarnings(system2(lkh.bin, lkh.args, stdout = TRUE))
+  write(c(paste("PROBLEM_FILE =", instance), paste("OUTPUT_TOUR_FILE =", output.file), "RUNS = 1", "SEED = 1", "MAX_TRIALS = 10"), file = param.file)
+  res = system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE)
 
   # build tour
   tour = as.integer(readTSPlibTOURFile(output.file))
@@ -88,18 +95,13 @@ runLKHSolver = function(instance, solver, ...) {
 # Run EAX specific stuff.
 #
 # @interface see runTSPSolver
-runEAXSolver = function(instance, solver, ...) {
-  if (solver == "eax") {
-    eax.bin = "/Users/jboss/repositories/git/salesperson/bin/eax/osx/eax"
-  } else {
-    eax.bin = "/Users/jboss/repositories/git/salesperson/bin/eax-restart/osx/eax"
-  }
+runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
   #FIXME: does not work as expected. Generate tempfile in tempdir!
   #temp.file = tempfile("EAX_")
   temp.file = paste(instance, ".out", sep = "")
   #FIXME: meaning of all these parameters?
   eax.args = c(1, temp.file, 100, 30, instance, 0, 3)
-  if (solver == "eax-restart") {
+  if (restart) {
     eax.args = c(eax.args, 1)
   }
   res = system2(eax.bin, eax.args, stdout = TRUE)
