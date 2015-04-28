@@ -1,7 +1,10 @@
 # Run solver on instance.
 #
-# @param instance [\code{character(1)}]\cr
-#   File path to TSPlib file.
+# @param x [\code{Network}]\cr
+#   TSP instance to solve.
+# @param x.path [\code{character(1)}]\cr
+#   File path to the TSP instance at hand in TSPlib format. Either the path or
+#   the instance need to be passed.
 # @param solver [\code{character(1)}]\cr
 #   Name of solver to use. See \code{\link{getAvailableSolverNames}} for the
 #   currently available solvers.
@@ -10,9 +13,22 @@
 # @return [\code{TSPSolverResult}]
 #   Result object of type \code{TSPSolverResult}. See \code{\link{makeTSPSolverResult}}.
 # @export
-runTSPSolver = function(instance, solver, ...) {
+runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", ...) {
   # sanity checks
-  assertCharacter(instance, len = 1L, any.missing = FALSE)
+  if (is.null(x.path)) {
+    if (is.null(x)) {
+      stopf("Either the instance or a path to a TSPlib file must be provided.")
+    }
+    # Since our solvers need a file, we export our network here to import it
+    # later again by the chosen solver
+    assertClass(x, "Network")
+    #x.path = tempfile("TSPlib_")
+    x.path = "TSPlibFile.tsp"
+    catf("Exporting to %s", x.path)
+    exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, digits = 0L)
+  }
+  print(x.path)
+  #assertFile(x.path, access = "r")
   assertChoice(solver, choices = getAvailableSolverNames())
 
   # start time measuring
@@ -20,9 +36,9 @@ runTSPSolver = function(instance, solver, ...) {
 
   # dispatching
   if (solver %in% c("eax", "eax-restart")) {
-    res = runEAXSolver(instance, solver, ...)
+    res = runEAXSolver(x.path, solver, ...)
   } else if (solver %in% c("lkh", "lkh-restart")) {
-    res = runLKHSolver(instance, solver, ...)
+    res = runLKHSolver(x.path, solver, ...)
   }
 
   # actual time measuring
@@ -31,7 +47,7 @@ runTSPSolver = function(instance, solver, ...) {
 
   # wrap it up in a nice result object
   makeTSPSolverResult(
-    instance.name = instance,
+    instance = if (testClass(x, "Network")) x$name else x.path,
     solver = solver,
     tour.length = coalesce(res$tour.length, NA),
     tour = coalesce(res$tour, NA),
@@ -86,7 +102,7 @@ runEAXSolver = function(instance, solver, ...) {
   if (solver == "eax-restart") {
     eax.args = c(eax.args, 1)
   }
-  res = suppressWarnings(system2(eax.bin, eax.args, stdout = TRUE))
+  res = system2(eax.bin, eax.args, stdout = TRUE)
   best.sol.conn = file(paste(temp.file, "_BestSol", sep = ""))
   lines = readLines(best.sol.conn)
 
