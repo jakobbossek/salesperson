@@ -96,16 +96,34 @@ runLKHSolver = function(instance, control, lkh.bin) {
 #
 # @interface see runTSPSolver
 runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
-  #FIXME: does not work as expected. Generate tempfile in tempdir!
-  #temp.file = tempfile("EAX_")
-  temp.file = paste(instance, ".out", sep = "")
-  #FIXME: meaning of all these parameters?
-  eax.args = c(1, temp.file, 100, 30, instance, 0, 3)
-  if (restart) {
-    eax.args = c(eax.args, 1)
+  # 0. argv[0] name of the function (as usual in c)
+  # 1. maxNumOfTrial: number of trials, i.e., restarts?
+  # 2. dstFile: most probably file to store data of tour
+  # 3. fNumOfPop: number of populations (mu) or iterations?
+  # 4. fNumOfKids: number of offspring (lambda?)
+  # 5. fFileNameTSP: file name of tsp source file (in TSPlib format)
+  # 6. fTargetTourLength:
+  # 7. fCutoffTime:
+  buildEAXArguments = function(instance, control, restart) {
+    args = list()
+    args$max.trials = coalesce(control$max.trials, 1L)
+    args$tour.file = coalesce(control$tour.file, paste0(instance, ".out"))
+    args$pop.size = coalesce(control$pop.size, 100L)
+    args$off.size = coalesce(control$off.size, 30L)
+    args$instance.file = instance
+    args$stop.on.tour.length = coalesce(control$stop.on.tour.length, 0)
+    args$stop.on.cutoff.time = coalesce(control$stop.on.cutoff.time, 3)
+    args$restart = coalesce(control$restart, 1L)
+    return(args)
   }
-  res = system2(eax.bin, eax.args, stdout = TRUE)
-  best.sol.conn = file(paste(temp.file, "_BestSol", sep = ""))
+
+  args = buildEAXArguments(instance, control, restart)
+  if (!restart) {
+    eax.args$restart = NULL
+  }
+  args.list = unlist(args)
+  res = system2(eax.bin, args.list, stdout = TRUE)
+  best.sol.conn = file(paste(args$tour.file, "_BestSol", sep = ""))
   lines = readLines(best.sol.conn)
 
   # extract relevant data
@@ -115,8 +133,8 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
 
   # cleanup
   #FIXME: check the result files thorougly. What are all the numbers in the _Result file?
-  unlink(paste(temp.file, "_BestSol", sep = ""))
-  unlink(paste(temp.file, "_Result", sep = ""))
+  unlink(paste(args$tour.file, "_BestSol", sep = ""))
+  unlink(paste(args$tour.file, "_Result", sep = ""))
 
   return(list("tour" = tour, "tour.length" = tour.length, error = NULL))
 }
