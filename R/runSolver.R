@@ -108,14 +108,14 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   print(res)
 
   # build tour
-  tour = as.integer(readTSPlibTOURFile(args$OUTPUT_TOUR_FILE))
+  tour = readTSPlibTOURFile(args$OUTPUT_TOUR_FILE)
 
   x = paste(res)
 
   # cleanup
   unlink(param.file)
 
-  return(list("tour" = tour, "error" = NULL))
+  return(list("tour" = tour$tour, "tour.length" = tour$tour.length, "error" = NULL))
 }
 
 # Run EAX specific stuff.
