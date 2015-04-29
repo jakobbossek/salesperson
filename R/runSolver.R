@@ -50,7 +50,7 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
     if (solver %in% c("eax", "eax-restart")) {
       res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
     } else if (solver %in% c("lkh", "lkh-restart")) {
-      res = runLKHSolver(x.path, control, solver.bin)
+      res = runLKHSolver(x.path, control, solver.bin, restart = (solver == "lkh-restart"))
     }
   }
 
@@ -71,18 +71,44 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
 # Run LKH specific stuff.
 #
 # @interface see runTSPSolver
-runLKHSolver = function(instance, control, lkh.bin) {
-  param.file = paste(instance, ".par", sep="")
-  lkh.args = c(param.file, 9)
+runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
+  buildLKHArguments = function(instance, control) {
+    args = list()
+    # the most important parameters are the PROBLEM_FILE, the number of RUNS,
+    # the initial SEED for the generator of pseudo random numbers and TIME_LIMIT
+    # in seconds.
+    args$PROBLEM_FILE = instance
+    args$RUNS = coalesce(control$runs, 1L)
+    args$SEED = coalesce(control$seed, 1L)
+    args$TIME_LIMIT = coalesce(control$time.limit, 9999999L)
+    args$OUTPUT_TOUR_FILE = paste0(instance, ".out")
+    return(args)
+  }
+
+  writeToLKHParameterFile = function(param.file, args) {
+    args = sapply(names(args), function(name) {
+      sprintf("%s = %s", name, args[[name]])
+    })
+    output = collapse(args, "\n")
+    write(output, file = param.file)
+  }
+
+  param.file = paste0(instance, ".par")
+  args = buildLKHArguments(instance, control)
+  writeToLKHParameterFile(param.file, args)
+  # second parameter is time limit
+  lkh.args = c(param.file, if (!is.null(args$TIME_LIMIT)) args$TIME_LIMIT else 1000000L)
+  if (restart) {
+    lkh.args = c("<<<", param.file)
+  }
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
-  output.file = paste(instance, ".out", sep = "")
-  write(c(paste("PROBLEM_FILE =", instance), paste("OUTPUT_TOUR_FILE =", output.file), "RUNS = 1", "SEED = 1", "MAX_TRIALS = 10"), file = param.file)
-  res = system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE)
+  res = suppressWarnings(system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE))
+  print(res)
 
   # build tour
-  tour = as.integer(readTSPlibTOURFile(output.file))
+  tour = as.integer(readTSPlibTOURFile(args$OUTPUT_TOUR_FILE))
 
   x = paste(res)
 
@@ -119,7 +145,7 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
 
   args = buildEAXArguments(instance, control, restart)
   if (!restart) {
-    eax.args$restart = NULL
+    args$restart = NULL
   }
   args.list = unlist(args)
   res = system2(eax.bin, args.list, stdout = TRUE)
