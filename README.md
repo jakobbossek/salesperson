@@ -6,6 +6,14 @@
 
 ## Description
 
+The [Travelling Salesperson Problem](http://en.wikipedia.org/wiki/Travelling_salesman_problem) (TSP) is one of the most popular combinatorial optimization problems. Given a (un)directed graph with pairwise distances between the nodes the problem is to find a shortest travelling tour which starts in a starting node, visits each node exactly once and returns back to the start. Despite its fairly easy problem formulation the TSP is unfortunately NP-complete and we do not whether an exact deterministic polynomial time algorithm to solve it efficiently exists. However, in practise the TSP can be solved to optimality or at least close to optimality by means of sophisticated state-of-the-art heuristics, e.g., LKH or EAX.
+
+These local search algorithms work well and partly theoretical results on their performance exist, but how they cope with problems at hand in practise is barely known. In the pase decade a lot of scientific effort was spent on learning the actual behaviour of these algorithms.
+
+Following the no-free-lunch theorem for optimization there is no single best solver, i.e., a solver which operates best on each problem instance. Instead the performance can vary significantly. It is therefore desirable to set up a portfolio of TSP solvers and - given a problem instance at hand - choose the solver which most probably will operate best on it within the scope of *Algorithm selection* (AC).
+
+This package implements methods to compute characteristic properties, the socalled **(instance) features**, of TSP instances, e.g., the average edge costs, the angle between a node and both of his nearest neighbor nodes. This features can be used to fit performance models and apply machine learning algorithm in the AC context. The package furthermore offers an R interface to a set of state-of-the-art inexact TSP-solver like LKH, EAX and its restart variants.
+
 ## Installation
 
 Currently there is only this developement version of **salesperson**.
