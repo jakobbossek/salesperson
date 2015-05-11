@@ -83,6 +83,10 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
     args$SEED = coalesce(control$seed, 1L)
     args$TIME_LIMIT = coalesce(control$time.limit, 9999999L)
     args$OUTPUT_TOUR_FILE = paste0(instance, ".out")
+    if (!is.null(control$stop.on.tour.length)) {
+      args$OPTIMUM = as.integer(control$stop.on.tour.length)
+      args$STOP_AT_OPTIMUM = "YES"
+    }
     return(args)
   }
 
