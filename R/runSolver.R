@@ -64,7 +64,8 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
     solver = solver,
     tour.length = coalesce(res$tour.length, NA),
     tour = coalesce(res$tour, NA),
-    runtime = runtime
+    runtime = runtime,
+    solver.output = res$solver.output
   )
 }
 
@@ -97,7 +98,7 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   args = buildLKHArguments(instance, control)
   writeToLKHParameterFile(param.file, args)
   # second parameter is time limit
-  lkh.args = c(param.file, if (!is.null(args$TIME_LIMIT)) args$TIME_LIMIT else 1000000L)
+  lkh.args = c(param.file, args$TIME_LIMIT)
   if (restart) {
     lkh.args = c("<<<", param.file)
   }
@@ -105,17 +106,15 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = suppressWarnings(system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE))
-  print(res)
+  #print(res)
 
   # build tour
   tour = readTSPlibTOURFile(args$OUTPUT_TOUR_FILE)
 
-  x = paste(res)
-
   # cleanup
   unlink(param.file)
 
-  return(list("tour" = tour$tour, "tour.length" = tour$tour.length, "error" = NULL))
+  return(list("tour" = tour$tour, "tour.length" = tour$tour.length, "error" = NULL, solver.output = res))
 }
 
 # Run EAX specific stuff.
@@ -148,7 +147,7 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
     args$restart = NULL
   }
   args.list = unlist(args)
-  res = system2(eax.bin, args.list, stdout = TRUE)
+  res = system2(eax.bin, args.list, stdout = TRUE, stderr = TRUE)
   best.sol.conn = file(paste(args$tour.file, "_BestSol", sep = ""))
   lines = readLines(best.sol.conn)
 
@@ -162,5 +161,5 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
   unlink(paste(args$tour.file, "_BestSol", sep = ""))
   unlink(paste(args$tour.file, "_Result", sep = ""))
 
-  return(list("tour" = tour, "tour.length" = tour.length, error = NULL))
+  return(list("tour" = tour, "tour.length" = tour.length, error = NULL, solver.output = res))
 }

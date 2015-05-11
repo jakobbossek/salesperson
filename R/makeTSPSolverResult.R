@@ -29,10 +29,12 @@ NULL
 #   Actual runtime of the solver on the instance.
 # @param error [\code{character(1)}]\cr
 #   Error message in case of solver failing on instance.
+# @param solver.output [\code{character(1)}]\cr
+#   Raw stdout/stderr output of the solver.
 # @return [\code{TSPSolverResult}]
 #   Result object.
 makeTSPSolverResult = function(instance.name, solver,
-  tour.length = NA, tour = NA, runtime = NA, error = NULL) {
+  tour.length = NA, tour = NA, runtime = NA, error = NULL, solver.output = NULL) {
   assertCharacter(instance.name, len = 1L)
   assertCharacter(solver, len = 1L)
   !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
@@ -48,15 +50,16 @@ makeTSPSolverResult = function(instance.name, solver,
     tour = tour,
     runtime = runtime,
     error = error,
+    solver.output = solver.output,
     classes = "TSPSolverResult"
   )
 }
 
-# Print TSPSolverResult to stdout.
-#
-# @param x [\code{\link{TSPSolverResult}}]\cr
-#   Result object.
-# @export
+#' Print TSPSolverResult to stdout.
+#'
+#' @param x [\code{\link{TSPSolverResult}}]\cr
+#'   Result object.
+#' @export
 print.TSPSolverResult = function(x) {
   if (!is.null(x$error)) {
     catf("Instance '%s' could not be solved due to an error!", x$instance.name)
