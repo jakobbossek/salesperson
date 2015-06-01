@@ -44,8 +44,6 @@ getFeatureSet = function(x, black.list = character(0),
   # merge user defined feature-fun args and defaults preferring user-defined
   feature.fun.args = BBmisc::insert(getDefaultFeatureFunArgs(), feature.fun.args)
 
-  catf("Using the following feature (sub)sets: %s", collapse(feature.set.names, sep = ", "))
-
   feats = lapply(feature.set.names, function(feature.set.name) {
     feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
     if (is.null(feature.fun.args[[feature.set.name]])) {
