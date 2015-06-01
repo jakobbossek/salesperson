@@ -40,23 +40,24 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
   control = c(control, list(...))
 
   # dispatching
-  if (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart")) {
+  if (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart", "concorde")) {
     # get path to solver and make a first check. We need further checks in the
     # corrsponding solver functions.
     solver.bin = solverPaths()[[solver]]
     if (is.null(solver.bin)) {
-      stopf("No path specified to executable of solver '%s'. Use the solverPaths function to set a path.")
+      stopf("No path specified to executable of solver '%s'. Use the solverPaths(...) function to set a path.")
     }
     if (solver %in% c("eax", "eax-restart")) {
       res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
     } else if (solver %in% c("lkh", "lkh-restart")) {
       res = runLKHSolver(x.path, control, solver.bin, restart = (solver == "lkh-restart"))
+    } else if (solver == "concorde") {
+      res = runConcordeSolver(x.path, control, solver.bin)
     }
   }
 
   # actual time measuring
-  end.time = proc.time()
-  runtime = (end.time - start.time)[3]
+  runtime = (proc.time() - start.time)[3]
 
   # wrap it up in a nice result object
   makeTSPSolverResult(
@@ -68,6 +69,70 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
     solver.output = res$solver.output
   )
 }
+
+# Run exact CONCORDE solver.
+#
+# @interface see runTSPSolver
+runConcordeSolver = function(instance, control, bin) {
+  x = importFromTSPlibFormat(instance)
+
+  # setup some temporary files and a temporary directory
+  # Note: we need to do this here since we call a command line program
+  work_dir = tempdir()
+  cur_dir = getwd()
+  on.exit(setwd(cur_dir))
+  setwd(work_dir)
+
+  temp_file = tempfile(tmpdir = work_dir)
+  tour_file = paste0(temp_file, ".sol")
+  result_file = paste0(temp_file, ".res")
+  input_file = paste0(cur_dir, "/", instance)
+  catf(input_file)
+
+  seed = coalesce(control$seed, 1L)
+
+  # set arguments
+  args = c(
+    # output file
+    "-o", tour_file,
+    # random seed
+    "-s", seed,
+    # input file
+    input_file
+  )
+
+  # invoke binary. Invoke ./concorde to get a list of all possible arguments.
+  res = system2(bin, args = args, stdout = TRUE, stderr = TRUE)
+
+  # check for possible errors
+  if (hasAttributes(res, "status")) {
+    stopf("Error during concorde invocation.")
+  }
+  if (!file.access(tour_file) == 0) {
+    stopf("Concorde output file could not be opened.")
+  }
+
+  # extract tour
+  tour = scan(tour_file, what = integer(0), quiet = TRUE)
+
+  # the first line contains the number of nodes. Thus we delete the first element.
+  # Moreover we need to add 1 to each node, since the enumeration starts with 0.
+  tour = tour[-1] + 1L
+
+
+  # extract tour length
+  # The first line in the result file contains the tour length as the second entry
+  #FIXME: occasionally concorde outputs a *.res file from which the length could
+  #be extracted. However, this is not always the case :-/
+  #tour_lengh = as.integer(read.table(result_file, nrows = 1L))$V3
+  tour_length = computeTourLength(x, tour)
+
+  # cleanup
+  unlink(c(temp_file, result_file))
+
+  return(list(tour = tour, tour.length = tour_length, error = NULL, solver.output = res))
+}
+
 
 # Run LKH specific stuff.
 #

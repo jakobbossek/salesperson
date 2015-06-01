@@ -17,7 +17,7 @@
 #   }
 # @return [\code{list}] List of pathes. Used internally by \code{runTSPSolver}.
 solverPaths = function(paths = NULL) {
-  defaults = list("lkh" = NULL, "lkh-restart" = NULL, "eax" = NULL, "eax-restart" = NULL)
+  defaults = list("lkh" = NULL, "lkh-restart" = NULL, "eax" = NULL, "eax-restart" = NULL, concorde = NULL)
   solver.names = names(defaults)
   if (is.null(paths)) {
     if (!exists(".paths")) {
