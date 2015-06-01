@@ -9,93 +9,69 @@ using namespace Rcpp;
 NumericVector getAnglesToNearestNeighborsCPP(NumericMatrix coords, NumericMatrix dist_mat);
 RcppExport SEXP salesperson_getAnglesToNearestNeighborsCPP(SEXP coordsSEXP, SEXP dist_matSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericMatrix >::type coords(coordsSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type dist_mat(dist_matSEXP );
-        NumericVector __result = getAnglesToNearestNeighborsCPP(coords, dist_mat);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dist_mat(dist_matSEXP);
+    __result = Rcpp::wrap(getAnglesToNearestNeighborsCPP(coords, dist_mat));
+    return __result;
 END_RCPP
 }
 // getCentroidCoordinatesCPP
 NumericVector getCentroidCoordinatesCPP(const NumericMatrix coords);
 RcppExport SEXP salesperson_getCentroidCoordinatesCPP(SEXP coordsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const NumericMatrix >::type coords(coordsSEXP );
-        NumericVector __result = getCentroidCoordinatesCPP(coords);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type coords(coordsSEXP);
+    __result = Rcpp::wrap(getCentroidCoordinatesCPP(coords));
+    return __result;
 END_RCPP
 }
 // getDistancesToCentroidCPP
 NumericVector getDistancesToCentroidCPP(const NumericMatrix coords, NumericVector centroid_coords);
 RcppExport SEXP salesperson_getDistancesToCentroidCPP(SEXP coordsSEXP, SEXP centroid_coordsSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const NumericMatrix >::type coords(coordsSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type centroid_coords(centroid_coordsSEXP );
-        NumericVector __result = getDistancesToCentroidCPP(coords, centroid_coords);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type centroid_coords(centroid_coordsSEXP);
+    __result = Rcpp::wrap(getDistancesToCentroidCPP(coords, centroid_coords));
+    return __result;
 END_RCPP
 }
 // getDistanceFeatureSetCPP
 List getDistanceFeatureSetCPP(const NumericMatrix d, const NumericVector dd);
 RcppExport SEXP salesperson_getDistanceFeatureSetCPP(SEXP dSEXP, SEXP ddSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const NumericMatrix >::type d(dSEXP );
-        Rcpp::traits::input_parameter< const NumericVector >::type dd(ddSEXP );
-        List __result = getDistanceFeatureSetCPP(d, dd);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const NumericMatrix >::type d(dSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type dd(ddSEXP);
+    __result = Rcpp::wrap(getDistanceFeatureSetCPP(d, dd));
+    return __result;
 END_RCPP
 }
 // getFractionOfPointsNearBoundingBoxCPP
 List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distanceFraction);
 RcppExport SEXP salesperson_getFractionOfPointsNearBoundingBoxCPP(SEXP coordsSEXP, SEXP distanceFractionSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericMatrix >::type coords(coordsSEXP );
-        Rcpp::traits::input_parameter< double >::type distanceFraction(distanceFractionSEXP );
-        List __result = getFractionOfPointsNearBoundingBoxCPP(coords, distanceFraction);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< double >::type distanceFraction(distanceFractionSEXP);
+    __result = Rcpp::wrap(getFractionOfPointsNearBoundingBoxCPP(coords, distanceFraction));
+    return __result;
 END_RCPP
 }
 // getNearestNeighbourDistancesCPP
 NumericVector getNearestNeighbourDistancesCPP(NumericMatrix dist_mat);
 RcppExport SEXP salesperson_getNearestNeighbourDistancesCPP(SEXP dist_matSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericMatrix >::type dist_mat(dist_matSEXP );
-        NumericVector __result = getNearestNeighbourDistancesCPP(dist_mat);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< NumericMatrix >::type dist_mat(dist_matSEXP);
+    __result = Rcpp::wrap(getNearestNeighbourDistancesCPP(dist_mat));
+    return __result;
 END_RCPP
 }

@@ -59,8 +59,10 @@ makeTSPSolverResult = function(instance.name, solver,
 #'
 #' @param x [\code{\link{TSPSolverResult}}]\cr
 #'   Result object.
+#' @param ... [any]\cr
+#'   Not used.
 #' @export
-print.TSPSolverResult = function(x) {
+print.TSPSolverResult = function(x, ...) {
   if (!is.null(x$error)) {
     catf("Instance '%s' could not be solved due to an error!", x$instance.name)
     catf("Error message: %s", as.character(x$error))

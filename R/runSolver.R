@@ -18,19 +18,13 @@
 # @export
 runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(), ...) {
   # sanity checks
-  if (is.null(x.path)) {
-    if (is.null(x)) {
-      stopf("Either the instance or a path to a TSPlib file must be provided.")
-    }
-    # Since our solvers need a file, we export our network here to import it
-    # later again by the chosen solver
-    assertClass(x, "Network")
-    #x.path = tempfile("TSPlib_")
-    x.path = "TSPlibFile.tsp"
-    messagef("Exporting to %s", x.path)
-    exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, digits = 0L)
+  if (is.null(x.path) && is.null(x)) {
+    stopf("Either the instance or a path to a TSPlib file must be provided.")
   }
-  #assertFile(x.path, access = "r")
+  if (!is.null(x)) {
+    assertClass(x, "Network")
+  }
+
   assertChoice(solver, choices = getAvailableSolverNames())
 
   # start time measuring
@@ -39,21 +33,30 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
   # Merge control arguments
   control = c(control, list(...))
 
-  # dispatching
-  if (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart", "concorde")) {
-    # get path to solver and make a first check. We need further checks in the
-    # corrsponding solver functions.
-    solver.bin = solverPaths()[[solver]]
+  # get path to solver and make a first check. We need further checks in the
+  # corrsponding solver functions. This is irrelevant if we use a "native" solver.
+  solver.bin = solverPaths()[[solver]]
+
+  # exporting instance for certain solvers
+  if (is.null(x.path) && (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart", "concorde"))) {
+    # NOTE: we only have the binaries of these solvers and thus need to export
+    # the instance to TSPlib format
+    #x.path = tempfile("TSPlib_")
+    x.path = "TSPlibFile.tsp"
+    exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, digits = 2L)
+
     if (is.null(solver.bin)) {
       stopf("No path specified to executable of solver '%s'. Use the solverPaths(...) function to set a path.")
     }
-    if (solver %in% c("eax", "eax-restart")) {
-      res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
-    } else if (solver %in% c("lkh", "lkh-restart")) {
-      res = runLKHSolver(x.path, control, solver.bin, restart = (solver == "lkh-restart"))
-    } else if (solver == "concorde") {
-      res = runConcordeSolver(x.path, control, solver.bin)
-    }
+  }
+
+  if (solver %in% c("eax", "eax-restart")) {
+    res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
+    print(res)
+  } else if (solver %in% c("lkh", "lkh-restart")) {
+    res = runLKHSolver(x.path, control, solver.bin, restart = (solver == "lkh-restart"))
+  } else if (solver == "concorde") {
+    res = runConcordeSolver(x.path, control, solver.bin)
   }
 
   # actual time measuring
@@ -61,7 +64,7 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
 
   # wrap it up in a nice result object
   makeTSPSolverResult(
-    instance = if (testClass(x, "Network")) x$name else x.path,
+    instance.name = if (testClass(x, "Network")) x$name else x.path,
     solver = solver,
     tour.length = coalesce(res$tour.length, NA),
     tour = coalesce(res$tour, NA),
@@ -119,13 +122,12 @@ runConcordeSolver = function(instance, control, bin) {
   # Moreover we need to add 1 to each node, since the enumeration starts with 0.
   tour = tour[-1] + 1L
 
-
   # extract tour length
   # The first line in the result file contains the tour length as the second entry
   #FIXME: occasionally concorde outputs a *.res file from which the length could
   #be extracted. However, this is not always the case :-/
   #tour_lengh = as.integer(read.table(result_file, nrows = 1L))$V3
-  tour_length = computeTourLength(x, tour)
+  tour_length = computeTourLength(x, tour, round = TRUE)
 
   # cleanup
   unlink(c(temp_file, result_file))
@@ -175,7 +177,7 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = suppressWarnings(system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE))
-  #print(res)
+  print(res)
 
   # build tour
   tour = readTSPlibTOURFile(args$OUTPUT_TOUR_FILE)
@@ -217,6 +219,7 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
   }
   args.list = unlist(args)
   res = system2(eax.bin, args.list, stdout = TRUE, stderr = TRUE)
+  print(res)
   best.sol.conn = file(paste(args$tour.file, "_BestSol", sep = ""))
   lines = readLines(best.sol.conn)
 
