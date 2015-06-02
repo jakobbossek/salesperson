@@ -14,7 +14,7 @@ computeTourLength = function(x, tour, round = FALSE) {
   assertFlag(round)
   n = getNumberOfNodes(x)
 
-  if (!testInteger(tour) || !isPermutation(round, source = seq(n))) {
+  if (!testInteger(tour) || !isPermutation(tour, source = seq(n))) {
     stopf("Second parameter needs to be a permutation of {1, ..., %i}.", n)
   }
 
