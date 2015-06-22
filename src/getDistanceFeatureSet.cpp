@@ -84,7 +84,7 @@ List getDistanceFeatureSetCPP(const NumericMatrix d, const NumericVector dd) {
   mode_mean /= mode_quantity;
 
   // other features
-  mean_tour_length = 2 / (n_cities - 1) * dist_sum;
+  mean_tour_length = (2.0 * dist_sum) / (n_cities - 1.0);
 
   List out = List::create(
     NumericVector::create(fraction_shorter_mean_distance),
