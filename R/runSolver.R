@@ -41,9 +41,9 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
   if (is.null(x.path) && (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart", "concorde"))) {
     # NOTE: we only have the binaries of these solvers and thus need to export
     # the instance to TSPlib format
-    #x.path = tempfile("TSPlib_")
-    x.path = "TSPlibFile.tsp"
-    exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, digits = 2L)
+    x.path = tempfile("TSPlib_", fileext = ".tsp")
+    #x.path = "TTT.tsp"
+    exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, name = "mist", digits = 2L)
 
     if (is.null(solver.bin)) {
       stopf("No path specified to executable of solver '%s'. Use the solverPaths(...) function to set a path.")
@@ -52,7 +52,6 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
 
   if (solver %in% c("eax", "eax-restart")) {
     res = runEAXSolver(x.path, control, solver.bin, restart = (solver == "eax-restart"))
-    print(res)
   } else if (solver %in% c("lkh", "lkh-restart")) {
     res = runLKHSolver(x.path, control, solver.bin, restart = (solver == "lkh-restart"))
   } else if (solver == "concorde") {
@@ -89,7 +88,7 @@ runConcordeSolver = function(instance, control, bin) {
   temp_file = tempfile(tmpdir = work_dir)
   tour_file = paste0(temp_file, ".sol")
   result_file = paste0(temp_file, ".res")
-  input_file = paste0(cur_dir, "/", instance)
+  input_file = instance
   catf(input_file)
 
   seed = coalesce(control$seed, 1L)
@@ -165,8 +164,20 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
     write(output, file = param.file)
   }
 
-  param.file = paste0(instance, ".par")
+  work_dir = tempdir()
+  cur_dir = getwd()
+  on.exit(setwd(cur_dir))
+  setwd(work_dir)
+
+  temp.file = tempfile(tmpdir = work_dir)
+  param.file = paste0(temp.file, ".par")
+  output.file = paste0(temp.file, ".out")
+  print(output.file)
+  input_file = instance
+  catf(input_file)
+
   args = buildLKHArguments(instance, control)
+  args$OUTPUT_TOUR_FILE = output.file
   writeToLKHParameterFile(param.file, args)
   # second parameter is time limit
   lkh.args = c(param.file, args$TIME_LIMIT)
@@ -177,10 +188,9 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = suppressWarnings(system2(lkh.bin, lkh.args, stdout = TRUE, stderr = TRUE))
-  print(res)
 
   # build tour
-  tour = readTSPlibTOURFile(args$OUTPUT_TOUR_FILE)
+  tour = readTSPlibTOURFile(output.file)
 
   # cleanup
   unlink(param.file)
@@ -213,14 +223,20 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
     return(args)
   }
 
+  work_dir = tempdir()
+  cur_dir = getwd()
+  on.exit(setwd(cur_dir))
+  setwd(work_dir)
+
   args = buildEAXArguments(instance, control, restart)
   if (!restart) {
     args$restart = NULL
   }
   args.list = unlist(args)
   res = system2(eax.bin, args.list, stdout = TRUE, stderr = TRUE)
-  print(res)
-  best.sol.conn = file(paste(args$tour.file, "_BestSol", sep = ""))
+  catf("WD: %s", getwd())
+  print(list.files(getwd()))
+  best.sol.conn = file(paste(basename(args$tour.file), "_BestSol", sep = ""))
   lines = readLines(best.sol.conn)
 
   # extract relevant data
@@ -230,8 +246,8 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
 
   # cleanup
   #FIXME: check the result files thorougly. What are all the numbers in the _Result file?
-  unlink(paste(args$tour.file, "_BestSol", sep = ""))
-  unlink(paste(args$tour.file, "_Result", sep = ""))
+  #unlink(paste(args$tour.file, "_BestSol", sep = ""))
+  #unlink(paste(args$tour.file, "_Result", sep = ""))
 
   return(list("tour" = tour, "tour.length" = tour.length, error = NULL, solver.output = res))
 }
