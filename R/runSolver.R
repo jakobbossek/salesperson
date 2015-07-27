@@ -41,8 +41,8 @@ runTSPSolver = function(x = NULL, x.path = NULL, solver = "eax", control = list(
   if (is.null(x.path) && (solver %in% c("eax", "eax-restart", "lkh", "lkh-restart", "concorde"))) {
     # NOTE: we only have the binaries of these solvers and thus need to export
     # the instance to TSPlib format
-    x.path = tempfile("TSPlib_", fileext = ".tsp")
-    #x.path = "TTT.tsp"
+    #x.path = tempfile("TSP", fileext = ".tsp")
+    x.path = paste0("TSP", sample(100000, 1L), ".tsp")
     exportToTSPlibFormat(x, use.extended.format = FALSE, filename = x.path, name = "mist", digits = 2L)
 
     if (is.null(solver.bin)) {
@@ -89,8 +89,6 @@ runConcordeSolver = function(instance, control, bin) {
   tour_file = paste0(temp_file, ".sol")
   result_file = paste0(temp_file, ".res")
   input_file = instance
-  catf(input_file)
-
   seed = coalesce(control$seed, 1L)
 
   # set arguments
@@ -105,6 +103,7 @@ runConcordeSolver = function(instance, control, bin) {
 
   # invoke binary. Invoke ./concorde to get a list of all possible arguments.
   res = system2(bin, args = args, stdout = TRUE, stderr = TRUE)
+  #print(res)
 
   # check for possible errors
   if (hasAttributes(res, "status")) {
@@ -164,6 +163,8 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
     write(output, file = param.file)
   }
 
+  input_file = instance
+
   work_dir = tempdir()
   cur_dir = getwd()
   on.exit(setwd(cur_dir))
@@ -172,11 +173,8 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
   temp.file = tempfile(tmpdir = work_dir)
   param.file = paste0(temp.file, ".par")
   output.file = paste0(temp.file, ".out")
-  print(output.file)
-  input_file = instance
-  catf(input_file)
 
-  args = buildLKHArguments(instance, control)
+  args = buildLKHArguments(input_file, control)
   args$OUTPUT_TOUR_FILE = output.file
   writeToLKHParameterFile(param.file, args)
   # second parameter is time limit
@@ -194,6 +192,7 @@ runLKHSolver = function(instance, control, lkh.bin, restart = FALSE) {
 
   # cleanup
   unlink(param.file)
+  unlink(output.file)
 
   return(list("tour" = tour$tour, "tour.length" = tour$tour.length, "error" = NULL, solver.output = res))
 }
@@ -223,21 +222,21 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
     return(args)
   }
 
-  work_dir = tempdir()
-  cur_dir = getwd()
-  on.exit(setwd(cur_dir))
-  setwd(work_dir)
-
   args = buildEAXArguments(instance, control, restart)
   if (!restart) {
     args$restart = NULL
   }
+
   args.list = unlist(args)
   res = system2(eax.bin, args.list, stdout = TRUE, stderr = TRUE)
-  catf("WD: %s", getwd())
-  print(list.files(getwd()))
-  best.sol.conn = file(paste(basename(args$tour.file), "_BestSol", sep = ""))
+  sol.file = paste0(args$tour.file, "_BestSol")
+  #catf("Solution file should be located in: %s", sol.file)
+  best.sol.conn = file(sol.file, "r")
   lines = readLines(best.sol.conn)
+
+  on.exit(
+    close(best.sol.conn)
+  )
 
   # extract relevant data
   # first line contains #nodes and length of shortest tour found by EAX
@@ -246,8 +245,9 @@ runEAXSolver = function(instance, control, eax.bin, restart = TRUE) {
 
   # cleanup
   #FIXME: check the result files thorougly. What are all the numbers in the _Result file?
-  #unlink(paste(args$tour.file, "_BestSol", sep = ""))
-  #unlink(paste(args$tour.file, "_Result", sep = ""))
+  unlink(paste(args$tour.file, "_BestSol", sep = ""))
+  unlink(paste(args$tour.file, "_Result", sep = ""))
+  #unlink(instance)
 
   return(list("tour" = tour, "tour.length" = tour.length, error = NULL, solver.output = res))
 }
