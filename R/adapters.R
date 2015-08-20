@@ -46,24 +46,23 @@ callAustralianSolverInterface = function(instance, control, solver, bin) {
   # since this fucking Christofides implementation does not handle non-integer
   # EUC coordinates correctly we do this "transformation" here: load EUC_2D
   # instance with netgen, transform to TSP (package) instance and export again.
-  x = netgen::importFromTSPlibFormat(instance)
   requirePackages("TSP", why = paste0(solver, " TSP algorithm"))
-  y = as.TSP(x$distance.matrix)
+  y = as.TSP(instance$distance.matrix)
 
   # set up temporary folders and files
   wd = tempdir()
   temp.file = tempfile(tmpdir = wd)
 
-  temp.file.in = paste0(temp.file, ".tsp")
-  temp.file.out = paste0(temp.file, ".res")
+  file.input = paste0(temp.file, ".tsp")
+  file.output = paste0(temp.file, ".res")
 
   #FIXME: hardcoded precision
-  TSP::write_TSPLIB(y, file = temp.file.in, precision = 2L)
+  TSP::write_TSPLIB(y, file = file.input, precision = 2L)
   cur.wd = getwd()
   on.exit(setwd(cur.wd))
 
   # apply algorithm
-  args = c(toupper(solver), temp.file.in)
+  args = c(toupper(solver), file.input)
   res = try(suppressWarnings(system2(bin, args, stdout = TRUE, stderr = TRUE)))
 
   tour = NA
@@ -74,14 +73,14 @@ callAustralianSolverInterface = function(instance, control, solver, bin) {
     error = res
   }
 
-  if (file.exists(temp.file.out)) {
-    tour = scan(temp.file.out, what = integer(0), quiet = TRUE)
+  if (file.exists(file.output)) {
+    tour = scan(file.output, what = integer(0), quiet = TRUE)
     tour = tour[-1] + 1L # since the first integer is the dimension and node numbering starts at 0
-    tour.length = computeTourLength(x, tour)
-    unlink(temp.file.out)
+    tour.length = computeTourLength(instance, tour)
+    unlink(file.output)
   }
 
-  unlink(temp.file.in)
+  unlink(c(file.input, file.output))
 
   return(list(
       "tour" = tour,

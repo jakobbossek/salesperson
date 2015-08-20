@@ -23,20 +23,37 @@ makeTSPSolver.eax_restart = function() {
 }
 
 #' @export
-prepareInstance.eax_restart = function(solver, instance) {
-  return(prepareInstance.eax(solver, instance))
-}
-
-#' @export
 # @interface see runTSPSolver
 run.eax_restart = function(solver, instance, solver.pars, ...) {
+  temp.dir = tempdir()
+  temp.file = basename(tempfile(tmpdir = temp.dir))
+
+  cur.wd = getwd()
+  setwd(temp.dir)
+  on.exit(setwd(cur.wd))
+
+  is.temp.input = FALSE
+  if (testClass(instance, "Network")) {
+    file.input = paste0(temp.file, ".tsp")
+    is.temp.input = TRUE
+    netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
+  } else {
+     file.input = instance
+  }
+  assertFile(file.input, "r")
+
+  # build filenames for file which store the results
+  file.output = paste0(file.input, ".out")
+  file.sol = paste0(file.input, ".out_BestSol")
+  file.result = paste0(file.input, ".out_Result")
+
   # See solvers/eax/README.md for details
   args = list()
   args$max.trials = coalesce(solver.pars$max.trials, 1L)
-  args$tour.file = coalesce(solver.pars$tour.file, paste0(instance, ".out"))
+  args$tour.file = file.output
   args$pop.size = coalesce(solver.pars$pop.size, 100L)
   args$off.size = coalesce(solver.pars$off.size, 30L)
-  args$instance.file = instance
+  args$instance.file = file.input
   args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
   args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
   args$max.iter.with.no.improvement = coalesce(solver.pars$max.iter.with.no.improvement, 999999L)
@@ -64,7 +81,7 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
   # runsolver.output = readLines(runsolver.con)
   # close(runsolver.con)
 
-  sol.file = paste0(args$tour.file, "_BestSol")
+  #sol.file = paste0(args$tour.file, "_BestSol")
 
   # algorithm probably failed: try to extract the best solution so far
   # if (!file.exists(sol.file)) {
@@ -87,19 +104,22 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
   #     }
   #   }
   # } else {
-  best.sol.conn = file(sol.file, "r")
-  lines = readLines(best.sol.conn)
-  close(best.sol.conn)
+  sol.con = file(file.sol, "r")
+  lines = readLines(sol.con)
+  close(sol.con)
 
   # extract relevant data
   # first line contains #nodes and length of shortest tour found by EAX
+  #FIXME: we can make this nicer!
   tour.length = as.numeric(strsplit(lines[1], " ", fixed = TRUE)[[1]][2])
   tour = as.integer(strsplit(lines[2], " ", fixed = TRUE)[[1]])
 
   # cleanup
-  unlink(paste(args$tour.file, "_BestSol", sep = ""))
-  unlink(paste(args$tour.file, "_Result", sep = ""))
-  #}
+  unlink(c(file.output, file.sol, file.result))
+  if (is.temp.input) {
+    unlink(file.input)
+  }
+
   return(
     list(
       "tour" = tour,

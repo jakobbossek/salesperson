@@ -17,18 +17,31 @@ makeTSPSolver.lkh = function() {
 }
 
 #' @export
-prepareInstance.lkh = function(solver, instance) {
-  prepareInstance.eax(solver, instance)
-}
-
-#' @export
 # @interface see runTSPSolver
 run.lkh = function(solver, instance, solver.pars, ...) {
+  temp.dir = tempdir()
+  cur.dir = getwd()
+  on.exit(setwd(cur.dir))
+  setwd(temp.dir)
+
+  temp.file = basename(tempfile(tmpdir = temp.dir))
+  file.params = paste0(temp.file, ".par")
+  file.output = paste0(temp.file, ".out")
+
+  has.temporary.input = FALSE
+  if (testClass(instance, "Network")) {
+    has.temporary.input = TRUE
+    file.input = paste0(temp.file, ".tsp")
+    netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
+  } else {
+    file.input = instance
+  }
+
   # the most important parameters are the PROBLEM_FILE, the number of RUNS,
   # the initial SEED for the generator of pseudo random numbers and TIME_LIMIT
   # in seconds.
   args = list()
-  args$PROBLEM_FILE = instance
+  args$PROBLEM_FILE = file.input
   args$RUNS = coalesce(solver.pars$runs, 1L)
   args$SEED = coalesce(solver.pars$seed, 1L)
   args$TIME_LIMIT = coalesce(solver.pars$cutoff.time, 999999L)
@@ -40,30 +53,19 @@ run.lkh = function(solver, instance, solver.pars, ...) {
     args$STOP_AT_OPTIMUM = "YES"
   }
 
-  writeToLKHParameterFile = function(param.file, args) {
+  writeToLKHParameterFile = function(file.params, args) {
     args = sapply(names(args), function(name) {
       sprintf("%s = %s", name, args[[name]])
     })
     output = collapse(args, "\n")
-    write(output, file = param.file)
+    write(output, file = file.params)
   }
 
-  input_file = instance
-
-  work_dir = getwd()
-  cur_dir = getwd()
-  on.exit(setwd(cur_dir))
-  setwd(work_dir)
-
-  temp.file = tempfile(tmpdir = work_dir)
-  param.file = paste0(temp.file, ".par")
-  output.file = paste0(temp.file, ".out")
-
-  args$OUTPUT_TOUR_FILE = output.file
-  writeToLKHParameterFile(param.file, args)
+  args$OUTPUT_TOUR_FILE = file.output
+  writeToLKHParameterFile(file.params, args)
 
   # second parameter is time limit
-  lkh.args = c(param.file, instance)
+  lkh.args = c(file.params, file.input)
 
   # prepare output
   tour = NA
@@ -104,14 +106,20 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   #   }
   # } else {
   # build tour
-  tmp = readTSPlibTOURFile(output.file)
+  tmp = readTSPlibTOURFile(file.output)
   tour = tmp$tour
   tour.length = tmp$tour.length
-  unlink(output.file)
-  #}
 
-  # cleanup
-  unlink(param.file)
+  unlink(c(file.output, file.params))
+  if (has.temporary.input) {
+    unlink(file.input)
+  }
 
-  return(list("tour" = tour, "tour.length" = tour.length, "error" = error, solver.output = res))
+  return(list(
+      "tour" = tour,
+      "tour.length" = tour.length,
+      "error" = error,
+      solver.output = res
+    )
+  )
 }

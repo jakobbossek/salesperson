@@ -24,10 +24,6 @@ runSolver = function(solver, instance, solver.pars, ...) {
   }
   assertClass(solver, "TSPSolver")
   instance2 = instance
-  if (!testString(instance) && hasProperties(solver, "requires.tsplib")) {
-    #warningf("You passed a network, but solver '%s' needs a TSPlib file format. Exporting!", solver$short.name)
-    instance2 = prepareInstance(solver, instance)
-  }
   start.time = proc.time()
   res = run(solver, instance2, solver.pars, ...)
   end.time = as.numeric(proc.time() - start.time)

@@ -11,11 +11,6 @@ makeTSPSolver.concorde = function() {
 }
 
 #' @export
-prepareInstance.concorde = function(solver, instance) {
-  return(instance)
-}
-
-#' @export
 run.concorde = function(solver, instance, solver.pars, ...) {
   # set concorde path
   return(runSolverFromTSPPackage(solver, instance, solver.pars))
