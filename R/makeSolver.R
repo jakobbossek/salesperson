@@ -80,3 +80,31 @@ getSolverProperties = function(solver) {
 getSolverProperties.TSPSolver = function(solver) {
   return(solver$properties)
 }
+
+#' @title
+#'   Run a TSP solver to solve a problem instance.
+#'
+#' @param solver [\code{TSPSolver}]\cr
+#'   Solver object.
+#' @param instance [\code{Network}]\cr
+#'   TSP instance to solve.
+#' @param solver.pars [\code{list}]\cr
+#'   Potentially empty named list of solver parameters passed to the solver.
+#' @return [\code{TSPSolverResult}]
+#' @export
+run = function(solver, instance, solver.pars, ...) {
+  UseMethod("run")
+}
+
+#' @title
+#'   Preprocess instance before running the solver on it.
+#'
+#' @param solver [\code{TSPSolver}]\cr
+#'   Solver object.
+#' @param instance [\code{Network}]\cr
+#'   Instance to solver.
+#' @return [any] Specific to the solver.
+#' @export
+prepareInstance = function(solver, instance) {
+  UseMethod("prepareInstance")
+}
