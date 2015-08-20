@@ -50,6 +50,13 @@ makeTSPSolverInternal = function(cl, short.name, name,
 }
 
 #' @title
+#'   Make TSP solver dispatcher.
+#' @export
+makeTSPSolver = function(solver) {
+  UseMethod("makeTSPSolver")
+}
+
+#' @title
 #'   Check if learner has certain properties.
 #'
 #' @param solver [\code{TSPSolver}]\cr
