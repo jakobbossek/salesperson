@@ -23,20 +23,20 @@ prepareInstance.lkh = function(solver, instance) {
 
 #' @export
 # @interface see runTSPSolver
-run.lkh = function(solver, instance, control) {
+run.lkh = function(solver, instance, solver.pars, ...) {
   # the most important parameters are the PROBLEM_FILE, the number of RUNS,
   # the initial SEED for the generator of pseudo random numbers and TIME_LIMIT
   # in seconds.
   args = list()
   args$PROBLEM_FILE = instance
-  args$RUNS = coalesce(control$runs, 1L)
-  args$SEED = coalesce(control$seed, 1L)
-  args$TIME_LIMIT = coalesce(control$cutoff.time, 999999L)
-  if (!is.null(control$max.trials)) {
-    args$MAX_TRIALS = as.integer(control$max.trials)
+  args$RUNS = coalesce(solver.pars$runs, 1L)
+  args$SEED = coalesce(solver.pars$seed, 1L)
+  args$TIME_LIMIT = coalesce(solver.pars$cutoff.time, 999999L)
+  if (!is.null(solver.pars$max.trials)) {
+    args$MAX_TRIALS = as.integer(solver.pars$max.trials)
   }
-  if (!is.null(control$opt.tour.length)) {
-    args$OPTIMUM = as.integer(control$opt.tour.length)
+  if (!is.null(solver.pars$opt.tour.length)) {
+    args$OPTIMUM = as.integer(solver.pars$opt.tour.length)
     args$STOP_AT_OPTIMUM = "YES"
   }
 
@@ -73,7 +73,7 @@ run.lkh = function(solver, instance, control) {
 
   # here we append the binary file and runsolver stuff
   # runsolver.file = tempfile()
-  # lkh.args = c("-C", control$stop.on.cutoff.time, "-w", runsolver.file, lkh.bin, lkh.args)
+  # lkh.args = c("-C", solver.pars$stop.on.cutoff.time, "-w", runsolver.file, lkh.bin, lkh.args)
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)

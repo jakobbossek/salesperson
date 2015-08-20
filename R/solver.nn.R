@@ -15,6 +15,6 @@ makeTSPSolver.nn = function() {
 }
 
 #' @export
-run.nn = function(solver, instance, solver.pars) {
+run.nn = function(solver, instance, solver.pars, ...) {
   return(runSolverFromTSPPackage(solver, instance, solver.pars))
 }

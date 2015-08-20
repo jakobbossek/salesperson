@@ -16,6 +16,6 @@ prepareInstance.mst = function(solver, instance) {
 
 #' @export
 # @interface see runTSPSolver
-run.mst = function(solver, instance, control) {
-  callAustralianSolverInterface(instance, control, bin = solver$bin, solver = "2APP")
+run.mst = function(solver, instance, solver.pars, ...) {
+  callAustralianSolverInterface(instance, solver.pars, bin = solver$bin, solver = "2APP")
 }

@@ -16,7 +16,7 @@ prepareInstance.concorde = function(solver, instance) {
 }
 
 #' @export
-run.concorde = function(solver, instance, control) {
+run.concorde = function(solver, instance, solver.pars, ...) {
   x = importFromTSPlibFormat(instance)
 
   #FIXME: result file is located in working dir and is "INSTANCE_FILE.res".
@@ -26,7 +26,7 @@ run.concorde = function(solver, instance, control) {
   tour.file = paste0(temp.file, ".sol")
   result.file = paste0(temp.file, ".res")
   input.file = instance
-  seed = coalesce(control$seed, 1L)
+  seed = coalesce(solver.pars$seed, 1L)
 
   # set arguments
   args = c(

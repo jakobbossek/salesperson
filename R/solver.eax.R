@@ -35,26 +35,26 @@ prepareInstance.eax = function(solver, instance) {
 
 #' @export
 # @interface see runTSPSolver
-run.eax = function(solver, instance, control) {
+run.eax = function(solver, instance, solver.pars, ...) {
   # See solvers/eax/README.md for details
   args = list()
-  args$max.trials = coalesce(control$max.trials, 1L)
-  args$tour.file = coalesce(control$tour.file, paste0(instance, ".out"))
-  args$pop.size = coalesce(control$pop.size, 100L)
-  args$off.size = coalesce(control$off.size, 30L)
+  args$max.trials = coalesce(solver.pars$max.trials, 1L)
+  args$tour.file = coalesce(solver.pars$tour.file, paste0(instance, ".out"))
+  args$pop.size = coalesce(solver.pars$pop.size, 100L)
+  args$off.size = coalesce(solver.pars$off.size, 30L)
   args$instance.file = instance
-  args$opt.tour.length = coalesce(control$opt.tour.length, 0L)
-  args$cutoff.time = coalesce(control$cutoff.time, 999999L)
-  args$max.iter.with.no.improvement = coalesce(control$max.iter.with.no.improvement, 999999L)
+  args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
+  args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
+  args$max.iter.with.no.improvement = coalesce(solver.pars$max.iter.with.no.improvement, 999999L)
   args$max.restarts = 0L
-  args$stop.on.best.close.to.average = coalesce(control$stop.on.best.close.to.average, 1L)
-  args$seed = coalesce(control$seed, 123L)
+  args$stop.on.best.close.to.average = coalesce(solver.pars$stop.on.best.close.to.average, 1L)
+  args$seed = coalesce(solver.pars$seed, 123L)
 
   args.list = unlist(args)
 
   # IMPORTANT: append runsolver stuff
   # This is ugly as sin, but I do not know a better/nicer solution at the moment
-  #args.list = c("-C", control$stop.on.cutoff.time, "-w", runsolver.file, eax.bin, args.list)
+  #args.list = c("-C", solver.pars$stop.on.cutoff.time, "-w", runsolver.file, eax.bin, args.list)
 
   # try to call solver
   res = try(suppressWarnings(system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)))

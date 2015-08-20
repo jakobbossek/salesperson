@@ -12,6 +12,6 @@ makeTSPSolver.nearest_insertion = function() {
 }
 
 #' @export
-run.nearest_insertion = function(solver, instance, solver.pars) {
+run.nearest_insertion = function(solver, instance, solver.pars, ...) {
   return(runSolverFromTSPPackage(solver, instance, solver.pars))
 }

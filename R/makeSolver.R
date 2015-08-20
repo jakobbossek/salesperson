@@ -52,11 +52,9 @@ makeTSPSolverInternal = function(cl, short.name, name,
 #' @title
 #'   Make TSP solver dispatcher.
 #'
-#' @param solver [\code{character(1)}]\cr
-#'   Solver object.
 #' @return [\code{TSPSolver}]
 #' @export
-makeTSPSolver = function(solver) {
+makeTSPSolver = function() {
   UseMethod("makeTSPSolver")
 }
 

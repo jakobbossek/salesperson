@@ -15,6 +15,6 @@ makeTSPSolver.repetitive_nn = function() {
 }
 
 #' @export
-run.repetitive_nn = function(solver, instance, solver.pars) {
+run.repetitive_nn = function(solver, instance, solver.pars, ...) {
   return(runSolverFromTSPPackage(solver, instance, solver.pars))
 }
