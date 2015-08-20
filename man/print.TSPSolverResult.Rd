@@ -7,7 +7,7 @@
 \method{print}{TSPSolverResult}(x, ...)
 }
 \arguments{
-\item{x}{[\code{\link{TSPSolverResult}}]\cr
+\item{x}{[\code{TSPSolverResult}]\cr
 Result object.}
 
 \item{...}{[any]\cr
