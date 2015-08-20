@@ -47,7 +47,7 @@ callAustralianSolverInterface = function(instance, control, solver, bin) {
   # EUC coordinates correctly we do this "transformation" here: load EUC_2D
   # instance with netgen, transform to TSP (package) instance and export again.
   x = netgen::importFromTSPlibFormat(instance)
-  requirePackages("TSP", why = "christofides algorithm")
+  requirePackages("TSP", why = paste0(solver, " TSP algorithm"))
   y = as.TSP(x$distance.matrix)
 
   # set up temporary folders and files
@@ -74,17 +74,6 @@ callAustralianSolverInterface = function(instance, control, solver, bin) {
     error = res
   }
 
-  # since we get the tour only we need to compute the length by hand
-  computeTourLength = function(x, tour) {
-    dm = x$distance.matrix
-    tmp = c(tour, tour[1L])
-    len = 0.0
-    for (i in 1:(length(tour))) {
-      len = len + dm[tmp[i], tmp[i + 1L]]
-    }
-    return(len)
-  }
-
   if (file.exists(temp.file.out)) {
     tour = scan(temp.file.out, what = integer(0), quiet = TRUE)
     tour = tour[-1] + 1L # since the first integer is the dimension and node numbering starts at 0
@@ -94,5 +83,11 @@ callAustralianSolverInterface = function(instance, control, solver, bin) {
 
   unlink(temp.file.in)
 
-  return(list("tour" = tour, "tour.length" = tour.length, "error" = error, solver.output = res))
+  return(list(
+      "tour" = tour,
+      "tour.length" = tour.length,
+      "error" = error,
+      solver.output = res
+    )
+  )
 }
