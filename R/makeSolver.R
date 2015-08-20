@@ -48,3 +48,35 @@ makeTSPSolverInternal = function(cl, short.name, name,
     classes = c(cl, "TSPSolver")
   )
 }
+
+#' @title
+#'   Check if learner has certain properties.
+#'
+#' @param solver [\code{TSPSolver}]\cr
+#'   Solver object.
+#' @param properties [\code{character}]\cr
+#'   Vector of strings.
+#' @return [\code{logical(1)}] \code{TRUE} if the solver has all properties, \code{FALSE} otherwise.
+#' @export
+hasProperties = function(solver, properties) {
+  UseMethod("hasProperties")
+}
+
+hasProperties.TSPSolver = function(solver, properties) {
+  return(isSubset(properties, getSolverProperties(solver)))
+}
+
+#' @title
+#'   Get the properties/tags of the solver.
+#'
+#' @param solver [\code{TSPSolver}]\cr
+#'   Solver object.
+#' @return [\code{character}]
+#' @export
+getSolverProperties = function(solver) {
+  UseMethod("getSolverProperties")
+}
+
+getSolverProperties.TSPSolver = function(solver) {
+  return(solver$properties)
+}
