@@ -3,7 +3,7 @@
 #' @template arg_network
 #' @template arg_include_costs
 #' @return [\code{list}]
-#' @export
+#' @export
 getCentroidFeatureSet = function(x, include.costs = FALSE) {
   assertClass(x, "Network")
   measureTime(expression({
