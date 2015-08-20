@@ -33,13 +33,17 @@ NULL
 #   Raw stdout/stderr output of the solver.
 # @return [\code{TSPSolverResult}]
 #   Result object.
-makeTSPSolverResult = function(instance.name, solver,
-  tour.length = NA, tour = NA, runtime = NA, error = NULL, solver.output = NULL) {
+makeTSPSolverResult = function(
+  instance.name,
+  solver,
+  tour.length = NA, tour = NA,
+  runtime = NA, error = NULL,
+  solver.output = NULL) {
   assertCharacter(instance.name, len = 1L)
   assertCharacter(solver, len = 1L)
   !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
   !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
-  !is.na(runtime) && assertNumber(runtime, na.ok = FALSE)
+  !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
   if (!isPermutation(tour)) {
     stopf("Passed tour is not a permutation of the nodes!")
   }
