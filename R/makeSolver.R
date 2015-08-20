@@ -115,16 +115,3 @@ getSolverProperties.TSPSolver = function(solver) {
 run = function(solver, instance, solver.pars, ...) {
   UseMethod("run")
 }
-
-#' @title
-#'   Preprocess instance before running the solver on it.
-#'
-#' @param solver [\code{TSPSolver}]\cr
-#'   Solver object.
-#' @param instance [\code{Network}]\cr
-#'   Instance to solver.
-#' @return [any] Specific to the solver.
-#' @export
-prepareInstance = function(solver, instance) {
-  UseMethod("prepareInstance")
-}
