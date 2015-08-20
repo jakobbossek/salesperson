@@ -8,7 +8,7 @@
 #'
 #' @param solver [\code{character(1)} || \code{TSPSolver}]\cr
 #'   Solver.
-#' @param instance [\code{\link[netgen]{Network}}]\cr
+#' @param instance [\code{Network}]\cr
 #'   Instance to solve.
 #' @param solver.pars [\code{list}]\cr
 #'   Named list of parameters for the solver.

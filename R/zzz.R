@@ -4,5 +4,7 @@
 #' @import netgen
 #' @import Rcpp
 #' @import stringr
+#' @import ParamHelpers
+#' @import TSP
 #' @useDynLib salesperson
 NULL

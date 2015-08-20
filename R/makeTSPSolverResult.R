@@ -61,7 +61,7 @@ makeTSPSolverResult = function(
 
 #' Print TSPSolverResult to stdout.
 #'
-#' @param x [\code{\link{TSPSolverResult}}]\cr
+#' @param x [\code{TSPSolverResult}]\cr
 #'   Result object.
 #' @param ... [any]\cr
 #'   Not used.

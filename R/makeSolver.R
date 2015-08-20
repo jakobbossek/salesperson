@@ -51,6 +51,10 @@ makeTSPSolverInternal = function(cl, short.name, name,
 
 #' @title
 #'   Make TSP solver dispatcher.
+#'
+#' @param solver [\code{character(1)}]\cr
+#'   Solver object.
+#' @return [\code{TSPSolver}]
 #' @export
 makeTSPSolver = function(solver) {
   UseMethod("makeTSPSolver")
@@ -106,6 +110,8 @@ getSolverProperties.TSPSolver = function(solver) {
 #'   TSP instance to solve.
 #' @param solver.pars [\code{list}]\cr
 #'   Potentially empty named list of solver parameters passed to the solver.
+#' @param ... [any]\cr
+#'   Not used.
 #' @return [\code{TSPSolverResult}]
 #' @export
 run = function(solver, instance, solver.pars, ...) {

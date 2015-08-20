@@ -4,7 +4,7 @@
 #'
 #' @param solver [\code{character(1)}]\cr
 #'    Name of the solver.
-#' @param instance [\code{\link[netgen]{Network}}]\cr
+#' @param instance [\code{Network}]\cr
 #'    Netgen network.
 #' @param solver.pars [\code{list}]\cr
 #'    Named list of solver parameters.
