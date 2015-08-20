@@ -47,4 +47,6 @@ expect_valid_TSPSolverResult = function(x, n.points, info = NULL) {
   expect_true(is.numeric(x$tour.length), info = paste0("Tour is not numeric in case: ", info))
   expect_equal(length(x$tour), n.points, info = paste0("Tour has wrong length in case:", info))
   expect_true(isPermutation(x$tour), info = paste0("Tour is not a permutation in case:, ", info))
+  expect_true(all(x$runtime >= 0), info = paste0("Runtime is always greater (or equal) to zero in case: ", info))
+  expect_true(is.null(x$error), info = paste0("An error occured in case: ", info)
 }
