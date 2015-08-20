@@ -57,6 +57,15 @@ makeTSPSolver = function(solver) {
 }
 
 #' @title
+#'   Check if solver is called via an external binary.
+#'
+#' @param solver [\code{TSPSolver}]
+#' @return [\code{logical(1)}]
+isExternalSolver = function(solver) {
+  return(hasProperties(solver, "external"))
+}
+
+#' @title
 #'   Check if learner has certain properties.
 #'
 #' @param solver [\code{TSPSolver}]\cr
