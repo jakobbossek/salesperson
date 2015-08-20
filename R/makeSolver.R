@@ -1,0 +1,50 @@
+#' @title
+#'   Generator for TSP solvers.
+#' @description
+#'   Construct a TSP solver object.
+#'
+#' @param solver [\code{character(1)}]\cr
+#'   Solver id.
+#' @return [\code{TSPSolver}]
+makeSolver = function(solver) {
+  constructor = getS3method("makeTSPSolver", solver)
+  solver = do.call(constructor, list())
+  if (isExternalSolver(solver)) {
+    solver$bin = solverPaths()[[solver$cl]] #getSolverPath(solver$short.name)
+  }
+  return(solver)
+}
+
+#' @title
+#'   Internal generator for TSP solvers.
+#'
+#' @param cl [\code{character(1)}]\cr
+#'   Class name for the TSP solver.
+#' @param short.name [\code{character(1)}]\cr
+#'   Short name / identifier for the solver.
+#' @param name [\code{character(1)}]\cr
+#'   Long name of the solver.
+#' @param properties [\code{character}]\cr
+#'   Character vector of characterizing properties of the learner, e.g., \dQuote{external}
+#'   if the solver is called via an external script.
+#' @param par.set [\code{\link[ParamHelpers]{ParamSet}}]\cr
+#'   Set of solver parameters with constraints and defaults.
+#' @param packages [\code{character}]\cr
+#'   Character vector of package names of R packages which are necessary to
+#'   run the solver.
+#' @param description [\code{character(1)}]\cr
+#'   Optional description of the solver or solvers functioning principle.
+#' @return [\code{TSPSolver}]
+makeTSPSolverInternal = function(cl, short.name, name,
+  properties, par.set, packages = NULL, description = NULL) {
+  makeS3Obj(
+    cl = cl,
+    short.name = short.name,
+    name = name,
+    description = description,
+    properties = properties,
+    par.set = par.set,
+    packages = packages,
+    classes = c(cl, "TSPSolver")
+  )
+}
