@@ -24,3 +24,70 @@ runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
     )
   )
 }
+
+#' @title
+#'   Adapter/interface to the TSP algorithms implemented by the group of Markus Wagner.
+#'
+#' @param instance [\code{character(1)}]\cr
+#'   Path to instance in TSPlib format.
+#' @param control [\code{list}]\cr
+#'   Control object.
+#' @param solver [\code{character(1)}]\cr
+#'   Solver name, i.e., on of 2APP, 2OPT or CHRIS.
+#' @param bin [\code{character(1)}]\cr
+#'   Full path to the binary executable.
+#' @return [\code{list}]
+callAustralianSolverInterface = function(instance, control, solver, bin) {
+  # since this fucking Christofides implementation does not handle non-integer
+  # EUC coordinates correctly we do this "transformation" here: load EUC_2D
+  # instance with netgen, transform to TSP (package) instance and export again.
+  x = netgen::importFromTSPlibFormat(instance)
+  requirePackages("TSP", why = "christofides algorithm")
+  y = as.TSP(x$distance.matrix)
+
+  # set up temporary folders and files
+  wd = tempdir()
+  temp.file = tempfile(tmpdir = wd)
+
+  temp.file.in = paste0(temp.file, ".tsp")
+  temp.file.out = paste0(temp.file, ".res")
+
+  #FIXME: hardcoded precision
+  TSP::write_TSPLIB(y, file = temp.file.in, precision = 2L)
+  cur.wd = getwd()
+  on.exit(setwd(cur.wd))
+
+  # apply algorithm
+  args = c(toupper(solver), temp.file.in)
+  res = try(suppressWarnings(system2(bin, args, stdout = TRUE, stderr = TRUE)))
+
+  tour = NA
+  tour.length = NA
+  error = NULL
+
+  if (inherits(res, "try-error")) {
+    error = res
+  }
+
+  # since we get the tour only we need to compute the length by hand
+  computeTourLength = function(x, tour) {
+    dm = x$distance.matrix
+    tmp = c(tour, tour[1L])
+    len = 0.0
+    for (i in 1:(length(tour))) {
+      len = len + dm[tmp[i], tmp[i + 1L]]
+    }
+    return(len)
+  }
+
+  if (file.exists(temp.file.out)) {
+    tour = scan(temp.file.out, what = integer(0), quiet = TRUE)
+    tour = tour[-1] + 1L # since the first integer is the dimension and node numbering starts at 0
+    tour.length = computeTourLength(x, tour)
+    unlink(temp.file.out)
+  }
+
+  unlink(temp.file.in)
+
+  return(list("tour" = tour, "tour.length" = tour.length, "error" = error, solver.output = res))
+}
