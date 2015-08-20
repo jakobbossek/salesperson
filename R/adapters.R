@@ -14,7 +14,12 @@ runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
   # convert to TSP file format ...
   instance2 = TSP(instance$distance.matrix)
   # ... and solve
-  res = TSP::solve_TSP(instance2, method = solver$cl)
+  if (solver$cl == "concorde") {
+    # NOTE: since concorde_path needs to set the directory and not the full path
+    # to the executable, we need to apply dirname here
+    TSP::concorde_path(dirname(solver$bin))
+  }
+  res = suppressAll(TSP::solve_TSP(instance2, method = solver$cl))
   return(
     list(
       "tour" = as.integer(res),
