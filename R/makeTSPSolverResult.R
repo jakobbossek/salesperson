@@ -73,7 +73,7 @@ print.TSPSolverResult = function(x, ...) {
   } else {
     catf("Solved instance '%s' successfully!", x$instance.name)
     catf("Used solver:  %s", toupper(x$solver))
-    catf("Elapsed time: %.2f [seconds]", x$runtime)
+    catf("Elapsed time: %.2f [seconds]", x$runtime[3L])
     catf("Tour length:  %.2f", x$tour.length)
     max.idx = min(length(x$tour), 10L)
     catf("Head of tour: %s", paste(collapse(x$tour[1:max.idx], sep = ", "), ", ...", sep = ""))
