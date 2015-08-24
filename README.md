@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/jakobbossek/salesperson.svg)](https://travis-ci.org/jakobbossek/salesperson)
 [![Build status](https://ci.appveyor.com/api/projects/status/6hd5dguq6w3v7t7j/branch/master?svg=true)](https://ci.appveyor.com/project/jakobbossek/salesperson/branch/master)
-[![Coverage Status](https://coveralls.io/repos/jakobbossek/salesperson/badge.svg?branch=master&service=github)](https://coveralls.io/github/jakobbossek/salesperson?branch=master))
+[![Coverage Status](https://coveralls.io/repos/jakobbossek/salesperson/badge.svg?branch=master&service=github)](https://coveralls.io/github/jakobbossek/salesperson?branch=master)
 
 ## Description
 
