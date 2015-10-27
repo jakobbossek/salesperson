@@ -5,16 +5,13 @@ makeTSPSolver.eax = function() {
     short.name = "EAX",
     name = "Edge-Assembly-Crossover",
     properties = c("euclidean", "external", "requires.tsplib"),
-    #FIXME: here we misuse learner parameters as solver parameter, but i think it is ok
     par.set = makeParamSet(
       makeIntegerLearnerParam(id = "max.trials", default = 1L, lower = 1L),
       makeIntegerLearnerParam(id = "pop.size", default = 100L, lower = 2L),
       makeIntegerLearnerParam(id = "off.size", default = 30L),
       makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
       makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      #FIXME: the next one is not yet implemented
       makeIntegerLearnerParam(id = "max.iter.with.no.improvement", default = 10, lower = 1L),
-      # zero means no restarts at all
       makeLogicalLearnerParam(id = "stop.on.best.close.to.average", default = TRUE),
       makeIntegerLearnerParam(id = "seed", default = 1L)
     )
@@ -56,6 +53,7 @@ run.eax = function(solver, instance, solver.pars, ...) {
   args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
   args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
   args$max.iter.with.no.improvement = coalesce(solver.pars$max.iter.with.no.improvement, 999999L)
+  # deactivate restarts
   args$max.restarts = 0L
   args$stop.on.best.close.to.average = coalesce(solver.pars$stop.on.best.close.to.average, 1L)
   args$seed = coalesce(solver.pars$seed, 123L)

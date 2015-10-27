@@ -5,7 +5,6 @@ makeTSPSolver.lkh = function() {
     short.name = "LKH",
     name = "Lin-Kernigham Heuristic",
     properties = c("euclidean", "external", "requires.tsplib"),
-    #FIXME: here we misuse learner parameters as solver parameter, but i think it is ok
     par.set = makeParamSet(
       makeIntegerLearnerParam(id = "runs", default = 1L, lower = 1L),
       makeIntegerLearnerParam(id = "seed", default = 1L, lower = 1L),
