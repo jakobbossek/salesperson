@@ -38,7 +38,7 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
     is.temp.input = TRUE
     netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
   } else {
-     file.input = instance
+    file.input = instance
   }
   assertFile(file.input, "r")
 

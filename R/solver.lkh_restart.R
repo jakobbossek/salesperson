@@ -10,7 +10,7 @@ makeTSPSolver.lkh_restart = function() {
       makeIntegerLearnerParam(id = "seed", default = 1L, lower = 1L),
       makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
       makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "max.trials", default = 100000000L, lower = 1L)
+      makeIntegerLearnerParam(id = "max.restarts", default = 100000000L, lower = 1L)
     )
   )
 }
@@ -44,8 +44,8 @@ run.lkh_restart = function(solver, instance, solver.pars, ...) {
   args$RUNS = coalesce(solver.pars$runs, 1L)
   args$SEED = coalesce(solver.pars$seed, 1L)
   args$TIME_LIMIT = coalesce(solver.pars$cutoff.time, 999999L)
-  if (!is.null(solver.pars$max.trials)) {
-    args$MAX_TRIALS = as.integer(solver.pars$max.trials)
+  if (!is.null(solver.pars$max.restarts)) {
+    args$MAX_TRIALS = as.integer(solver.pars$max.restarts)
   }
   if (!is.null(solver.pars$opt.tour.length)) {
     args$OPTIMUM = as.integer(solver.pars$opt.tour.length)
