@@ -63,7 +63,7 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   writeToLKHParameterFile(file.params, args)
 
   # second parameter is time limit
-  lkh.args = c(file.params, file.input)
+  lkh.args = c(file.params, args$TIME_LIMIT)
 
   # prepare output
   tour = NA
