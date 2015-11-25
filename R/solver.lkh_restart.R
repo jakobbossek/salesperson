@@ -31,7 +31,7 @@ run.lkh_restart = function(solver, instance, solver.pars, ...) {
   if (testClass(instance, "Network")) {
     has.temporary.input = TRUE
     file.input = paste0(temp.file, ".tsp")
-    netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
+    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
   } else {
     file.input = instance
   }
@@ -44,9 +44,8 @@ run.lkh_restart = function(solver, instance, solver.pars, ...) {
   args$RUNS = coalesce(solver.pars$runs, 1L)
   args$SEED = coalesce(solver.pars$seed, 1L)
   args$TIME_LIMIT = coalesce(solver.pars$cutoff.time, 999999L)
-  if (!is.null(solver.pars$max.restarts)) {
-    args$MAX_TRIALS = as.integer(solver.pars$max.restarts)
-  }
+  args$MAX_TRIALS = coalesce(solver.pars$max.restarts, 999999L)
+
   if (!is.null(solver.pars$opt.tour.length)) {
     args$OPTIMUM = as.integer(solver.pars$opt.tour.length)
     args$STOP_AT_OPTIMUM = "YES"

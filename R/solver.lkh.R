@@ -31,7 +31,7 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   if (testClass(instance, "Network")) {
     has.temporary.input = TRUE
     file.input = paste0(temp.file, ".tsp")
-    netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
+    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
   } else {
     file.input = instance
   }
