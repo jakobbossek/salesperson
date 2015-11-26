@@ -60,7 +60,6 @@ run.eax = function(solver, instance, solver.pars, ...) {
   args$seed = coalesce(solver.pars$seed, 123L)
 
   args.list = unlist(args)
-  print(args.list)
 
   # IMPORTANT: append runsolver stuff
   # This is ugly as sin, but I do not know a better/nicer solution at the moment
@@ -68,7 +67,7 @@ run.eax = function(solver, instance, solver.pars, ...) {
 
   # try to call solver
   res = try(suppressWarnings(system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)))
-  print(res)
+
   # prepare result
   tour = NA
   tour.length = NA

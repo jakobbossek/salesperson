@@ -69,7 +69,6 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
 
   # try to call solver
   res = try(suppressWarnings(system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)))
-  print(res)
 
   # prepare result
   tour = NA
