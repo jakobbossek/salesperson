@@ -11,8 +11,8 @@ makeTSPSolver.eax = function() {
       makeIntegerLearnerParam(id = "off.size", default = 30L),
       makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
       makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "max.iter.with.no.improvement", default = 10, lower = 1L),
-      makeLogicalLearnerParam(id = "stop.on.best.close.to.average", default = TRUE),
+      #makeIntegerLearnerParam(id = "max.iter.with.no.improvement", default = 10, lower = 1L),
+      #makeLogicalLearnerParam(id = "stop.on.best.close.to.average", default = TRUE),
       makeIntegerLearnerParam(id = "seed", default = 1L)
     )
   )
@@ -32,7 +32,7 @@ run.eax = function(solver, instance, solver.pars, ...) {
   if (testClass(instance, "Network")) {
     file.input = paste0(temp.file, ".tsp")
     is.temp.input = TRUE
-    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
+    netgen::exportToTSPlibFormat(instance, filename = file.input, use.extended.format = FALSE)
   } else {
      file.input = instance
   }
@@ -44,6 +44,7 @@ run.eax = function(solver, instance, solver.pars, ...) {
   file.result = paste0(file.input, ".out_Result")
 
   # See solvers/eax/README.md for details
+  # Examplary call to EAX: #./jikken 10 DATA 100 30 rat575.tsp 0 60 seed
   args = list()
   args$max.trials = coalesce(solver.pars$max.trials, 1L)
   args$tour.file = file.output
@@ -52,13 +53,14 @@ run.eax = function(solver, instance, solver.pars, ...) {
   args$instance.file = file.input
   args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
   args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
-  args$max.iter.with.no.improvement = coalesce(solver.pars$max.iter.with.no.improvement, 999999L)
+  #args$max.iter.with.no.improvement = coalesce(solver.pars$max.iter.with.no.improvement, 999999L)
   # deactivate restarts
-  args$max.restarts = 0L
-  args$stop.on.best.close.to.average = coalesce(solver.pars$stop.on.best.close.to.average, 1L)
+  #args$max.restarts = 0L
+  #args$stop.on.best.close.to.average = coalesce(solver.pars$stop.on.best.close.to.average, 1L)
   args$seed = coalesce(solver.pars$seed, 123L)
 
   args.list = unlist(args)
+  print(args.list)
 
   # IMPORTANT: append runsolver stuff
   # This is ugly as sin, but I do not know a better/nicer solution at the moment
@@ -66,7 +68,7 @@ run.eax = function(solver, instance, solver.pars, ...) {
 
   # try to call solver
   res = try(suppressWarnings(system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)))
-
+  print(res)
   # prepare result
   tour = NA
   tour.length = NA
