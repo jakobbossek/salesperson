@@ -35,6 +35,9 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
   if (testClass(instance, "Network")) {
     file.input = paste0(temp.file, ".tsp")
     is.temp.input = TRUE
+    if (any(round(instance$distance.matrix) != instance$distance.matrix)) {
+      stopf("EAX+restart can handle only integer distances!")
+    }
     netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
   } else {
     file.input = instance
