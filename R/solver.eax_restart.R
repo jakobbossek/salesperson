@@ -16,7 +16,9 @@ makeTSPSolver.eax_restart = function() {
       # zero means no restarts at all
       #makeIntegerLearnerParam(id = "max.restarts", default = 10L),
       #makeLogicalLearnerParam(id = "stop.on.best.close.to.average", default = TRUE),
-      makeIntegerLearnerParam(id = "seed", default = 1L)
+      makeIntegerLearnerParam(id = "seed", default = 1L),
+      # the following paraemters a not parameters of the C++ implementation
+      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
     )
   )
 }
@@ -33,12 +35,13 @@ run.eax_restart = function(solver, instance, solver.pars, ...) {
 
   is.temp.input = FALSE
   if (testClass(instance, "Network")) {
+    full.matrix = coalesce(solver.pars$full.matrix, FALSE)
     file.input = paste0(temp.file, ".tsp")
     is.temp.input = TRUE
-    if (any(round(instance$distance.matrix) != instance$distance.matrix)) {
+    if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
       stopf("EAX+restart can handle only integer distances!")
     }
-    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
+    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE)
   } else {
     file.input = instance
   }
