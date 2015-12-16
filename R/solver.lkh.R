@@ -84,7 +84,6 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = try(suppressWarnings(system2(solver$bin, lkh.args, stdout = TRUE, stderr = TRUE)))
-  print(res)
 
   # read runsolver output
   # runsolver.con = file(runsolver.file, "r")
