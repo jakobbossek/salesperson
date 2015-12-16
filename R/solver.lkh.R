@@ -11,6 +11,8 @@ makeTSPSolver.lkh = function() {
       makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
       makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
       makeIntegerLearnerParam(id = "max.trials", default = 100000000L, lower = 1L)
+      # the following paraemters a not parameters of the C++ implementation
+      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
     )
   )
 }
@@ -29,9 +31,13 @@ run.lkh = function(solver, instance, solver.pars, ...) {
 
   has.temporary.input = FALSE
   if (testClass(instance, "Network")) {
-    has.temporary.input = TRUE
+    full.matrix = coalesce(solver.pars$full.matrix, FALSE)
     file.input = paste0(temp.file, ".tsp")
-    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = TRUE, use.extended.format = FALSE)
+    has.temporary.input = TRUE
+    if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
+      stopf("LKH can handle only integer distances!")
+    }
+    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE, digits = 100)
   } else {
     file.input = instance
   }
@@ -78,6 +84,7 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = try(suppressWarnings(system2(solver$bin, lkh.args, stdout = TRUE, stderr = TRUE)))
+  print(res)
 
   # read runsolver output
   # runsolver.con = file(runsolver.file, "r")
