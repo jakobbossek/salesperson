@@ -17,18 +17,21 @@
 #'   library(netgen)
 #'   x = generateRandomNetwork(n.points = 50L)
 #'   # get all features available in salesperson with default parameters
-#'   fs = getFeatureSet(x)
+#'   # Note that we always exclude the VRP problem specific VRP features, since
+#'   # we are operating on a simple euclidean TSP instance without depots and
+#'   # arrival times.
+#'   fs = getFeatureSet(x, black.list = "VRP")
 #'
 #'   # now include the costs of computing (in seconds) for each set of parameters
 #'   # as additional features
-#'   fs = getFeatureSet(x, include.costs = TRUE)
+#'   fs = getFeatureSet(x, black.list = "VRP", include.costs = TRUE)
 #'
 #'   # compute all but MST and distance features
-#'   fs = getFeatureSet(x, black.list = c("MST", "Distance"))
+#'   fs = getFeatureSet(x, black.list = c("VRP", "MST", "Distance"))
 #'
 #'   # now set user-defined parameter values for cluster
 #'   args = list("Cluster" = list("epsilon" = c(0.01, 0.05, 0.1, 0.2, 0.3)))
-#'   fs = getFeatureSet(x, feature.fun.args = args)
+#'   fs = getFeatureSet(x, black.list = "VRP", feature.fun.args = args)
 #' @export
 getFeatureSet = function(x, black.list = character(0),
   include.costs = FALSE,
@@ -80,7 +83,7 @@ getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
 #' @export
 getAvailableFeatureSets = function() {
   c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
-    "Distance", "Modes", "MST", "NearestNeighbour")
+    "Distance", "Modes", "MST", "NearestNeighbour", "VRP")
 }
 
 #' Returns list of parameters defaults for feature computation.

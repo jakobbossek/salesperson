@@ -1,7 +1,10 @@
 Package: salesperson
 Type: Package
-Title: Computation of Instance Feature Sets and R Interface to the State-of-the-Art Solvers for the Traveling Salesperson Problem
-Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics, frequently termed instance features.
+Title: Computation of Instance Feature Sets and R Interface to the State-of-the-
+    Art Solvers for the Traveling Salesperson Problem
+Description: Comprehensive collection of functions for solving and analizing
+    the symmetric Traveling Salesperson Problem (TSP) by means of instance
+    characteristics, frequently termed instance features.
 Version: 1.0
 Date: 2015-08-20
 Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role =
@@ -25,3 +28,4 @@ Suggests:
 LinkingTo: Rcpp
 LazyData: yes
 ByteCompile: yes
+RoxygenNote: 5.0.1
