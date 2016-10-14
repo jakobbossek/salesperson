@@ -23,7 +23,8 @@ Imports:
     checkmate (>= 1.5.1),
     Rcpp (>= 0.11.3),
     TSP (>= 1.1-2),
-    fpc
+    fpc,
+    splancs
 Suggests:
     testthat
 LinkingTo: Rcpp

@@ -7,5 +7,6 @@
 #' @import ParamHelpers
 #' @import TSP
 #' @import fpc
+#' @importFrom splancs areapl
 #' @useDynLib salesperson
 NULL

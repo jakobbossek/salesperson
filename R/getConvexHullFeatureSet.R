@@ -6,9 +6,17 @@
 #' @export
 getConvexHullFeatureSet = function(x, include.costs = FALSE) {
   assertClass(x, "Network")
-  # here we delegate to tspmeta
-  tsp.instance = netgenToTSPmeta(x)
   measureTime(expression({
-    tspmeta::feature_chull(tsp.instance)
+    getConvexHullFeatureSet2(x)
   }), "chull", include.costs)
+}
+
+getConvexHullFeatureSet2 = function(x) {
+  coordinates = x$coordinates
+  hull = chull(coordinates[, 1L], coordinates[, 2L])
+  area = splancs::areapl(coordinates[hull, ])
+  list(
+    chull_area = area,
+    chull_points_on_hull = length(hull) / getNumberOfNodes(x)
+  )
 }
