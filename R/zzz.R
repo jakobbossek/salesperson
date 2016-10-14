@@ -6,5 +6,6 @@
 #' @import stringr
 #' @import ParamHelpers
 #' @import TSP
+#' @import fpc
 #' @useDynLib salesperson
 NULL

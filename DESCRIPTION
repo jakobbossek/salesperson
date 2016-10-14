@@ -22,7 +22,8 @@ Depends:
 Imports:
     checkmate (>= 1.5.1),
     Rcpp (>= 0.11.3),
-    TSP (>= 1.1-2)
+    TSP (>= 1.1-2),
+    fpc
 Suggests:
     testthat
 LinkingTo: Rcpp

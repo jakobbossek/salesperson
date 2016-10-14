@@ -12,7 +12,7 @@ Network.}
 
 \item{epsilon}{[\code{numeric(1)}]\cr
 Probability for reachability computation in dbscan clustering method.
-See \code{\link[tspmeta]{feature_cluster}}. Default is 0.01.}
+Default is 0.01.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
