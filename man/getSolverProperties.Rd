@@ -13,4 +13,7 @@ Solver object.}
 \value{
 [\code{character}]
 }
+\description{
+Get the properties/tags of the solver.
+}
 

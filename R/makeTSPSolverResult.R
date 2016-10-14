@@ -1,18 +1,19 @@
-# TSP-Solver result object.
-#
-# Contains information returned by a solver on a specific problem instance.
-# Includes the following elements:
-# \describe{
-#   \item{instance.name}{Name of the instance solved.}
-#   \item{solver}{Solver name used to solve the instance.}
-#   \item{tour.length}{Tour length}
-#   \item{tour}{Permutation of the nodes.}
-#   \item{runtime}{Running time measured via \code{proc.time}}
-#   \item{error}{Error message, which occured during optimization.}
-# }
-# @rdname TSPSolverResult
-# @name TSPSolverResult
-# @export
+#' @title
+#' TSP-Solver result object.
+#'
+#' @description
+#' Contains information returned by a solver on a specific problem instance.
+#' Includes the following elements:
+#' \describe{
+#'   \item{instance.name}{Name of the instance solved.}
+#'   \item{solver}{Solver name used to solve the instance.}
+#'   \item{tour.length}{Tour length}
+#'   \item{tour}{Permutation of the nodes.}
+#'   \item{runtime}{Running time measured via \code{proc.time}}
+#'   \item{error}{Error message, which occured during optimization.}
+#' }
+#' @rdname TSPSolverResult
+#' @name TSPSolverResult
 NULL
 
 # Generator for TSPSolverResult objects.

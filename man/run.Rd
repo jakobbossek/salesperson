@@ -22,4 +22,7 @@ Not used.}
 \value{
 [\code{TSPSolverResult}]
 }
+\description{
+Run a TSP solver to solve a problem instance.
+}
 

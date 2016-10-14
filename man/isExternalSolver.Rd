@@ -12,4 +12,7 @@ isExternalSolver(solver)
 \value{
 [\code{logical(1)}]
 }
+\description{
+Check if solver is called via an external binary.
+}
 

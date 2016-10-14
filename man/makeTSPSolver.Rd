@@ -9,4 +9,7 @@ makeTSPSolver()
 \value{
 [\code{TSPSolver}]
 }
+\description{
+Make TSP solver dispatcher.
+}
 

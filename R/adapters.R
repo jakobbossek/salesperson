@@ -1,14 +1,14 @@
 # ADAPTERS to other R packages and other libraries
 
-#' Adapter/interface to the \code{\link[TSP]{solve_TSP}} method.
-#'
-#' @param solver [\code{character(1)}]\cr
-#'    Name of the solver.
-#' @param instance [\code{Network}]\cr
-#'    Netgen network.
-#' @param solver.pars [\code{list}]\cr
-#'    Named list of solver parameters.
-#' @return [\code{list}]
+# Adapter/interface to the \code{\link[TSP]{solve_TSP}} method.
+#
+# @param solver [\code{character(1)}]\cr
+#    Name of the solver.
+# @param instance [\code{Network}]\cr
+#    Netgen network.
+# @param solver.pars [\code{list}]\cr
+#    Named list of solver parameters.
+# @return [\code{list}]
 runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
   requirePackages("TSP", why = "runSolverFromTSPPackage")
   # convert to TSP file format ...
@@ -30,18 +30,18 @@ runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
   )
 }
 
-#' @title
-#'   Adapter/interface to the TSP algorithms implemented by the group of Markus Wagner.
-#'
-#' @param instance [\code{character(1)}]\cr
-#'   Path to instance in TSPlib format.
-#' @param control [\code{list}]\cr
-#'   Control object.
-#' @param solver [\code{character(1)}]\cr
-#'   Solver name, i.e., on of 2APP, 2OPT or CHRIS.
-#' @param bin [\code{character(1)}]\cr
-#'   Full path to the binary executable.
-#' @return [\code{list}]
+# @title
+#   Adapter/interface to the TSP algorithms implemented by the group of Markus Wagner.
+#
+# @param instance [\code{character(1)}]\cr
+#   Path to instance in TSPlib format.
+# @param control [\code{list}]\cr
+#   Control object.
+# @param solver [\code{character(1)}]\cr
+#   Solver name, i.e., on of 2APP, 2OPT or CHRIS.
+# @param bin [\code{character(1)}]\cr
+#   Full path to the binary executable.
+# @return [\code{list}]
 callAustralianSolverInterface = function(instance, control, solver, bin) {
   # since this fucking Christofides implementation does not handle non-integer
   # EUC coordinates correctly we do this "transformation" here: load EUC_2D

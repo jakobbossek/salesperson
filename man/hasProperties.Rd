@@ -16,4 +16,7 @@ Vector of strings.}
 \value{
 [\code{logical(1)}] \code{TRUE} if the solver has all properties, \code{FALSE} otherwise.
 }
+\description{
+Check if learner has certain properties.
+}
 

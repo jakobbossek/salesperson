@@ -8,7 +8,7 @@ makeSolver(solver)
 }
 \arguments{
 \item{solver}{[\code{character(1)}]\cr
-Solver id.}
+Solver Id.}
 }
 \value{
 [\code{TSPSolver}]
