@@ -5,7 +5,6 @@ test_that("getFeatureSet does produce reasonable results", {
     x = netgen::generateClusteredNetwork(n.points = 100L, n.cluster = 2L, upper = 100)
 
     feature.set = getFeatureSet(x, black.list = c("VRP"))
-    print(feature.set)
     expect_feature_list(feature.set, feature.set = "ALL")
 
     feature.set = getFeatureSet(x, black.list = c("VRP"), include.costs = TRUE)
