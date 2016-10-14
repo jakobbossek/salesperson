@@ -8,5 +8,6 @@
 #' @import TSP
 #' @import fpc
 #' @importFrom splancs areapl
+#' @importFrom vegan spantree spandepth
 #' @useDynLib salesperson
 NULL

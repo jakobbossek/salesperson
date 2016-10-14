@@ -24,7 +24,8 @@ Imports:
     Rcpp (>= 0.11.3),
     TSP (>= 1.1-2),
     fpc,
-    splancs
+    splancs,
+    vegan
 Suggests:
     testthat
 LinkingTo: Rcpp
