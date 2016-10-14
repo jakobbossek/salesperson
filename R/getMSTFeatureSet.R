@@ -21,8 +21,8 @@ getMSTFeatureSet2 = function(x) {
   span_tree_dists = span_tree$dist
 
   res = c(
-    numvec_feature_statistics(span_tree_depth, "mst_depth"),
-    numvec_feature_statistics(span_tree_dists, "mst_dists")
+    computeStatisticsOnNumericVector(span_tree_depth, "mst_depth"),
+    computeStatisticsOnNumericVector(span_tree_dists, "mst_dists")
   )
 
   res$mst_dists_sum = sum(span_tree_dists) / sum(d)

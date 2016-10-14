@@ -18,6 +18,6 @@ test_that("getMSTFeatureSet does produce reasonable results", {
     expect_equal(feature.set$mst_dists_max, 1)
     expect_equal(feature.set$mst_dists_span, 0)
     expect_equal(feature.set$mst_dists_sd, 0)
-    expect_equal(feature.set$mst_dists_coef_of_var, 0)
+    expect_equal(feature.set$mst_dists_varcoeff, 0)
     expect_equal(feature.set$mst_dists_sum, mst_dists_sum.expected)
 })
