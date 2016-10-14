@@ -6,9 +6,25 @@
 #' @export
 getModesFeatureSet = function(x, include.costs = FALSE) {
   assertClass(x, "Network")
-  # here we delegate to tspmeta
-  tsp.instance = netgenToTSPmeta(x)
   measureTime(expression({
-    tspmeta::feature_modes(tsp.instance)
+    getModesFeatureSet2(x)
   }), "modes", include.costs)
+}
+
+getModesFeatureSet2 = function(x) {
+  distances = as.numeric(x$distance.matrix)
+
+  intdens = function(a, b) {
+    mean(y[a:b]) * (d$x[b] - d$x[a])
+  }
+
+  d = density(distances)
+  y = d$y
+  n = length(y)
+
+  minidx = c(1L, which(y[2:(n - 1)] < y[1:(n - 2)] & y[2:(n - 1)] < y[3:n]), n + 1)
+  modemass = sapply(1:(length(minidx) - 1L), function(i) {
+    intdens(minidx[i], minidx[i + 1] - 1)
+  })
+  list(modes_number = sum(modemass > 0.01))
 }
