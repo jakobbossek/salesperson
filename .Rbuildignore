@@ -13,3 +13,5 @@ appveyor.yml
 bin
 solvers
 man-roxygen
+TODO.md
+benchmark
