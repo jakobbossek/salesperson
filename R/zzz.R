@@ -5,6 +5,7 @@
 #' @import stringr
 #' @import ParamHelpers
 #' @import TSP
+#' @import ecr
 #' @importFrom fpc dbscan
 #' @importFrom splancs areapl
 #' @importFrom vegan spantree spandepth
