@@ -5,6 +5,10 @@
 #' Find the Shortest Hamiltonian Path between two cities by
 #' means of a TSP formulation.
 #'
+#' @note
+#' At the moment the function only works correctly if start.id = 1 and dest.id = 2
+#' or vice versa and the input graph has exactly two depots.
+#'
 #' @param x [Network]
 #'   Network (see package netgen).
 #' @param start.id [integer(1)]
@@ -15,16 +19,15 @@
 #'   Shortest hamiltonian path.
 #' @export
 findShortestHamiltonianPath = function(x, start.id, dest.id) {
-  if (!testClass(x, "Network")) {
+  #FIXME: add sanity checks
+  if (!testClass(x, "Network"))
     stopf("We need a network (see package netgen).")
-  }
-  if (!hasDepots(x) && getNumberOfDepots(x) != 2L) {
-    stopf("We need networks with exactly two depots.")
-  }
 
+  if (!hasDepots(x) & getNumberOfDepots(x) != 2)
+    stopf("We need a network with exactly two depots.")
+
+  #FIXME: recomputation. We need to fix this in netgen!
   # compute pairwise distances
-  #dist.mat = x$distance.matrix
-
   coords = as.matrix(as.data.frame(x, include.extra = FALSE))
 
   # compute pairwise distances
@@ -54,6 +57,7 @@ findShortestHamiltonianPath = function(x, start.id, dest.id) {
   # extract ATSP tour from STSP SOLUTION
   atsp.tour = TSP::as.TOUR(stsp.tour[stsp.tour <= TSP::n_of_cities(atsp)])
 
+  #FIXME: this works only if start.id and dest.id are in {1,2}.
   # Add start and end tour
   # NOTE! NOTE! NOTE!
   # If the dummy nodes appear before and not after the original nodes
