@@ -25,3 +25,16 @@ test_that("getAngleFeatureSet does produce reasonable results", {
     angle.feats = getAngleFeatureSet(x)
     expect_feature_list(angle.feats, feature.set = "Angle")
 })
+
+test_that("getAngleFeatureSet does not produce NaN/NA if drop.duplicates = TRUE", {
+  coordinates = matrix(c(1, 2, 1, 2, 4, 3, 8, 9), byrow = TRUE, ncol = 2L)
+
+  # first check that NaN/NA is produced if duplicates occur
+  x = suppressWarnings(makeNetwork(coordinates))
+  feats = getAngleFeatureSet(x)
+  expect_true(any(is.na(feats)))
+
+  # now check that this is not the case if duplicated are removed
+  feats = suppressWarnings(getAngleFeatureSet(x, drop.duplicates = TRUE))
+  expect_true(all(!is.na(feats)))
+})
