@@ -24,4 +24,8 @@ ID of the end node.}
 Find the Shortest Hamiltonian Path between two cities by
 means of a TSP formulation.
 }
+\note{
+At the moment the function only works correctly if start.id = 1 and dest.id = 2
+or vice versa and the input graph has exactly two depots.
+}
 
