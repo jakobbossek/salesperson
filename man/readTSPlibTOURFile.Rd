@@ -18,4 +18,3 @@ Path to TSPlib tour file.}
 Since we need only the tour and the tour length, this functions skips the
 specification part.
 }
-

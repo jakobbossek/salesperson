@@ -28,4 +28,3 @@ means of a TSP formulation.
 At the moment the function only works correctly if start.id = 1 and dest.id = 2
 or vice versa and the input graph has exactly two depots.
 }
-

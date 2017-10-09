@@ -16,4 +16,3 @@ Solver Id.}
 \description{
 Construct a TSP solver object.
 }
-

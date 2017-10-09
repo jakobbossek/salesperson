@@ -23,4 +23,3 @@ Should costs be included as an additional feature? Default is \code{FALSE}.}
 \description{
 Feature: statistics of angles between nodes and their two nearest neighbors.
 }
-

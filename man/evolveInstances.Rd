@@ -29,22 +29,6 @@ Default is 30.}
 Number of TSP instances generated in each evolutionary cycle.
 Default is \code{n.population}.}
 
-\item{n.elite}{[\code{integer(1)}]\cr
-Number of fittest individuals of the current generation that shall be copied to the
-next generation without changing. Keep in mind, that the algorithm
-does not care about this option if the \code{survival.strategy} is set to 'plus'.
-Default is 0.}
-
-\item{survival.strategy}{[\code{character(1)}]\cr
-Determines the survival strategy used by the EA. Possible are \dQuote{plus} for
-a classical (mu + lambda) strategy and \dQuote{comma} for (mu, lambda).
-Default is \dQuote{plus}.}
-
-\item{logger}{[\code{function}]\cr
-Monitoring object used to log stuff.
-Default is \code{NULL} which means no logging at all.
-See \code{\link{setupOptPathLoggingMonitor}} for ecr's build-in logger.}
-
 \item{cells.round}{[\code{numeric(1)}]\cr
 Grid resolution for rounding.
 Default is 100.}
@@ -73,33 +57,6 @@ Only relevant if \code{mutator = NULL}, i.e., no custom mutator is set.}
 Round the coordinates before normal mutation.
 Default is \code{FALSE}.}
 
-\item{parent.selector}{[\code{ecr_selector}]\cr
-Selection operator which implements a procedure to copy individuals from a
-given population to the mating pool, i. e., allow them to become parents.}
-
-\item{survival.selector}{[\code{ecr_selector}]\cr
-Selection operator which implements a procedurce to extract individuals from
-a given set, which should survive and set up the next generation.}
-
-\item{recombinator}{[\code{ecr_recombinator}]\cr
-Recombination operator of type \code{ecr_recombinator}.}
-
-\item{stopping.conditions}{[\code{list}]\cr
-List of functions of type \code{ecr_terminator}. At least one stopping
-condition needs to be passed.
-Default is the empty list.}
-
-\item{monitor}{[\code{function}]\cr
-Monitoring function.
-Default is \code{NULL}, i.e. no monitoring.}
-
-\item{mutator}{[\code{ecr_mutator}]\cr
-Mutation operator of type \code{ecr_mutator}.}
-
-\item{generator}{[\code{ecr_generator}]\cr
-Generator operator of type \code{ecr_generator} for the generation of the initial
-population.}
-
 \item{...}{[any]\cr
 Not used.}
 }
@@ -111,4 +68,3 @@ Function to create instances for the Travelling Salesperson Problem or a
 related orienteering problem by means of a sophisticated evololutionary
 algorithm.
 }
-

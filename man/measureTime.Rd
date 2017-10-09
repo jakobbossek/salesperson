@@ -28,4 +28,3 @@ Return value of evaluated \code{expr} with additional attribute
 \description{
 Simple wrapper around \code{proc.time}.
 }
-

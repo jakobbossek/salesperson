@@ -16,4 +16,3 @@ Solver object.}
 \description{
 Get the properties/tags of the solver.
 }
-

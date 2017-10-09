@@ -12,4 +12,3 @@ makeTSPSolver()
 \description{
 Make TSP solver dispatcher.
 }
-

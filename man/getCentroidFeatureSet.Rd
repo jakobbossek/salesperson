@@ -19,4 +19,3 @@ Should costs be included as an additional feature? Default is \code{FALSE}.}
 \description{
 Feature: Centroid coordinates and statistics of distances to centroid.
 }
-

@@ -16,4 +16,3 @@ Network.}
 \description{
 Convert netgen object to tspmeta TSP instance.
 }
-

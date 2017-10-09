@@ -28,4 +28,3 @@ This is a central function. It expects a solver (either a characterizing string
   algorithm/solver. It then runs the solver on the instance and returns a solver
   result object.
 }
-

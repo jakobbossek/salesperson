@@ -9,4 +9,3 @@ getAvailableFeatureSets()
 \description{
 May be used as black list for \code{getFeatureSet}.
 }
-

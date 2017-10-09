@@ -24,4 +24,3 @@ depots.
 \note{
 Only orienteering instances with two depots are supported at the moment.
 }
-

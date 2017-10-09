@@ -12,4 +12,3 @@ getDefaultFeatureFunArgs()
 \description{
 Returns list of parameters defaults for feature computation.
 }
-

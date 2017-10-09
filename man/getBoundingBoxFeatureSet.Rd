@@ -23,4 +23,3 @@ Should costs be included as an additional feature? Default is \code{FALSE}.}
 \description{
 Feature: fraction of points near bounding boxplot.
 }
-

@@ -27,4 +27,3 @@ does this.}
 \description{
 Compute tour length given a TSP instance and a tour/permutation.
 }
-

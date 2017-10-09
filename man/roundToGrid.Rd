@@ -20,4 +20,3 @@ Number of cells desired, i.e., grid resolution.}
 \description{
 Round instance (points are placed in the center of the grids).
 }
-

@@ -23,4 +23,3 @@ Standard deviation of normal noise.}
 \description{
 Adds some normal noise to a fraction of city coordinates.
 }
-

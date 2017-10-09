@@ -19,4 +19,3 @@ Vector of strings.}
 \description{
 Check if learner has certain properties.
 }
-

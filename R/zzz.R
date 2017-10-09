@@ -12,8 +12,7 @@
 #' @importFrom splancs areapl
 #' @importFrom vegan spantree spandepth
 #' @importFrom grDevices chull
-#' @importFrom stats median quantile sd var stats density dist rnorm runif
+#' @importFrom stats median quantile sd var density dist rnorm runif
 #' @importFrom utils getS3method
 #' @useDynLib salesperson
-#' importFrom()
 NULL

@@ -13,4 +13,3 @@ Numeric matrix of city coordinates, rows denote cities.}
 \description{
 Rescale coordinates to [0,1] x [0,1].
 }
-

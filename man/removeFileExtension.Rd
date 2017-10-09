@@ -16,4 +16,3 @@ Truncated filename, i.e., filename without last file extension.
 \description{
 Removes the file extension of a given filename.
 }
-

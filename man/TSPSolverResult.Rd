@@ -15,4 +15,3 @@ Includes the following elements:
   \item{error}{Error message, which occured during optimization.}
 }
 }
-

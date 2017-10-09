@@ -27,4 +27,3 @@ executables. Since the CRAN guidelines do not permit shipping binary executables
 one has the download these by hand and tell the \pkg{salesperson} package about
 the file path. This is done by the \code{solverPaths} function.
 }
-

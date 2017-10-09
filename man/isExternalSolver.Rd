@@ -15,4 +15,3 @@ isExternalSolver(solver)
 \description{
 Check if solver is called via an external binary.
 }
-

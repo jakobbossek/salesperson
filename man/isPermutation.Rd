@@ -19,4 +19,3 @@ Vector which we want to compare with. Default is 1, ..., length(x).}
 \description{
 Check if vector contains permutation of number 1:n
 }
-
