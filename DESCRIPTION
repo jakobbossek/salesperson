@@ -23,7 +23,8 @@ Imports:
     splancs,
     vegan,
     igraph,
-    cccd
+    cccd,
+    e1071
 Suggests:
     testthat
 LinkingTo: Rcpp

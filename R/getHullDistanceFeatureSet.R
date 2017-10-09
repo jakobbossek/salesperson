@@ -16,7 +16,7 @@ getHullDistanceFeatureSet = function(x, skewness.type = NULL, include.costs = FA
 
 getHullDistanceFeatureSet2 = function(x, skewness.type = NULL) {
   ## we need e1071 for computing the skewness
-  requirePackages(c("e1071"), why = "getHullDistanceFeatureSet")
+  requirePackages("e1071", why = "getHullDistanceFeatureSet")
 
   ## per default use "Type 3" definition skewness in e1071::skewness
   if (is.null(skewness.type)) {
@@ -73,7 +73,7 @@ getHullDistanceFeatureSet2 = function(x, skewness.type = NULL) {
   # See Table I in Pihera and Musliu Features
   res = c(
     computeStatisticsOnNumericVector(hull.distances, "hulldist"),
-    "hulldist_skew" = skewness(hull.distances, type = skewness.type)
+    "hulldist_skew" = e1071::skewness(hull.distances, type = skewness.type)
   )
 
   return(res)
