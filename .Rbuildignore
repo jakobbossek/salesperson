@@ -15,3 +15,5 @@ solvers
 man-roxygen
 TODO.md
 benchmark
+^docs$
+todo
