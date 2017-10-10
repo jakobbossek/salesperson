@@ -76,40 +76,11 @@ run.lkh_restart = function(solver, instance, solver.pars, ...) {
   tour = NA
   tour.length = NA
   error = NULL
-  #runsolver.output = NA
-
-  # here we append the binary file and runsolver stuff
-  # runsolver.file = tempfile()
-  # lkh.args = c("-C", solver.pars$stop.on.cutoff.time, "-w", runsolver.file, lkh.bin, lkh.args)
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
   res = try(suppressWarnings(system2(solver$bin, lkh.args, stdout = TRUE, stderr = TRUE)))
 
-  # read runsolver output
-  # runsolver.con = file(runsolver.file, "r")
-  # runsolver.output = readLines(runsolver.con)
-  # close(runsolver.con)
-  # unlink(runsolver.file)
-
-  # algorithm failed probably: try to determine if he was successful but had not enough time to terminate
-  # if (!file.exists(file.output)) {
-  #   catf("Most probably %s did not finish before time limit was reached.", lkh.bin)
-  #   error = "Most probably the algorithm reached the time limit."
-  #   if (!is.null(res)) {
-  #     # go through the stdout/strerr output line by line and search for the last useful output,
-  #     # i.e., output of the shortest tour length so far
-  #     last.output = res
-  #     for (i in length(last.output):1L) {
-  #       output.line = last.output[i]
-  #       bags = str_extract_all(output.line, pattern = "Cost = [0-9]+")[[1L]]
-  #       if (length(bags) == 1L) {
-  #         tour.length = as.integer(str_split(bags, " = ")[[1L]][2L])
-  #         break
-  #       }
-  #     }
-  #   }
-  # } else {
   # build tour
   tmp = readTSPlibTOURFile(file.output)
   tour = tmp$tour
