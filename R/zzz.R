@@ -16,3 +16,5 @@
 #' @importFrom utils getS3method
 #' @useDynLib salesperson
 NULL
+
+salesperson = new.env(parent = emptyenv())

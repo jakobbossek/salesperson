@@ -18,22 +18,22 @@
 #' @return [\code{list}] List of pathes. Used internally by \code{runTSPSolver}.
 #' @export
 solverPaths = function(paths = NULL) {
-  defaults = list("lkh" = NULL, "lkh_restart" = NULL, "eax" = NULL, "eax_restart" = NULL, concorde = NULL)
+  defaults = list("lkh" = NULL, "lkh_restart" = NULL, "eax" = NULL, concorde = NULL)
   solver.names = names(defaults)
   if (is.null(paths)) {
-    if (!exists(".paths")) {
-      .paths <<- defaults
+    if (is.null(salesperson$paths)) {
+      salesperson$paths <- defaults
     }
-    .paths
+    return(salesperson$paths)
   } else {
     assertList(paths)
-    .paths <<- BBmisc::insert(defaults, paths)
+    salesperson$paths <- BBmisc::insert(defaults, paths)
     lapply(solver.names, function(solver.name) {
-      path.to.solver = paths[[solver.name]]
+      path.to.solver = salesperson$paths[[solver.name]]
       if (!is.character(path.to.solver)) {
         catf("No path to solver '%s' specified. This solver thus cannot be used.", solver.name)
       }
     })
-    invisible(.paths)
+    invisible(salesperson$paths)
   }
 }
