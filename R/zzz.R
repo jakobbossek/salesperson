@@ -8,6 +8,7 @@
 #' @import ecr
 #' @import cccd
 #' @import igraph
+#' @import e1071
 #' @importFrom fpc dbscan
 #' @importFrom splancs areapl
 #' @importFrom vegan spantree spandepth
