@@ -16,8 +16,6 @@
 #'   Parameters for the solver.
 #' @return [\code{TSPSolverResult}]
 #' @export
-#FIXME: add possibility to pass path to TSPlib file
-#FIXME: add possibility to pass solver object
 runSolver = function(solver, instance, solver.pars, ...) {
   if (testString(solver)) {
     solver = makeSolver(solver)
@@ -28,7 +26,7 @@ runSolver = function(solver, instance, solver.pars, ...) {
   res = run(solver, instance2, solver.pars, ...)
   end.time = as.numeric(proc.time() - start.time)
 
-  res = makeTSPSolverResult(
+  res2 = makeTSPSolverResult(
     #FIXME: multiple cases if instance is network or character
     instance.name = if (testClass(instance, "Network")) instance$name else basename(instance),
     solver = solver$short.name,
@@ -38,5 +36,6 @@ runSolver = function(solver, instance, solver.pars, ...) {
     error = res$error,
     solver.output = res$solver.output
   )
-  return(res)
+  res2$trajectory = res$trajectory
+  return(res2)
 }
