@@ -31,3 +31,15 @@ test_that("getConvexHullFeatureSet does produce reasonable results", {
     expect_equal(feature.set$hull_edges_varcoeff, 0)
     expect_scalar_na(feature.set$hull_edges_skew)
 })
+
+test_that("getConvexHullFeatureSet also works for instances where the hull edges are horizontal or vertical", {
+  # build this simple network object by hand
+  x = generateSimpleTestNetwork()
+  x$coordinates = rbind(x$coordinates, c(0, 0.5), c(0.5, 1), c(0.7, 0.3))
+  x$distance.matrix = as.matrix(dist(x$coordinates))
+
+  # build feature set and check for valid entries
+  feature.set = getConvexHullFeatureSet(x)
+  expect_feature_list(feature.set, feature.set = "ConvexHull")
+  expect_numeric(unlist(feature.set[!grepl("edges_skew", names(feature.set))]), lower = 0, upper = Inf, any.missing = FALSE)
+})

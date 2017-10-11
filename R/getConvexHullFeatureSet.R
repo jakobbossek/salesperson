@@ -145,15 +145,25 @@ getConvexHullDistanceFeatureSet = function(x, hull.list, skewness.type) {
       # take two neighboring points (A and B) on the hull
       A = coords[hull.tour[j],]
       B = coords[hull.tour[j + 1L],]
-      ## compute slope (m) and intercept (n) of linear function (y = m * x + n) running through A and B
-      m = (A[2L] - B[2L]) / (A[1L] - B[1L])
-      n = B[2L] - m * B[1L]
-      ## compute slope and intercept of orthogonal vector (assuring it runs through X)
-      m.orth = -1L / m
-      n.orth = X[2L] - m.orth * X[1L]
-      ## compute closest point of X on the linear function through A and B --> D
-      D.x = (n - n.orth) / (m.orth - m)
-      D = c(D.x, m * D.x + n)
+      if (A[2] == B[2]) {
+        ## if A and B are on the same horizontal line, the closest point of X on AB
+        ## (denoted D) inherits the x-position of X and the y-position of A (resp. B)
+        D = c(X[1], A[2])
+      } else if (A[1L] == B[1L]) {
+        ## if A and B are on the same vertical line, the closest point of X on AB
+        ## (denoted D) inherits the x-position of A (resp. B) and the y-position of X
+        D = c(A[1], X[2])
+      } else {
+        ## compute slope (m) and intercept (n) of linear function (y = m * x + n) running through A and B
+        m = (A[2L] - B[2L]) / (A[1L] - B[1L])
+        n = B[2L] - m * B[1L]
+        ## compute slope and intercept of orthogonal vector (assuring it runs through X)
+        m.orth = -1L / m
+        n.orth = X[2L] - m.orth * X[1L]
+        ## compute closest point of X on the linear function through A and B --> D
+        D.x = (n - n.orth) / (m.orth - m)
+        D = c(D.x, m * D.x + n)
+      }
       ## compute distance from X to D
       return(sqrt(sum((X - D)^2L)))
     }, double(1L))
