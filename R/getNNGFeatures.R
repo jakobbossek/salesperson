@@ -29,7 +29,7 @@ getNNGFeatureSet2 = function(x, ks = NULL) {
 getkNNGFeatureSet = function(x, k, kchar) {
   # compute directed Nearest-Neighbor-Graph
   # Here we use FNN (fast neighbor computation)
-  nng.dir = cccd::nng(x$coordinates, k = k, use.fnn = TRUE,  algorithm = "kd_tree")
+  nng.dir = cccd::nng(x$coordinates, k = k, use.fnn = TRUE, algorithm = "kd_tree")
 
   # ... and its undirected version
   nng.undir = igraph::as.undirected(nng.dir, mode = "collapse")
