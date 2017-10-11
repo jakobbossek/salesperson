@@ -24,6 +24,22 @@ test_that("getAngleFeatureSet does produce reasonable results", {
     # check the exposed method
     angle.feats = getAngleFeatureSet(x)
     expect_feature_list(angle.feats, feature.set = "Angle")
+
+    # variation statistics of angle feats should be exactly zero
+    fns = !grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max", names(angle.feats))
+    expect_identical(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
+
+    # location statistics of angle feats should be identical to pi/2
+    fns = !grepl("_cos_", names(angle.feats)) & grepl("mean|median|min|max", names(angle.feats))
+    expect_identical(as.numeric(unlist(angle.feats[fns])), rep(pi/2, 4))
+
+    # variation statistics of angle cosine feats should be exactly zero
+    fns = grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max", names(angle.feats))
+    expect_identical(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
+    
+    # location statistics of angle cosine feats should be roughly zero
+    fns = grepl("_cos_", names(angle.feats)) & grepl("mean|median|min|max", names(angle.feats))
+    expect_equal(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
 })
 
 test_that("getAngleFeatureSet does not produce NaN/NA if drop.duplicates = TRUE", {
@@ -37,4 +53,22 @@ test_that("getAngleFeatureSet does not produce NaN/NA if drop.duplicates = TRUE"
   # now check that this is not the case if duplicated are removed
   feats = suppressWarnings(getAngleFeatureSet(x, drop.duplicates = TRUE))
   expect_true(all(!is.na(feats)))
+})
+
+test_that("getAngleFeatureSet generates different outputs for the different feature sets", {
+  # build this simple network object by hand
+  x = generateSimpleTestNetwork()
+
+  feats = getAngleFeatureSet(x)
+  feats1 = getAngleFeatureSet(x, feature.set = "angle")
+  feats2 = getAngleFeatureSet(x, feature.set = "cos")
+  feats3 = getAngleFeatureSet(x, feature.set = c("cos", "angle"))
+
+  ## compare the feature names
+  expect_identical(names(feats), c(names(feats1), names(feats2)))
+  expect_true(!all(names(feats1) == names(feats2)))
+  expect_identical(sort(names(feats)), sort(names(feats3)))
+  
+  # now check whether we catch an error if we throw in a wrong feature set name
+  expect_error(getAngleFeatureSet(x, feature.set = "hull"))
 })

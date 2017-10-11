@@ -4,11 +4,19 @@
 \alias{getAngleFeatureSet}
 \title{Feature: statistics of angles between nodes and their two nearest neighbors.}
 \usage{
-getAngleFeatureSet(x, drop.duplicates = FALSE, include.costs = FALSE)
+getAngleFeatureSet(x, feature.set = NULL, drop.duplicates = FALSE,
+  include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
 Network.}
+
+\item{feature.set}{[\code{character}]\cr
+Subset of angle feature sets that should be computed. Possible choices are
+\code{"angle"} (statistics based on the angles between nodes and their two
+nearest neighbors) and \code{"cos"} (statistics based on the cosine of the
+aforementioned angles). Per default (\code{NULL}), both feature sets will
+be computed.}
 
 \item{drop.duplicates}{[\code{logical(1)}]\cr
 Should duplicated node coordinates be dropped?
