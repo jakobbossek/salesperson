@@ -76,7 +76,7 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP getMonitoringFeatureSetC(SEXP, SEXP);
+RcppExport SEXP getMonitoringFeatureSetC(SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_salesperson_getAnglesToNearestNeighborsCPP", (DL_FUNC) &_salesperson_getAnglesToNearestNeighborsCPP, 2},
@@ -85,7 +85,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_salesperson_getDistanceFeatureSetCPP", (DL_FUNC) &_salesperson_getDistanceFeatureSetCPP, 2},
     {"_salesperson_getFractionOfPointsNearBoundingBoxCPP", (DL_FUNC) &_salesperson_getFractionOfPointsNearBoundingBoxCPP, 2},
     {"_salesperson_getNearestNeighbourDistancesCPP", (DL_FUNC) &_salesperson_getNearestNeighbourDistancesCPP, 1},
-    {"getMonitoringFeatureSetC",                           (DL_FUNC) &getMonitoringFeatureSetC,                           2},
+    {"getMonitoringFeatureSetC",                           (DL_FUNC) &getMonitoringFeatureSetC,                           3},
     {NULL, NULL, 0}
 };
 
