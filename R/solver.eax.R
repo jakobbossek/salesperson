@@ -19,9 +19,61 @@ makeTSPSolver.eax = function() {
   )
 }
 
+readEAXSolution = function(file.sol) {
+  sol.con = file(file.sol, "r")
+  lines = readLines(sol.con)
+  close(sol.con)
+
+  # extract relevant data
+  # first line contains #nodes and length of shortest tour found by EAX
+  list(
+    tour.length = as.numeric(strsplit(lines[1], " ", fixed = TRUE)[[1]][2]),
+    tour = as.integer(strsplit(lines[2], " ", fixed = TRUE)[[1]])
+  )
+}
+
 #' @export
 # @interface see runTSPSolver
-run.eax = function(solver, instance, solver.pars, ...) {
+#FIXME: add possibility to return trajectory file instead of imported trajectory
+#FIXME: handle initial population
+run.eax = function(solver, instance,
+  max.trials = 1L,
+  pop.size = 100L,
+  off.size = 30L,
+  cutoff.time = 10L,
+  opt.tour.length = NULL,
+  seed = as.integer(runif(1L) * 2^15),
+  with.restarts = FALSE,
+  snapshot.step = 0L,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  ...) {
+  # sanity check stuff
+  max.trials = asInt(max.trials, lower = 1L)
+  pop.size = asInt(pop.size, lower = 2L)
+  off.size = asInt(off.size, lower = 1L)
+
+  # passing 0 to binary deactivates cutoff time
+  if (is.null(cutoff.time))
+    cutoff.time = 0L
+  else
+    cutoff.time = asInt(cutoff.time, lower = 0L)
+
+  # passing 0 to binary means: optimum is not known
+  if (is.null(opt.tour.length))
+    opt.tour.length = 0L
+  else
+    opt.tour.length = asInt(opt.tour.length, lower = 1L)
+
+  seed = asInt(seed, lower = 1L)
+  assertFlag(with.restarts)
+
+  # 0 deactivates snapshots
+  snapshot.step = asInt(snapshot.step, lower = 0L)
+
+  assertFlag(full.matrix)
+  assertFlag(verbose)
+
   # temporary work dir
   temp.dir = tempdir()
   temp.file = basename(tempfile(tmpdir = temp.dir))
@@ -35,7 +87,6 @@ run.eax = function(solver, instance, solver.pars, ...) {
   # EAX and export accordingly
   is.temp.input = FALSE
   if (testClass(instance, "Network")) {
-    full.matrix = coalesce(solver.pars$full.matrix, FALSE)
     file.input = paste0(temp.file, ".tsp")
     is.temp.input = TRUE
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
@@ -54,39 +105,14 @@ run.eax = function(solver, instance, solver.pars, ...) {
   file.trajectory = paste0(temp.file, ".out_Incumbant")
 
   # See solvers/eax/README.md for details
-  # Examplary call to EAX: #./jikken 10 DATA 100 30 rat575.tsp 0 60 seed
-  args = list()
-  args$max.trials = coalesce(solver.pars$max.trials, 1L)
-  args$tour.file = file.output
-  args$pop.size = coalesce(solver.pars$pop.size, 100L)
-  args$off.size = coalesce(solver.pars$off.size, 30L)
-  args$instance.file = file.input
-  args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
-  args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
-
-  args$seed = coalesce(solver.pars$seed, 123L)
-  args$with.restarts = coalesce(solver.pars$with.restarts, 0)
-
-  args.list = unlist(args)
+  # Examplary call to EAX: #./jikken trials DATA pop off rat575.tsp opt cutoff seed withRestarts snapshot
+  args = list(max.trials, file.output, pop.size, off.size,
+    file.input, opt.tour.length, cutoff.time, seed, as.integer(with.restarts),
+    snapshot.step)
 
   # try to call solver
-  solver.output = system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)
-
-  # prepare result
-  tour = NA
-  tour.length = NA
-  error = NULL
-
-  sol.con = file(file.sol, "r")
-  lines = readLines(sol.con)
-  close(sol.con)
-
-  # extract relevant data
-  # first line contains #nodes and length of shortest tour found by EAX
-  #FIXME: we can make this nicer!
-  tour.length = as.numeric(strsplit(lines[1], " ", fixed = TRUE)[[1]][2])
-  tour = as.integer(strsplit(lines[2], " ", fixed = TRUE)[[1]])
-
+  solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
+  tour = readEAXSolution(file.sol)
   trajectory = read.table(file.trajectory, header = TRUE, sep = ",")
 
   # cleanup
@@ -97,10 +123,10 @@ run.eax = function(solver, instance, solver.pars, ...) {
 
   return(
     list(
-      "tour" = tour,
-      "tour.length" = tour.length,
+      "tour" = tour$tour,
+      "tour.length" = tour$tour.length,
       "trajectory" = trajectory,
-      error = error,
+      error = NULL,
       solver.output = solver.output
     )
   )

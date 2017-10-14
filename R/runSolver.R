@@ -70,7 +70,8 @@ runSolver = function(solver, instance, solver.pars = list(), solver.path = NULL,
   # run solver
   instance2 = instance
   start.time = proc.time()
-  res = run(solver, instance2, solver.pars, ...)
+  run.fun = getS3method("run", solver)
+  res = do.call(run.fun, c(list(solver = solver, instance = instance2), solver.pars))
   end.time = as.numeric(proc.time() - start.time)
 
   makeTSPSolverResult(

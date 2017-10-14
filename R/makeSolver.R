@@ -103,12 +103,10 @@ getSolverProperties.TSPSolver = function(solver) {
 #'   Solver object.
 #' @param instance [\code{Network}]\cr
 #'   TSP instance to solve.
-#' @param solver.pars [\code{list}]\cr
-#'   Potentially empty named list of solver parameters passed to the solver.
 #' @param ... [any]\cr
 #'   Not used.
 #' @return [\code{TSPSolverResult}]
 #' @export
-run = function(solver, instance, solver.pars, ...) {
+run = function(solver, instance, ...) {
   UseMethod("run")
 }
