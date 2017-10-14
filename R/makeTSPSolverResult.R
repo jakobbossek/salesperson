@@ -39,7 +39,8 @@ makeTSPSolverResult = function(
   solver,
   tour.length = NA, tour = NA,
   runtime = NA, error = NULL,
-  solver.output = NULL) {
+  solver.output = NULL,
+  trajectory = NULL) {
   assertCharacter(instance.name, len = 1L)
   assertCharacter(solver, len = 1L)
   !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
@@ -56,6 +57,7 @@ makeTSPSolverResult = function(
     runtime = runtime,
     error = error,
     solver.output = solver.output,
+    trajectory = trajectory,
     classes = "TSPSolverResult"
   )
 }
