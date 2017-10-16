@@ -16,3 +16,27 @@ test_that("Solvers from TSP package can be called without problems.", {
     }
   }
 })
+
+test_that("External solvers can be called", {
+  skip_on_cran()
+  skip_on_travis()
+
+  solvers = c("eax", "lkh", "concorde")
+  cutoff.time = 1
+  n.points = 200L
+
+  config.path = path.expand("~/.config/salesperson/")
+  solverPaths(
+    list(
+      lkh = paste0(config.path, "solvers/LKH-2.0.7-incumbant/LKH"),
+      eax = paste0(config.path, "solvers/eax/jikken"),
+      concorde = paste0(config.path, "solvers/concorde/osx/concorde")
+    )
+  )
+
+  for (solver in solvers) {
+    x = generateRandomNetwork(n.points)
+    res = runSolver(solver, instance = x, cutoff.time = cutoff.time)
+    expect_valid_TSPSolverResult(res, n.points, info = solver)
+  }
+})

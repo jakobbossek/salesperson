@@ -8,7 +8,7 @@
   off.size = 30L, cutoff.time = 10L, opt.tour.length = NULL,
   seed = as.integer(runif(1L) * 2^15), with.restarts = FALSE,
   snapshot.step = 0L, full.matrix = FALSE, verbose = FALSE,
-  return.trajectory.file = FALSE, ...)
+  return.trajectory.file = FALSE, init.pop = NULL, ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -68,6 +68,17 @@ is returned as a data frame. However, long solver runs may produce a
 trajectory of substantial size. If this is expected the user may decide
 to return just the path to the csv file the trajectory is stored to instead
 of importing this file.}
+
+\item{init.pop}{[\code{list}]\cr
+List of lists. Each sublist needs to contains three components:
+\describe{
+  \item{n [\code{integer(1)}]}{Number of nodes of the TSP problem.}
+  \item{tour [\code{integer(n)}]}{The actual tour.}
+  \item{tour.length [\code{integer(1)}]}{Length of the tour.}
+}
+Default is \code{NULL}, i.e., the initial population is generated
+randomly and 2-Opt is applied to each solution before the evolutionary
+loop starts.}
 
 \item{...}{[any]\cr
 Not used at the moment.}

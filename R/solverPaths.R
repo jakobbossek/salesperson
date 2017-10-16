@@ -30,6 +30,8 @@ solverPaths = function(paths = NULL) {
     salesperson$paths <- BBmisc::insert(defaults, paths)
     lapply(solver.names, function(solver.name) {
       path.to.solver = salesperson$paths[[solver.name]]
+      if (!is.null(path.to.solver))
+        assertFile(path.to.solver, access = "x")
       if (!is.character(path.to.solver)) {
         catf("No path to solver '%s' specified. This solver thus cannot be used.", solver.name)
       }

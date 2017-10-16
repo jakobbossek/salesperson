@@ -28,6 +28,26 @@ readEAXSolution = function(file.sol) {
   )
 }
 
+# INTERNAL
+# Helper function to write file with initial solutions for EAX
+# algorithm.
+#
+# @param init.pop [list]
+#   Initial population. See docs of run.eax for more information.
+# @param file.init.pop [character(1)]
+#   Path to file in which the initial population should be stored.
+# @return Nothing
+writeInitialPopulation = function(init.pop, file.init.pop) {
+  con = file(file.init.pop, "w")
+  on.exit(close(con))
+  for (i in 1:length(init.pop)) {
+    line1 = sprintf("%i %i", init.pop[[i]]$n, init.pop[[i]]$tour.length)
+    writeLines(line1, con = con)
+    line2 = collapse(init.pop[[i]]$tour, sep = " ")
+    writeLines(line2, con = con)
+  }
+}
+
 #' @title Solver: EAX
 #'
 #' @description Inexact TSP solvers based on a genetic approach.
@@ -74,6 +94,16 @@ readEAXSolution = function(file.sol) {
 #'   trajectory of substantial size. If this is expected the user may decide
 #'   to return just the path to the csv file the trajectory is stored to instead
 #'   of importing this file.
+#' @param init.pop [\code{list}]\cr
+#'   List of lists. Each sublist needs to contains three components:
+#'   \describe{
+#'     \item{n [\code{integer(1)}]}{Number of nodes of the TSP problem.}
+#'     \item{tour [\code{integer(n)}]}{The actual tour.}
+#'     \item{tour.length [\code{integer(1)}]}{Length of the tour.}
+#'   }
+#'   Default is \code{NULL}, i.e., the initial population is generated
+#'   randomly and 2-Opt is applied to each solution before the evolutionary
+#'   loop starts.
 #' @param ... [any]\cr
 #'   Not used at the moment.
 #' @template ret_TSPSolverResult
@@ -91,6 +121,7 @@ run.eax = function(solver, instance,
   full.matrix = FALSE,
   verbose = FALSE,
   return.trajectory.file = FALSE,
+  init.pop = NULL,
   ...) {
   # sanity check stuff
   max.trials = asInt(max.trials, lower = 1L)
@@ -118,6 +149,12 @@ run.eax = function(solver, instance,
   assertFlag(full.matrix)
   assertFlag(verbose)
   assertFlag(return.trajectory.file)
+
+  if (!is.null(init.pop)) {
+    assertList(init.pop, len = pop.size, any.missing = FALSE, all.missing = FALSE)
+    file.init.pop = paste0(temp.file, "_init.pop")
+    writeInitialPopulation(init.pop)
+  }
 
   # temporary work dir
   temp.dir = tempdir()
@@ -155,6 +192,9 @@ run.eax = function(solver, instance,
     file.input, opt.tour.length, cutoff.time, seed, as.integer(with.restarts),
     snapshot.step)
 
+  if (!is.null(init.pop))
+    args = c(args, file.init.pop)
+
   # try to call solver
   solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
   tour = readEAXSolution(file.sol)
@@ -169,6 +209,9 @@ run.eax = function(solver, instance,
   if (is.temp.input) {
     unlink(file.input)
   }
+
+  if (!is.null(init.pop))
+    unlink(file.init.pop)
 
   if (!return.trajectory.file)
     unlink(file.trajectory)
