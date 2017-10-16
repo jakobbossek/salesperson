@@ -4,8 +4,7 @@ makeTSPSolver.mst = function() {
     cl = "mst",
     short.name = "MST",
     name = "MST (minimum spanning tree) heuristic",
-    properties = c("euclidean", "external", "requires.tsplib", "deterministic"),
-    par.set = makeParamSet()
+    properties = c("euclidean", "external", "requires.tsplib", "deterministic")
   )
 }
 

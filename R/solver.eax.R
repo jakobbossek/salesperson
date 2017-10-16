@@ -4,18 +4,7 @@ makeTSPSolver.eax = function() {
     cl = "eax",
     short.name = "EAX",
     name = "Edge-Assembly-Crossover",
-    properties = c("euclidean", "external", "requires.tsplib"),
-    par.set = makeParamSet(
-      makeIntegerLearnerParam(id = "max.trials", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "pop.size", default = 100L, lower = 2L),
-      makeIntegerLearnerParam(id = "off.size", default = 30L),
-      makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
-      makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "seed", default = 1L),
-      makeLogicalLearnerParam(id = "with.restarts", default = FALSE),
-      # the following paraemters a not parameters of the C++ implementation
-      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
-    )
+    properties = c("euclidean", "external", "requires.tsplib")
   )
 }
 
@@ -47,6 +36,7 @@ run.eax = function(solver, instance,
   snapshot.step = 0L,
   full.matrix = FALSE,
   verbose = FALSE,
+  return.trajectory.file = FALSE,
   ...) {
   # sanity check stuff
   max.trials = asInt(max.trials, lower = 1L)
@@ -73,6 +63,7 @@ run.eax = function(solver, instance,
 
   assertFlag(full.matrix)
   assertFlag(verbose)
+  assertFlag(return.trajectory.file)
 
   # temporary work dir
   temp.dir = tempdir()
@@ -113,21 +104,26 @@ run.eax = function(solver, instance,
   # try to call solver
   solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
   tour = readEAXSolution(file.sol)
-  trajectory = read.table(file.trajectory, header = TRUE, sep = ",")
+
+  trajectory = if (!return.trajectory.file)
+    read.table(file.trajectory, header = TRUE, sep = ",")
+  else
+    file.path(temp.dir, file.trajectory)
 
   # cleanup
-  unlink(c(file.output, file.sol, file.result, file.trajectory))
+  unlink(c(file.output, file.sol, file.result))
   if (is.temp.input) {
     unlink(file.input)
   }
 
-  return(
-    list(
-      "tour" = tour$tour,
-      "tour.length" = tour$tour.length,
-      "trajectory" = trajectory,
-      error = NULL,
-      solver.output = solver.output
-    )
+  if (!return.trajectory.file)
+    unlink(file.trajectory)
+
+  list(
+    tour = tour$tour,
+    tour.length = tour$tour.length,
+    trajectory = trajectory,
+    error = NULL,
+    solver.output = solver.output
   )
 }

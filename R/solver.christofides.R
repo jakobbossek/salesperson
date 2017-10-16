@@ -4,8 +4,7 @@ makeTSPSolver.christofides = function() {
     cl = "christofides",
     short.name = "chris",
     name = "Christofides 2/3 approximation",
-    properties = c("euclidean", "external", "requires.tsplib", "deterministic"),
-    par.set = makeParamSet()
+    properties = c("euclidean", "external", "requires.tsplib", "deterministic")
   )
 }
 

@@ -29,8 +29,6 @@ makeSolver = function(solver) {
 # @param properties [\code{character}]\cr
 #   Character vector of characterizing properties of the learner, e.g., \dQuote{external}
 #   if the solver is called via an external script.
-# @param par.set [\code{\link[ParamHelpers]{ParamSet}}]\cr
-#   Set of solver parameters with constraints and defaults.
 # @param packages [\code{character}]\cr
 #   Character vector of package names of R packages which are necessary to
 #   run the solver.
@@ -38,14 +36,13 @@ makeSolver = function(solver) {
 #   Optional description of the solver or solvers functioning principle.
 # @return [\code{TSPSolver}]
 makeTSPSolverInternal = function(cl, short.name, name,
-  properties, par.set, packages = NULL, description = NULL) {
+  properties, packages = NULL, description = NULL) {
   makeS3Obj(
     cl = cl,
     short.name = short.name,
     name = name,
     description = description,
     properties = properties,
-    par.set = par.set,
     packages = packages,
     classes = c(cl, "TSPSolver")
   )

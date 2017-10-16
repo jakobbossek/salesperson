@@ -4,16 +4,7 @@ makeTSPSolver.lkh = function() {
     cl = "lkh",
     short.name = "LKH",
     name = "Lin-Kernigham Heuristic",
-    properties = c("euclidean", "external", "requires.tsplib"),
-    par.set = makeParamSet(
-      makeIntegerLearnerParam(id = "runs", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "seed", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
-      makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "max.trials", default = 100000000L, lower = 1L),
-      # the following paraemters a not parameters of the C++ implementation
-      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
-    )
+    properties = c("euclidean", "external", "requires.tsplib")
   )
 }
 
