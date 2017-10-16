@@ -1,24 +1,5 @@
-# WAS BRAUCHE ICH?
-# Einzelne Funktion, die
-# - solver als string bekommt
-# - Instanz als Network oder Pfad zu TSPlib-Datei
-# - Liste von Parametern als Liste oder ...
-#
-# WAS SOLL DIE FUNKTION MACHEN?!
-# - checken ob Solver existiert, in Form von run{SOLVER}
-# - ggf. Instanz laden und weitergeben.
-# - Parameter verpacken und via do.call an solver übergeben
-# - Zeit des Solverruns messen.
-# - Ergebnisse zurückgeben.
-# - Checken ob Solver external ist und path.to.solver übergeben oder
-#   Pfad in globaler Variable existiert.
-#
-# WEITERE ANFORDERUNGEN
-# - Funktion soll "erweiterbar" sein. D.h. es soll problemlos möglich sein
-#   Solver einzubinden, die nicht im Paket enthalten sind.
-#
-
 #' @title Apply TSP solver to instance.
+#'
 #' @description
 #' This is a central function. It expects a solver (either a characterizing string
 #' or a TSPSolver object), a Network to operate on and optional parameter for the
@@ -75,7 +56,6 @@ runSolver = function(solver, instance, solver.pars = list(), solver.path = NULL,
   end.time = as.numeric(proc.time() - start.time)
 
   makeTSPSolverResult(
-    #FIXME: multiple cases if instance is network or character
     instance.name = if (testClass(instance, "Network")) instance$name else basename(instance),
     solver = solver$short.name,
     tour.length = res$tour.length,
