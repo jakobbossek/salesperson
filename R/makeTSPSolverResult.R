@@ -46,9 +46,9 @@ makeTSPSolverResult = function(
   !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
   !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
   !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
-  if (!isPermutation(tour)) {
+  if (!isPermutation(tour))
     stopf("Passed tour is not a permutation of the nodes!")
-  }
+  assertDataFrame(trajectory, null.ok = TRUE, min.rows = 1L, min.cols = 2L)
   makeS3Obj(
     instance.name = instance.name,
     solver = solver,
@@ -79,6 +79,6 @@ print.TSPSolverResult = function(x, ...) {
     catf("Elapsed time: %.2f [seconds]", x$runtime[3L])
     catf("Tour length:  %.2f", x$tour.length)
     max.idx = min(length(x$tour), 10L)
-    catf("Head of tour: %s", paste(collapse(x$tour[1:max.idx], sep = ", "), ", ...", sep = ""))
+    catf("Tour:         %s", paste0(collapse(x$tour[1:max.idx], sep = ", "), ", ..."))
   }
 }
