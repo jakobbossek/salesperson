@@ -1,10 +1,10 @@
 Package: salesperson
 Type: Package
-Title: Computation of Instance Feature Sets and R Interface to the State-of-the-Art Solvers for the Traveling Salesperson Problem
+Title: Computation of Instance Features and R Interface to the State-of-the-Art Solvers for the Traveling Salesperson Problem
 Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics, frequently termed instance features.
-Version: 1.0
-Date: 2017-10-04
-Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")))
+Version: 1.0.0
+Date: 2017-10-16
+Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")), person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "ctb"))
 Maintainer: Jakob Bossek <j.bossek@gmail.com>
 URL: https://github.com/jakobbossek/salesperson
 BugReports: https://github.com/jakobbossek/salesperson/issues
@@ -22,8 +22,7 @@ Imports:
     splancs,
     vegan,
     igraph,
-    cccd,
-    e1071
+    cccd
 Suggests:
     testthat
 LinkingTo: Rcpp

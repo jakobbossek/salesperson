@@ -4,8 +4,7 @@
 \alias{getConvexHullFeatureSet}
 \title{Feature: number of points on convex hull and spanning area.}
 \usage{
-getConvexHullFeatureSet(x, feature.set = NULL, skewness.type = 3L,
-  include.costs = FALSE)
+getConvexHullFeatureSet(x, feature.set = NULL, include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -19,10 +18,6 @@ lengths of the hull edges) and \code{"dists"} (summary statistics of the
 distances of each city to its closest edge of the hull).
 Per default (\code{NULL}), all of the four previously listed feature sets will
 be computed.}
-
-\item{skewness.type}{[\code{integer(1)}]\cr
-Definition for computing the skewness as described in \code{\link[e1071]{skewness}}.
-The default is \code{type = 3L}.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}

@@ -17,7 +17,7 @@ test_that("getConvexHullFeatureSet does produce reasonable results", {
     expect_equal(feature.set$hull_dists_max, 0)
     expect_equal(feature.set$hull_dists_span, 0)
     expect_equal(feature.set$hull_dists_sd, 0)
-    expect_equal(feature.set$hull_dists_varcoeff, 0)
+    expect_scalar_na(feature.set$hull_dists_varcoeff)
     expect_scalar_na(feature.set$hull_dists_skew)
 
     # hull is a 1 by 1 square

@@ -7,5 +7,5 @@ test_that("getVRPFeatureSet does produce reasonable results", {
 
   feature_set = getVRPFeatureSet(x)
   expect_list(feature_set, types = "numeric", names = "named", any.missing = FALSE)
-  expect_true(all(feature_set > 0))
+  expect_true(all(feature_set[!grepl("skew", names(feature_set))] > 0))
 })

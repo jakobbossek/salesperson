@@ -26,20 +26,26 @@ test_that("getAngleFeatureSet does produce reasonable results", {
     expect_feature_list(angle.feats, feature.set = "Angle")
 
     # variation statistics of angle feats should be exactly zero
-    fns = !grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max", names(angle.feats))
+    fns = !grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max|skew", names(angle.feats))
     expect_identical(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
 
     # location statistics of angle feats should be identical to pi/2
     fns = !grepl("_cos_", names(angle.feats)) & grepl("mean|median|min|max", names(angle.feats))
     expect_identical(as.numeric(unlist(angle.feats[fns])), rep(pi/2, 4))
 
+    # skewness of a problem with identical angles is not computable
+    expect_scalar_na(angle.feats$angle_skew)
+
     # variation statistics of angle cosine feats should be exactly zero
-    fns = grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max", names(angle.feats))
+    fns = grepl("_cos_", names(angle.feats)) & !grepl("mean|median|min|max|skew", names(angle.feats))
     expect_identical(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
     
     # location statistics of angle cosine feats should be roughly zero
     fns = grepl("_cos_", names(angle.feats)) & grepl("mean|median|min|max", names(angle.feats))
     expect_equal(as.numeric(unlist(angle.feats[fns])), rep(0, 4))
+
+    # skewness of a problem with identical angles is not computable
+    expect_scalar_na(angle.feats$angle_cos_skew)
 })
 
 test_that("getAngleFeatureSet does not produce NaN/NA if drop.duplicates = TRUE", {

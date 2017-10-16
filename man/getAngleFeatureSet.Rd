@@ -31,3 +31,11 @@ Should costs be included as an additional feature? Default is \code{FALSE}.}
 \description{
 Feature: statistics of angles between nodes and their two nearest neighbors.
 }
+\details{
+In case \code{include.costs = TRUE} the output will provide up to three
+  separate cost values: one for the initialization phase, and one for each of the
+  feature sets that were defined in \code{feature.set}. As the initialization
+  phase is a mandatory prerequisite for computing either of the two feature sets,
+  the user will manually have to add the costs of the initialization phase to the
+  costs of the respective feature set(s).
+}

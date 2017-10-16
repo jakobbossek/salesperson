@@ -5,7 +5,7 @@
 # @param type [character(1)]
 #   Type of statistics.
 # @return [list]
-computeStatisticsOnNumericVector = function(x, type, skewness.type = NULL) {
+computeStatisticsOnNumericVector = function(x, type) {
   x.mean = mean(x)
   x.sd = sd(x)
   x.min = min(x)
@@ -19,14 +19,28 @@ computeStatisticsOnNumericVector = function(x, type, skewness.type = NULL) {
     "min" = x.min,
     "max" = x.max,
     #FIXME: span in x and y dimension?
-    "span" = x.max - x.min
-    )
-  ## for some features (such as the hull features), we additionally compute the skewness
-  if (!is.null(skewness.type)) {
-    requirePackages("e1071", why = "computeStatisticsOnNumericVector")
-    assertIntegerish(skewness.type, len = 1L, lower = 1L, upper = 3L)
-    feats = c(feats, "skew" = e1071::skewness(x, type = skewness.type))
-  }
+    "span" = x.max - x.min,
+    "skew" = skew(x)
+  )
   names(feats) = paste(type, names(feats), sep = "_")
   return(feats)
+}
+
+
+
+#' Computes skewness of a numeric vector (analogous to skewness type 3 of e1071)
+#'
+#' @param x [\code{numeric}]\cr
+#'   Vector used for computing the skewness.
+#' @return [\code{numeric(1)}]
+skew = function (x) {
+  if (any(is.na(x))) {
+    return(NA)
+  } else {
+    # center x
+    x = x - mean(x)
+    n = length(x)
+    y = sqrt(n) * sum(x^3L) / sqrt(sum(x^2L)^(3L))
+    return(y * sqrt(((n - 1) / n)^(3L)))
+  }
 }

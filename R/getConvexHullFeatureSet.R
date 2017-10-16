@@ -9,13 +9,10 @@
 #'   distances of each city to its closest edge of the hull).
 #'   Per default (\code{NULL}), all of the four previously listed feature sets will
 #'   be computed.
-#' @param skewness.type [\code{integer(1)}]\cr
-#'   Definition for computing the skewness as described in \code{\link[e1071]{skewness}}.
-#'   The default is \code{type = 3L}.
 #' @template arg_include_costs
 #' @return [\code{list}]
 #' @export
-getConvexHullFeatureSet = function(x, feature.set = NULL, skewness.type = 3L, include.costs = FALSE) {
+getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE) {
   assertClass(x, "Network")
   assertSubset(feature.set, choices = c("points", "area", "edges", "dists"))
   if (is.null(feature.set))
@@ -58,7 +55,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, skewness.type = 3L, in
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullEdgeFeatureSet(x = x, hull.list = hull.list, skewness.type = skewness.type)
+        getConvexHullEdgeFeatureSet(x = x, hull.list = hull.list)
       }), "hull_edges", include.costs)
     )
   }
@@ -68,7 +65,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, skewness.type = 3L, in
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullDistanceFeatureSet(x = x, hull.list = hull.list, skewness.type = skewness.type)
+        getConvexHullDistanceFeatureSet(x = x, hull.list = hull.list)
       }), "hull_dists", include.costs)
     )
   }
@@ -103,10 +100,7 @@ getConvexHullAreaFeatureSet = function(hull.list) {
 }
 
 ## summary statistics of the lengths of the hull's *edges*
-getConvexHullEdgeFeatureSet = function(x, hull.list, skewness.type) {
-  requirePackages("e1071", why = "getConvexHullFeatureSet: edges")
-  assertIntegerish(skewness.type, len = 1L, lower = 1L, upper = 3L, any.missing = FALSE)
-
+getConvexHullEdgeFeatureSet = function(x, hull.list) {
   ## city indices for round trip along the hull
   hull.tour = c(hull.list$hull, hull.list$hull[1L])
 
@@ -116,15 +110,12 @@ getConvexHullEdgeFeatureSet = function(x, hull.list, skewness.type) {
   }))
 
   # See Table I in Pihera and Musliu Features
-  computeStatisticsOnNumericVector(hull.edges, "hull_edges", skewness.type = skewness.type)
+  computeStatisticsOnNumericVector(hull.edges, "hull_edges")
 }
 
 
 ## summary statistics of *distances* from all points to the closest edge on the hull
-getConvexHullDistanceFeatureSet = function(x, hull.list, skewness.type) {
-  requirePackages("e1071", why = "getConvexHullFeatureSet: dists")
-  assertIntegerish(skewness.type, len = 1L, lower = 1L, upper = 3L, any.missing = FALSE)
-
+getConvexHullDistanceFeatureSet = function(x, hull.list) {
   ## city indices for round trip along the hull
   hull.tour = c(hull.list$hull, hull.list$hull[1L])
   n.hull = length(hull.list$hull)
@@ -172,7 +163,7 @@ getConvexHullDistanceFeatureSet = function(x, hull.list, skewness.type) {
   }, double(1L))
 
   ## See Table I in Pihera and Musliu Features
-  res = computeStatisticsOnNumericVector(hull.distances, "hull_dists", skewness.type = skewness.type)
+  res = computeStatisticsOnNumericVector(hull.distances, "hull_dists")
   
   ## in addition to Pihera and Musliu:
   ## ratio of points that are located on the hull (but do not necessarily define the hull)
