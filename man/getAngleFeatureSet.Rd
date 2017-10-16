@@ -4,11 +4,19 @@
 \alias{getAngleFeatureSet}
 \title{Feature: statistics of angles between nodes and their two nearest neighbors.}
 \usage{
-getAngleFeatureSet(x, drop.duplicates = FALSE, include.costs = FALSE)
+getAngleFeatureSet(x, feature.set = NULL, drop.duplicates = FALSE,
+  include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
 Network.}
+
+\item{feature.set}{[\code{character}]\cr
+Subset of angle feature sets that should be computed. Possible choices are
+\code{"angle"} (statistics based on the angles between nodes and their two
+nearest neighbors) and \code{"cos"} (statistics based on the cosine of the
+aforementioned angles). Per default (\code{NULL}), both feature sets will
+be computed.}
 
 \item{drop.duplicates}{[\code{logical(1)}]\cr
 Should duplicated node coordinates be dropped?
@@ -22,4 +30,12 @@ Should costs be included as an additional feature? Default is \code{FALSE}.}
 }
 \description{
 Feature: statistics of angles between nodes and their two nearest neighbors.
+}
+\details{
+In case \code{include.costs = TRUE} the output will provide up to three
+  separate cost values: one for the initialization phase, and one for each of the
+  feature sets that were defined in \code{feature.set}. As the initialization
+  phase is a mandatory prerequisite for computing either of the two feature sets,
+  the user will manually have to add the costs of the initialization phase to the
+  costs of the respective feature set(s).
 }

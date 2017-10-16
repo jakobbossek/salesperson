@@ -4,11 +4,20 @@
 \alias{getConvexHullFeatureSet}
 \title{Feature: number of points on convex hull and spanning area.}
 \usage{
-getConvexHullFeatureSet(x, include.costs = FALSE)
+getConvexHullFeatureSet(x, feature.set = NULL, include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
 Network.}
+
+\item{feature.set}{[\code{character}]\cr
+Subset of hull feature sets that should be computed. Possible choices are
+\code{"points"} (ratio of points defining the convex hull), \code{"area"}
+(area of the convex hull), \code{"edges"} (summary statistics of the
+lengths of the hull edges) and \code{"dists"} (summary statistics of the
+distances of each city to its closest edge of the hull).
+Per default (\code{NULL}), all of the four previously listed feature sets will
+be computed.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
