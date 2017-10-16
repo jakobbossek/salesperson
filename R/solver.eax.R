@@ -44,11 +44,8 @@ readEAXSolution = function(file.sol) {
 #' Proceedings of the Seventh International Conference on Genetic Algorithms
 #' (ICGA97), pages 450-457, San Francisco, CA. Morgan Kaufmann.
 #'
-#' @param solver [\code{TSPSolver}]\cr
-#'   EAX TSPSolver object.
-#' @param instance [\code{character(1)} | \code{Network}]\cr
-#'   Path to TSP instance in \href{https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/}{TSPlib}
-#'   format or \code{Network} object.
+#' @template arg_solver
+#' @template arg_instance
 #' @param max.trials [\code{integer(1)}]\cr
 #'   Number of independent runs. At the moment this is fixed to 1.
 #' @param pop.size [\code{integer(1)}]\cr
@@ -60,14 +57,8 @@ readEAXSolution = function(file.sol) {
 #' @param cutoff.time [\code{integer(1)}]\cr
 #'   Maximal running time in seconds.
 #'   Default is 10.
-#' @param opt.tour.length [\code{integer(1) | NULL}]\cr
-#'   Length of an optimal TSP tour. This is only relevant for benchmarking.
-#'   Keep in mind, that in case of a given optimal tour length most internal
-#'   stopping criteria of EAX are deacitvated. The algorithm stops if an optimal
-#'   tour is found or the cutoff time is reached.
-#' @param seed [\code{integer(1)}]\cr
-#'   Seed for the random numbers generator for reproduction.
-#'   Defaults to a random number between 1 and \eqn{2^15}.
+#' @template arg_opt_tour_length
+#' @template arg_seed
 #' @param with.restarts [\code{logical(1)}]\cr
 #'   Should EAX restart if a plateau is reached?
 #'   Default is \code{FALSE}.
@@ -75,14 +66,8 @@ readEAXSolution = function(file.sol) {
 #'   Possibility to log the entire population each \code{snapshot.step}
 #'   times.
 #'   Default is \code{0}, i.e., do not log at all.
-#' @param full.matrix [\code{logical(1)}]\cr
-#'   Only relevant if \code{instance} is a \code{Network}.
-#'   If \code{TRUE}, the network is exported to TSPlib format
-#'   with explicit edge weight definition.
-#'   Default is \code{FALSE}.
-#' @param verbose [\code{logical(1)}]\cr
-#'   Should the output of the solver be printed?
-#'   Default is \code{FALSE}.
+#' @template arg_full_matrix
+#' @template arg_verbose
 #' @param return.trajectory.file [\code{logical(1)}]\cr
 #'   If set to \code{FALSE} (the default), the logged optimization trace / trajectory
 #'   is returned as a data frame. However, long solver runs may produce a
@@ -91,7 +76,7 @@ readEAXSolution = function(file.sol) {
 #'   of importing this file.
 #' @param ... [any]\cr
 #'   Not used at the moment.
-#' @return [\code{\link{TSPSolverResult}}]
+#' @template ret_TSPSolverResult
 #' @export
 #FIXME: handle initial population
 run.eax = function(solver, instance,

@@ -8,6 +8,15 @@ makeTSPSolver.lkh = function() {
   )
 }
 
+# INTERNAL
+# Helper to write config file needed by Helsgauns LKH implementation.
+# PARAMETER = VALUE
+#
+# @param file.params [character(1)]
+#   Path to file.
+# @param args [list]
+#   Named list of values.
+# @return [Nothing]
 writeToLKHParameterFile = function(file.params, args) {
   args = sapply(names(args), function(name) {
     if (is.integer(args[[name]])) {
@@ -22,8 +31,37 @@ writeToLKHParameterFile = function(file.params, args) {
   write(output, file = file.params)
 }
 
+#' @title Solver: LKH
+#'
+#' @description Inexact TSP solvers based the Lin-Kernigham heuristic.
+#'
+#' @note This solver requires integer inter-city distances.
+#'
+#' @references
+#' Helsgaun, K. (2000). An effective implementation of the lin-kernighan traveling
+#' salesman heuristic. European Journal of Operational Research, 126:106-130.
+#'
+#' Helsgaun, K. (2009). General k-opt submoves for the Lin-Kernighan TSP heuristic.
+#' Mathematical Programming Computation, 1(2-3):119-163.
+#'
+#' @template arg_solver
+#' @template arg_instance
+#' @param runs [\code{integer(1)}]\cr
+#'   Number of independent runs. This value is fixed to 1.
+#' @template arg_seed
+#' @param cutoff.time [\code{integer(1)}]\cr
+#'   Maximal running time in seconds.
+#'   Default is 0, i.e., no cutoff time.
+#' @template arg_opt_tour_length
+#' @param max.trials [\code{integer(1)}]\cr
+#'   Maximal number of iterations.
+#'   Default is 1000.
+#' @template arg_full_matrix
+#' @template arg_verbose
+#' @param ... [any]\cr
+#'   Not used at the moment.
+#' @template ret_TSPSolverResult
 #' @export
-# @interface see runTSPSolver
 run.lkh = function(solver, instance,
   runs = 1L,
   seed = as.integer(runif(1L) * 2^15),
@@ -32,7 +70,7 @@ run.lkh = function(solver, instance,
   max.trials = 1000L,
   full.matrix = FALSE,
   verbose = FALSE,
-   ...) {
+  ...) {
 
   runs = asInt(runs, lower = 1L)
   seed = asInt(seed, lower = 1L)
@@ -105,12 +143,11 @@ run.lkh = function(solver, instance,
     unlink(file.input)
   }
 
-  return(list(
-      "tour" = tour,
-      "tour.length" = tour.length,
-      "error" = NULL,
-      "trajectory" = trajectory,
-      solver.output = res
-    )
+  list(
+    tour = tour,
+    tour.length = tour.length,
+    error = NULL,
+    trajectory = trajectory,
+    solver.output = res
   )
 }

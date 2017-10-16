@@ -12,7 +12,7 @@
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
-EAX TSPSolver object.}
+TSPSolver object.}
 
 \item{instance}{[\code{character(1)} | \code{Network}]\cr
 Path to TSP instance in \href{https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/}{TSPlib}
@@ -40,8 +40,8 @@ stopping criteria of EAX are deacitvated. The algorithm stops if an optimal
 tour is found or the cutoff time is reached.}
 
 \item{seed}{[\code{integer(1)}]\cr
-Seed for the random numbers generator for reproduction.
-Defaults to a random number between 1 and \eqn{2^15}.}
+Seed for the random numbers generator.
+Defaults to a random integer between 1 and \eqn{2^15}.}
 
 \item{with.restarts}{[\code{logical(1)}]\cr
 Should EAX restart if a plateau is reached?
