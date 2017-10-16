@@ -6,7 +6,6 @@ makeTSPSolver.nearest_insertion = function() {
     name = "Nearest Insertion Algorithm for the (euclidean) TSP",
     description = "",
     properties = c("euclidean", "deterministic"),
-    par.set = makeParamSet(),
     packages = "TSP"
   )
 }

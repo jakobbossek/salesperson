@@ -4,7 +4,7 @@
 \alias{run}
 \title{Run a TSP solver to solve a problem instance.}
 \usage{
-run(solver, instance, solver.pars, ...)
+run(solver, instance, ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -12,9 +12,6 @@ Solver object.}
 
 \item{instance}{[\code{Network}]\cr
 TSP instance to solve.}
-
-\item{solver.pars}{[\code{list}]\cr
-Potentially empty named list of solver parameters passed to the solver.}
 
 \item{...}{[any]\cr
 Not used.}

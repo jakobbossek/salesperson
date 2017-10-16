@@ -1,7 +1,7 @@
 Package: salesperson
 Type: Package
-Title: Computation of Instance Features and R Interface to the State-of-the-Art Solvers for the Traveling Salesperson Problem
-Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics, frequently termed instance features.
+Title: Computation of Instance Features and R Interface to the State-of-the-Art Exact and Inexact Solvers for the Traveling Salesperson Problem
+Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics.
 Version: 1.0.0
 Date: 2017-10-16
 Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")), person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "ctb"))
@@ -12,8 +12,7 @@ License: BSD_3_clause + file LICENSE
 Depends:
     BBmisc (>= 1.6),
     netgen (>= 1.0),
-    stringr (>= 0.6.2),
-    ParamHelpers (>= 1.5)
+    stringr (>= 0.6.2)
 Imports:
     checkmate (>= 1.5.1),
     Rcpp (>= 0.11.3),

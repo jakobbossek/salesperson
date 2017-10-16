@@ -4,24 +4,158 @@ makeTSPSolver.eax = function() {
     cl = "eax",
     short.name = "EAX",
     name = "Edge-Assembly-Crossover",
-    properties = c("euclidean", "external", "requires.tsplib"),
-    par.set = makeParamSet(
-      makeIntegerLearnerParam(id = "max.trials", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "pop.size", default = 100L, lower = 2L),
-      makeIntegerLearnerParam(id = "off.size", default = 30L),
-      makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
-      makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "seed", default = 1L),
-      makeLogicalLearnerParam(id = "with.restarts", default = FALSE),
-      # the following paraemters a not parameters of the C++ implementation
-      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
-    )
+    properties = c("euclidean", "external", "requires.tsplib")
   )
 }
 
+# INTERNAL
+# Helper function to extract tour and tour length of a solution
+# file produced by EAX binary.
+#
+# @param file.sol [character(1)]
+#   Path to solution file.
+# @return [list] With components tour.length and tour.
+readEAXSolution = function(file.sol) {
+  sol.con = file(file.sol, "r")
+  lines = readLines(sol.con)
+  close(sol.con)
+
+  # extract relevant data
+  # first line contains #nodes and length of shortest tour found by EAX
+  list(
+    tour.length = as.numeric(strsplit(lines[1], " ", fixed = TRUE)[[1]][2]),
+    tour = as.integer(strsplit(lines[2], " ", fixed = TRUE)[[1]])
+  )
+}
+
+# INTERNAL
+# Helper function to write file with initial solutions for EAX
+# algorithm.
+#
+# @param init.pop [list]
+#   Initial population. See docs of run.eax for more information.
+# @param file.init.pop [character(1)]
+#   Path to file in which the initial population should be stored.
+# @return Nothing
+writeInitialPopulation = function(init.pop, file.init.pop) {
+  con = file(file.init.pop, "w")
+  on.exit(close(con))
+  for (i in 1:length(init.pop)) {
+    line1 = sprintf("%i %i", init.pop[[i]]$n, init.pop[[i]]$tour.length)
+    writeLines(line1, con = con)
+    line2 = collapse(init.pop[[i]]$tour, sep = " ")
+    writeLines(line2, con = con)
+  }
+}
+
+#' @title Solver: EAX
+#'
+#' @description Inexact TSP solvers based on a genetic approach.
+#'
+#' @note This solver requires integer inter-city distances.
+#'
+#' @references
+#' Nagata, Y. and Kobayashi, S. (2013). A powerful genetic algorithm using
+#' edge assembly crossover for the travelling salesman problem. INFORMS Journal
+#' on Computing, 25(2):346-363.
+#'
+#' Nagata, Y. and Kobayashi, S. (1997). Edge assembly crossover: A high-power
+#' genetic algorithm for the travelling salesman problem. In Baeck, T., editor,
+#' Proceedings of the Seventh International Conference on Genetic Algorithms
+#' (ICGA97), pages 450-457, San Francisco, CA. Morgan Kaufmann.
+#'
+#' @template arg_solver
+#' @template arg_instance
+#' @param max.trials [\code{integer(1)}]\cr
+#'   Number of independent runs. At the moment this is fixed to 1.
+#' @param pop.size [\code{integer(1)}]\cr
+#'   Population size.
+#'   Default is 100.
+#' @param off.size [\code{integer(1)}]\cr
+#'   Number of offspring generated in each generation.
+#'   Default is 30.
+#' @param cutoff.time [\code{integer(1)}]\cr
+#'   Maximal running time in seconds.
+#'   Default is 10.
+#' @template arg_opt_tour_length
+#' @template arg_seed
+#' @param with.restarts [\code{logical(1)}]\cr
+#'   Should EAX restart if a plateau is reached?
+#'   Default is \code{FALSE}.
+#' @param snapshot.step [\code{integer(1)}]\cr
+#'   Possibility to log the entire population each \code{snapshot.step}
+#'   times.
+#'   Default is \code{0}, i.e., do not log at all.
+#' @template arg_full_matrix
+#' @template arg_verbose
+#' @param return.trajectory.file [\code{logical(1)}]\cr
+#'   If set to \code{FALSE} (the default), the logged optimization trace / trajectory
+#'   is returned as a data frame. However, long solver runs may produce a
+#'   trajectory of substantial size. If this is expected the user may decide
+#'   to return just the path to the csv file the trajectory is stored to instead
+#'   of importing this file.
+#' @param init.pop [\code{list}]\cr
+#'   List of lists. Each sublist needs to contains three components:
+#'   \describe{
+#'     \item{n [\code{integer(1)}]}{Number of nodes of the TSP problem.}
+#'     \item{tour [\code{integer(n)}]}{The actual tour.}
+#'     \item{tour.length [\code{integer(1)}]}{Length of the tour.}
+#'   }
+#'   Default is \code{NULL}, i.e., the initial population is generated
+#'   randomly and 2-Opt is applied to each solution before the evolutionary
+#'   loop starts.
+#' @param ... [any]\cr
+#'   Not used at the moment.
+#' @template ret_TSPSolverResult
 #' @export
-# @interface see runTSPSolver
-run.eax = function(solver, instance, solver.pars, ...) {
+#FIXME: handle initial population
+run.eax = function(solver, instance,
+  max.trials = 1L,
+  pop.size = 100L,
+  off.size = 30L,
+  cutoff.time = 10L,
+  opt.tour.length = NULL,
+  seed = as.integer(runif(1L) * 2^15),
+  with.restarts = FALSE,
+  snapshot.step = 0L,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  return.trajectory.file = FALSE,
+  init.pop = NULL,
+  ...) {
+  # sanity check stuff
+  max.trials = asInt(max.trials, lower = 1L)
+  pop.size = asInt(pop.size, lower = 2L)
+  off.size = asInt(off.size, lower = 1L)
+
+  # passing 0 to binary deactivates cutoff time
+  if (is.null(cutoff.time))
+    cutoff.time = 0L
+  else
+    cutoff.time = asInt(cutoff.time, lower = 0L)
+
+  # passing 0 to binary means: optimum is not known
+  if (is.null(opt.tour.length))
+    opt.tour.length = 0L
+  else
+    opt.tour.length = asInt(opt.tour.length, lower = 1L)
+
+  seed = asInt(seed, lower = 1L)
+  assertFlag(with.restarts)
+
+  # 0 deactivates snapshots
+  snapshot.step = asInt(snapshot.step, lower = 0L)
+
+  assertFlag(full.matrix)
+  assertFlag(verbose)
+  assertFlag(return.trajectory.file)
+
+  if (!is.null(init.pop)) {
+    assertList(init.pop, len = pop.size, any.missing = FALSE, all.missing = FALSE)
+    file.init.pop = paste0(temp.file, "_init.pop")
+    writeInitialPopulation(init.pop)
+  }
+
   # temporary work dir
   temp.dir = tempdir()
   temp.file = basename(tempfile(tmpdir = temp.dir))
@@ -35,7 +169,6 @@ run.eax = function(solver, instance, solver.pars, ...) {
   # EAX and export accordingly
   is.temp.input = FALSE
   if (testClass(instance, "Network")) {
-    full.matrix = coalesce(solver.pars$full.matrix, FALSE)
     file.input = paste0(temp.file, ".tsp")
     is.temp.input = TRUE
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
@@ -54,54 +187,40 @@ run.eax = function(solver, instance, solver.pars, ...) {
   file.trajectory = paste0(temp.file, ".out_Incumbant")
 
   # See solvers/eax/README.md for details
-  # Examplary call to EAX: #./jikken 10 DATA 100 30 rat575.tsp 0 60 seed
-  args = list()
-  args$max.trials = coalesce(solver.pars$max.trials, 1L)
-  args$tour.file = file.output
-  args$pop.size = coalesce(solver.pars$pop.size, 100L)
-  args$off.size = coalesce(solver.pars$off.size, 30L)
-  args$instance.file = file.input
-  args$opt.tour.length = coalesce(solver.pars$opt.tour.length, 0L)
-  args$cutoff.time = coalesce(solver.pars$cutoff.time, 999999L)
+  # Examplary call to EAX: #./jikken trials DATA pop off rat575.tsp opt cutoff seed withRestarts snapshot
+  args = list(max.trials, file.output, pop.size, off.size,
+    file.input, opt.tour.length, cutoff.time, seed, as.integer(with.restarts),
+    snapshot.step)
 
-  args$seed = coalesce(solver.pars$seed, 123L)
-  args$with.restarts = coalesce(solver.pars$with.restarts, 0)
-
-  args.list = unlist(args)
+  if (!is.null(init.pop))
+    args = c(args, file.init.pop)
 
   # try to call solver
-  solver.output = system2(solver$bin, args.list, stdout = TRUE, stderr = TRUE)
+  solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
+  tour = readEAXSolution(file.sol)
 
-  # prepare result
-  tour = NA
-  tour.length = NA
-  error = NULL
-
-  sol.con = file(file.sol, "r")
-  lines = readLines(sol.con)
-  close(sol.con)
-
-  # extract relevant data
-  # first line contains #nodes and length of shortest tour found by EAX
-  #FIXME: we can make this nicer!
-  tour.length = as.numeric(strsplit(lines[1], " ", fixed = TRUE)[[1]][2])
-  tour = as.integer(strsplit(lines[2], " ", fixed = TRUE)[[1]])
-
-  trajectory = read.table(file.trajectory, header = TRUE, sep = ",")
+  trajectory = if (!return.trajectory.file)
+    read.table(file.trajectory, header = TRUE, sep = ",")
+  else
+    file.path(temp.dir, file.trajectory)
 
   # cleanup
-  unlink(c(file.output, file.sol, file.result, file.trajectory))
+  unlink(c(file.output, file.sol, file.result))
   if (is.temp.input) {
     unlink(file.input)
   }
 
-  return(
-    list(
-      "tour" = tour,
-      "tour.length" = tour.length,
-      "trajectory" = trajectory,
-      error = error,
-      solver.output = solver.output
-    )
+  if (!is.null(init.pop))
+    unlink(file.init.pop)
+
+  if (!return.trajectory.file)
+    unlink(file.trajectory)
+
+  list(
+    tour = tour$tour,
+    tour.length = tour$tour.length,
+    trajectory = trajectory,
+    error = NULL,
+    solver.output = solver.output
   )
 }

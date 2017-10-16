@@ -4,8 +4,7 @@ makeTSPSolver.twoopt = function() {
     cl = "twoopt",
     short.name = "2-opt",
     name = "2-opt heuristic",
-    properties = c("euclidean", "external", "requires.tsplib", "stochastic"),
-    par.set = makeParamSet()
+    properties = c("euclidean", "external", "requires.tsplib", "stochastic")
   )
 }
 

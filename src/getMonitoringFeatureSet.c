@@ -3,9 +3,20 @@
 
 #include "macros.h"
 
-SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
+/*
+ * @param t [numeric]
+ *   Vector of times / iterations.
+ * @param f [numeric]
+ *   Vector of incumbent values.
+ * @param lb [numeric(1)]
+ *   Lower bound for tour length. Used for the computation of
+ *   the area under the curve.
+ * @return [list] Named list. See *names var at the bottom.
+ */
+SEXP getMonitoringFeatureSetC(SEXP t, SEXP f, SEXP lb) {
   EXTRACT_NUMERIC_VECTOR(t, c_t, n);
   EXTRACT_NUMERIC_VECTOR(f, c_f, n2);
+  EXTRACT_REAL(lb, c_lb);
 
   // R result stuff
   SEXP r_slopes_consecutive = PROTECT(allocVector(REALSXP, n - 1));
@@ -15,11 +26,15 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
   SEXP r_max_plateau_length = PROTECT(allocVector(INTSXP, 1));
   SEXP r_n_plateaus = PROTECT(allocVector(INTSXP, 1));
   SEXP r_success_ratio = PROTECT(allocVector(REALSXP, 1));
+  SEXP r_vertical_gaps = PROTECT(allocVector(REALSXP, n - 1));
+  SEXP r_area_under_curve = PROTECT(allocVector(REALSXP, 1));
+
 
   // correpsponding C data structures
   double *slopes_consecutive = REAL(r_slopes_consecutive);
   double *slopes_improvement = REAL(r_slopes_improvement);
   int *plateau_lengths = INTEGER(r_plateau_lengths);
+  double *vertical_gaps = REAL(r_vertical_gaps);
 
   double total_improvement = c_f[0] - c_f[n - 1];
   int n_success = 0;
@@ -27,6 +42,7 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
   int cur_plateau_length = 1;
   int n_plateaus = 0;
   int idx_last_improvement = 0;
+  double area_under_curve = 0.0;
 
   // counters for slopes_improvement and plateau_lengths
   int s = 0;
@@ -37,6 +53,14 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
     slopes_improvement[i - 1] = NA_REAL;
     slopes_consecutive[i - 1] = NA_REAL;
     plateau_lengths[i - 1] = NA_INTEGER;
+
+    // count vertical gap
+    vertical_gaps[i - 1] = c_f[i] - c_f[i - 1];
+
+    // area under the curve
+    double area_width = c_t[i] - c_t[i - 1];
+    double area_height = c_f[i - 1] - c_lb;
+    area_under_curve += area_width * area_height;
 
     if (c_f[i] < c_f[i - 1]) {
       // count successful iterations
@@ -75,6 +99,7 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
   REAL(r_total_improvement)[0] = total_improvement;
   INTEGER(r_n_plateaus)[0] = n_plateaus;
   REAL(r_success_ratio)[0] = (double)n_success / n;
+  REAL(r_area_under_curve)[0] = area_under_curve;
   INTEGER(r_max_plateau_length)[0] = max_plateau_length;
 
   // reserve named R list wrapper
@@ -87,6 +112,8 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
     "n_plateaus",
     "success_ratio",
     "max_plateau_length",
+    "vertical_gaps",
+    "area_under_curve",
     ""
   };
   SEXP r_out = PROTECT(mkNamed(VECSXP, names));
@@ -98,7 +125,9 @@ SEXP getMonitoringFeatureSetC(SEXP t, SEXP f) {
   SET_VECTOR_ELT(r_out, 4, r_n_plateaus);
   SET_VECTOR_ELT(r_out, 5, r_success_ratio);
   SET_VECTOR_ELT(r_out, 6, r_max_plateau_length);
+  SET_VECTOR_ELT(r_out, 7, r_vertical_gaps);
+  SET_VECTOR_ELT(r_out, 8, r_area_under_curve);
 
-  UNPROTECT(8);
+  UNPROTECT(10);
   return(r_out);
 }

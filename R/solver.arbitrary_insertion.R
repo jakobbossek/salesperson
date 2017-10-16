@@ -5,7 +5,6 @@ makeTSPSolver.arbitrary_insertion = function() {
     name = "Arbitrary Insertion Algorithm for the (euclidean) TSP",
     description = "",
     properties = c("euclidean", "deterministic"),
-    par.set = makeParamSet(),
     packages = "TSP"
   )
 }

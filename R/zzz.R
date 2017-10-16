@@ -3,7 +3,6 @@
 #' @import netgen
 #' @import Rcpp
 #' @import stringr
-#' @import ParamHelpers
 #' @import TSP
 #' @import cccd
 #' @import igraph
@@ -11,8 +10,8 @@
 #' @importFrom splancs areapl
 #' @importFrom vegan spantree spandepth
 #' @importFrom grDevices chull
-#' @importFrom stats median quantile sd var density dist rnorm runif
-#' @importFrom utils getS3method read.table
+#' @importFrom stats na.omit median quantile sd var density dist rnorm runif
+#' @importFrom utils methods getS3method read.table
 #' @useDynLib salesperson
 NULL
 

@@ -4,22 +4,87 @@ makeTSPSolver.lkh = function() {
     cl = "lkh",
     short.name = "LKH",
     name = "Lin-Kernigham Heuristic",
-    properties = c("euclidean", "external", "requires.tsplib"),
-    par.set = makeParamSet(
-      makeIntegerLearnerParam(id = "runs", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "seed", default = 1L, lower = 1L),
-      makeIntegerLearnerParam(id = "cutoff.time", default = 999999999L),
-      makeNumericLearnerParam(id = "opt.tour.length", default = 0, lower = 0),
-      makeIntegerLearnerParam(id = "max.trials", default = 100000000L, lower = 1L),
-      # the following paraemters a not parameters of the C++ implementation
-      makeLogicalLearnerParam(id = "full.matrix", default = FALSE)
-    )
+    properties = c("euclidean", "external", "requires.tsplib")
   )
 }
 
+# INTERNAL
+# Helper to write config file needed by Helsgauns LKH implementation.
+# PARAMETER = VALUE
+#
+# @param file.params [character(1)]
+#   Path to file.
+# @param args [list]
+#   Named list of values.
+# @return [Nothing]
+writeToLKHParameterFile = function(file.params, args) {
+  args = sapply(names(args), function(name) {
+    if (is.integer(args[[name]])) {
+      sprintf("%s = %i", name, args[[name]])
+    } else if (is.numeric(args[[name]])) {
+      sprintf("%s = %f", name, args[[name]])
+    } else {
+      sprintf("%s = %s", name, args[[name]])
+    }
+  })
+  output = collapse(args, "\n")
+  write(output, file = file.params)
+}
+
+#' @title Solver: LKH
+#'
+#' @description Inexact TSP solvers based the Lin-Kernigham heuristic.
+#'
+#' @note This solver requires integer inter-city distances.
+#'
+#' @references
+#' Helsgaun, K. (2000). An effective implementation of the lin-kernighan traveling
+#' salesman heuristic. European Journal of Operational Research, 126:106-130.
+#'
+#' Helsgaun, K. (2009). General k-opt submoves for the Lin-Kernighan TSP heuristic.
+#' Mathematical Programming Computation, 1(2-3):119-163.
+#'
+#' @template arg_solver
+#' @template arg_instance
+#' @param runs [\code{integer(1)}]\cr
+#'   Number of independent runs. This value is fixed to 1.
+#' @template arg_seed
+#' @param cutoff.time [\code{integer(1)}]\cr
+#'   Maximal running time in seconds.
+#'   Default is 0, i.e., no cutoff time.
+#' @template arg_opt_tour_length
+#' @param max.trials [\code{integer(1)}]\cr
+#'   Maximal number of iterations.
+#'   Default is 1000.
+#' @template arg_full_matrix
+#' @template arg_verbose
+#' @param ... [any]\cr
+#'   Not used at the moment.
+#' @template ret_TSPSolverResult
 #' @export
-# @interface see runTSPSolver
-run.lkh = function(solver, instance, solver.pars, ...) {
+run.lkh = function(solver, instance,
+  runs = 1L,
+  seed = as.integer(runif(1L) * 2^15),
+  cutoff.time = 0,
+  opt.tour.length = NULL,
+  max.trials = 1000L,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  ...) {
+
+  runs = asInt(runs, lower = 1L)
+  seed = asInt(seed, lower = 1L)
+  if (!is.null(cutoff.time))
+    cutoff.time = asInt(cutoff.time, lower = 1L)
+
+  if (!is.null(opt.tour.length))
+    opt.tour.length = asInt(opt.tour.length, lower = 1L)
+
+  max.trials = asInt(max.trials, lower = 10L)
+
+  assertFlag(full.matrix)
+  assertFlag(verbose)
+
   temp.dir = tempdir()
   cur.dir = getwd()
   on.exit(setwd(cur.dir))
@@ -28,10 +93,10 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   temp.file = basename(tempfile(tmpdir = temp.dir))
   file.params = paste0(temp.file, ".par")
   file.output = paste0(temp.file, ".out")
+  file.trajectory = paste0(temp.file, ".traj")
 
   has.temporary.input = FALSE
   if (testClass(instance, "Network")) {
-    full.matrix = coalesce(solver.pars$full.matrix, FALSE)
     file.input = paste0(temp.file, ".tsp")
     has.temporary.input = TRUE
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
@@ -47,54 +112,42 @@ run.lkh = function(solver, instance, solver.pars, ...) {
   # in seconds.
   args = list()
   args$PROBLEM_FILE = file.input
-  args$RUNS = coalesce(solver.pars$runs, 1L)
-  args$SEED = coalesce(solver.pars$seed, 1L)
-  args$TIME_LIMIT = coalesce(solver.pars$cutoff.time, 999999L)
-  args$MAX_TRIALS = coalesce(solver.pars$max.trials, 999999L)
+  args$OUTPUT_TRAJECTORY_FILE = file.trajectory
+  args$RUNS = runs
+  args$SEED = seed
+  if (!is.null(cutoff.time))
+    args$TIME_LIMIT = cutoff.time
 
-  if (!is.null(solver.pars$opt.tour.length)) {
-    args$OPTIMUM = solver.pars$opt.tour.length
+  args$MAX_TRIALS = max.trials
+
+  if (!is.null(opt.tour.length)) {
     args$STOP_AT_OPTIMUM = "YES"
-  }
-
-  writeToLKHParameterFile = function(file.params, args) {
-    args = sapply(names(args), function(name) {
-      sprintf("%s = %s", name, args[[name]])
-    })
-    output = collapse(args, "\n")
-    write(output, file = file.params)
+    args$OPTIMUM = opt.tour.length
   }
 
   args$OUTPUT_TOUR_FILE = file.output
   writeToLKHParameterFile(file.params, args)
 
-  # second parameter is time limit
-  lkh.args = c(file.params, args$TIME_LIMIT)
-
-  # prepare output
-  tour = NA
-  tour.length = NA
-  error = NULL
-
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
-  res = try(suppressWarnings(system2(solver$bin, lkh.args, stdout = TRUE, stderr = TRUE)))
+  res = system2(solver$bin, args = file.params, stdout = verbose, stderr = verbose)
 
   # build tour
   tmp = readTSPlibTOURFile(file.output)
   tour = tmp$tour
   tour.length = tmp$tour.length
+  trajectory = read.table(file.trajectory, header = TRUE, sep = ",")
 
-  unlink(c(file.output, file.params))
+  unlink(c(file.output, file.params, file.trajectory))
   if (has.temporary.input) {
     unlink(file.input)
   }
 
-  return(list(
-      "tour" = tour,
-      "tour.length" = tour.length,
-      "error" = error,
-      solver.output = res
-    )
+  list(
+    tour = tour,
+    tour.length = tour.length,
+    error = NULL,
+    trajectory = trajectory,
+    solver.output = res
   )
 }

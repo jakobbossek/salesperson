@@ -1,7 +1,9 @@
-# Returns all currently available solver names.
-#
-# @return [\code{character}]
-# @export
+#' Returns all currently implemented solver names.
+#'
+#' @return [\code{character}]
+#' @export
 getAvailableSolverNames = function() {
-  c("eax", "eax-restart", "lkh", "lkh-restart", "concorde")
+  solvers = as.character(methods("makeTSPSolver"))
+  solvers = gsub("makeTSPSolver.", "", solvers, fixed = TRUE)
+  return(solvers)
 }

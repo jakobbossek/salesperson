@@ -6,7 +6,6 @@ makeTSPSolver.farthest_insertion = function() {
     name = "Farthest Insertion Algorithm for the (euclidean) TSP",
     description = "",
     properties = c("euclidean", "deterministic"),
-    par.set = makeParamSet(),
     packages = "TSP"
   )
 }

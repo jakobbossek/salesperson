@@ -2,29 +2,36 @@
 % Please edit documentation in R/runSolver.R
 \name{runSolver}
 \alias{runSolver}
-\title{Apply solver to instance.}
+\title{Apply TSP solver to instance.}
 \usage{
-runSolver(solver, instance, solver.pars, ...)
+runSolver(solver, instance, solver.pars = list(), solver.path = NULL, ...)
 }
 \arguments{
 \item{solver}{[\code{character(1)} || \code{TSPSolver}]\cr
-Solver.}
+Either a string representation of the solver or a \code{TSPSolver} object.}
 
-\item{instance}{[\code{Network}]\cr
-Instance to solve.}
+\item{instance}{[\code{Network} | \code{character(1)}]\cr
+Instance to solve. Either a \code{Network} or a file path to the
+instance in TSPlib format.}
 
 \item{solver.pars}{[\code{list}]\cr
 Named list of parameters for the solver.}
 
+\item{solver.path}{[\code{character(1) | NULL}]\cr
+Path to external binary. Only relevant if global path is not
+set (see \code{\link{solverPaths}} function for details).
+Default is \code{NULL}.}
+
 \item{...}{[any]
-Parameters for the solver.}
+Alternative possibility to pass down parameters to the solver. Parameters
+passed this way take precedence over parameters passed via \code{solver.pars}.}
 }
 \value{
 [\code{TSPSolverResult}]
 }
 \description{
 This is a central function. It expects a solver (either a characterizing string
-  or a TSPSolver object), a Network to operate on and optional parameter for the
-  algorithm/solver. It then runs the solver on the instance and returns a solver
-  result object.
+or a TSPSolver object), a Network to operate on and optional parameter for the
+algorithm/solver. It then runs the solver on the instance and returns a solver
+result object.
 }
