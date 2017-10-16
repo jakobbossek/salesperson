@@ -6,7 +6,6 @@
 [![Build Status](https://travis-ci.org/jakobbossek/salesperson.svg)](https://travis-ci.org/jakobbossek/salesperson)
 [![Build status](https://ci.appveyor.com/api/projects/status/6hd5dguq6w3v7t7j/branch/master?svg=true)](https://ci.appveyor.com/project/jakobbossek/salesperson/branch/master)
 [![Coverage Status](https://coveralls.io/repos/jakobbossek/salesperson/badge.svg?branch=master&service=github)](https://coveralls.io/github/jakobbossek/salesperson?branch=master)
-[![Research software impact](http://depsy.org/api/package/cran/salesperson/badge.svg)](http://depsy.org/package/r/salesperson)
 
 ## Introduction
 
@@ -27,6 +26,8 @@ Delegated to [TSP](https://cran.r-project.org/package=TSP) package:
 The following two solvers are the current state-of-the-art in inexact TSP solving (see [1]). However, both are available for research only and need to be requested. 
 * LKH+restart [1, 2, 4]
 * EAX+restart [4, 5, 6]
+
+## References
 
 [1] Helsgaun, K. (2000). An effective implementation of the lin-kernighan traveling salesman heuristic. European Journal of Operational Research, 126:106–130.
 
@@ -57,7 +58,7 @@ print(autoplot(x, path = res$tour, close.path = TRUE))
 
 In order to run the exact CONCORDE TSP solver we first need to [download the executable](http://www.math.uwaterloo.ca/tsp/concorde/downloads/downloads.htm) for our operating system. Say, the path to the executable is */path/to/concorde* (on a linux system) or *C:/path/to/concorde* (on a windows system). We need to pass this path to `runSolver` in order to call CONCORDE.
 ```r
-res = runSolver("concorde", x, solver.path = "/Users/you/concorde")
+res = runSolver("concorde", x, solver.path = "/path/to/concorde")
 print(res)
 print(autoplot(x, path = res$tour, close.path = TRUE))
 ```
