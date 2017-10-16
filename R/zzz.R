@@ -3,7 +3,6 @@
 #' @import netgen
 #' @import Rcpp
 #' @import stringr
-#' @import ParamHelpers
 #' @import TSP
 #' @import cccd
 #' @import igraph
