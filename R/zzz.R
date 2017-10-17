@@ -4,8 +4,8 @@
 #' @import Rcpp
 #' @import stringr
 #' @import TSP
-#' @import cccd
-#' @import igraph
+#' @importFrom igraph as.undirected components
+#' @importFrom cccd nng
 #' @importFrom fpc dbscan
 #' @importFrom splancs areapl
 #' @importFrom vegan spantree spandepth
