@@ -1,8 +1,8 @@
 language: r
 
-warnings_are_errors: true
+cache: packages
 
-sudo: required
+warnings_are_errors: true
 
 r_github_packages:
   - jimhester/covr
@@ -10,7 +10,10 @@ r_github_packages:
 after_success:
   - Rscript -e 'library(covr);coveralls()'
 
+
 notifications:
   email:
+    recipients:
+      - bossek@wi.uni-muenster.de
     on_success: change
-    on_failure: change
+    on_failure: always
