@@ -32,7 +32,6 @@ the sublists according to \link{getAvailableFeatureSets}.}
 Feature: all features.
 }
 \examples{
-  library(netgen)
   x = generateRandomNetwork(n.points = 50L)
   # get all features available in salesperson with default parameters
   # Note that we always exclude the VRP problem specific VRP features, since

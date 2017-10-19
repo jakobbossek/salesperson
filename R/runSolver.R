@@ -6,6 +6,8 @@
 #' algorithm/solver. It then runs the solver on the instance and returns a solver
 #' result object.
 #'
+#' @keywords optimize
+#'
 #' @param solver [\code{character(1)} || \code{TSPSolver}]\cr
 #'   Either a string representation of the solver or a \code{TSPSolver} object.
 #' @param instance [\code{Network} | \code{character(1)}]\cr

@@ -35,3 +35,4 @@ or a TSPSolver object), a Network to operate on and optional parameter for the
 algorithm/solver. It then runs the solver on the instance and returns a solver
 result object.
 }
+\keyword{optimize}

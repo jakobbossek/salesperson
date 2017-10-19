@@ -29,7 +29,7 @@ run.lkh_restart = function(solver, instance, solver.pars, ...) {
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
       stopf("LKH can handle only integer distances!")
     }
-    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE, digits = 100)
+    exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE, digits = 100)
   } else {
     file.input = instance
   }

@@ -27,7 +27,7 @@ computeTourLength = function(x, tour, close.tour = TRUE, round = FALSE) {
     tour = c(tour, tour[1L])
   tour_length = 0
 
-  #FIXME: fix this in netgen::makeNetwork
+  #FIXME: fix this in makeNetwork
   dist.mat = x$distance.matrix
   if (hasDepots(x)) {
     dist.mat = as.matrix(dist(as.matrix(as.data.frame(x, include.extra = FALSE))))
