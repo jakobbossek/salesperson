@@ -51,7 +51,7 @@ writeToLKHParameterFile = function(file.params, args) {
 #' @template arg_seed
 #' @param cutoff.time [\code{integer(1)}]\cr
 #'   Maximal running time in seconds.
-#'   Default is 0, i.e., no cutoff time.
+#'   Default is NULL, i.e., no cutoff time.
 #' @template arg_opt_tour_length
 #' @param max.trials [\code{integer(1)}]\cr
 #'   Maximal number of iterations.
@@ -65,7 +65,7 @@ writeToLKHParameterFile = function(file.params, args) {
 run.lkh = function(solver, instance,
   runs = 1L,
   seed = as.integer(runif(1L) * 2^15),
-  cutoff.time = 0,
+  cutoff.time = NULL,
   opt.tour.length = NULL,
   max.trials = 1000L,
   full.matrix = FALSE,
@@ -75,7 +75,7 @@ run.lkh = function(solver, instance,
   runs = asInt(runs, lower = 1L)
   seed = asInt(seed, lower = 1L)
   if (!is.null(cutoff.time))
-    cutoff.time = asInt(cutoff.time, lower = 1L)
+    cutoff.time = asInt(cutoff.time, lower = 0L)
 
   if (!is.null(opt.tour.length))
     opt.tour.length = asInt(opt.tour.length, lower = 1L)

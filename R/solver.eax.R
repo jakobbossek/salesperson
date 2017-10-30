@@ -41,7 +41,7 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
   con = file(file.init.pop, "w")
   on.exit(close(con))
   for (i in 1:length(init.pop)) {
-    line1 = sprintf("%i %i", init.pop[[i]]$n, init.pop[[i]]$tour.length)
+    line1 = sprintf("%i %i",as.integer(init.pop[[i]]$n), as.integer(init.pop[[i]]$tour.length))
     writeLines(line1, con = con)
     line2 = collapse(init.pop[[i]]$tour, sep = " ")
     writeLines(line2, con = con)
@@ -150,12 +150,6 @@ run.eax = function(solver, instance,
   assertFlag(verbose)
   assertFlag(return.trajectory.file)
 
-  if (!is.null(init.pop)) {
-    assertList(init.pop, len = pop.size, any.missing = FALSE, all.missing = FALSE)
-    file.init.pop = paste0(temp.file, "_init.pop")
-    writeInitialPopulation(init.pop)
-  }
-
   # temporary work dir
   temp.dir = tempdir()
   temp.file = basename(tempfile(tmpdir = temp.dir))
@@ -164,6 +158,13 @@ run.eax = function(solver, instance,
   cur.wd = getwd()
   setwd(temp.dir)
   on.exit(setwd(cur.wd))
+
+  file.init.pop = NULL
+  if (!is.null(init.pop)) {
+    assertList(init.pop, max.len = pop.size, any.missing = FALSE, all.missing = FALSE)
+    file.init.pop = paste0(temp.file, "_init.pop")
+    writeInitialPopulation(init.pop, file.init.pop)
+  }
 
   # in case we pass a Network object, check whether its compatible with
   # EAX and export accordingly
@@ -197,6 +198,7 @@ run.eax = function(solver, instance,
 
   # try to call solver
   solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
+  print(solver.output)
   tour = readEAXSolution(file.sol)
 
   trajectory = if (!return.trajectory.file)
