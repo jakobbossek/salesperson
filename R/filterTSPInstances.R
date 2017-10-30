@@ -12,7 +12,8 @@
 #' @param directory [\code{character(1)}]\cr
 #'   Readable directory path.
 #' @param expr [\code{expression}]\cr
-#'   Expression wrapped with the \code{quote} function.
+#'   Expression wrapped with the \code{quote} function. Used to filter instances.
+#'   Default is \code{NULL}, i.e., no selection at all.
 #' @param paths.only [\code{logical(1)}]\cr
 #'   Should only the full file names of the instances be returned?
 #'   Default is \code{FALSE}.
@@ -37,19 +38,22 @@
 #'
 #' @seealso \code{\link{getTSPInstancesOverview}}
 #' @export
-filterTSPInstances = function(directory = NULL, expr, paths.only = FALSE, opt.known = FALSE) {
+filterTSPInstances = function(directory = NULL, expr = NULL, paths.only = FALSE, opt.known = FALSE) {
   assertDirectoryExists(directory, access = "r")
   assertFlag(paths.only, na.ok = FALSE)
   assertFlag(opt.known, na.ok = FALSE)
 
   df = getTSPInstancesOverview(directory, append.filename = TRUE)
 
-  idx = eval(expr, envir = df)
-  df2 = df[idx, , drop = FALSE]
+  if (!is.null(expr)) {
+    idx = eval(expr, envir = df)
+    df = df[idx, , drop = FALSE]
+  }
+
   if (opt.known) {
-    df2 = df2[which(df2$opt.length.known), , drop = FALSE]
+    df = df[which(df$opt.length.known), , drop = FALSE]
   }
   if (paths.only)
-    return(df2$file.path)
-  return(df2)
+    return(df$file.path)
+  return(df)
 }

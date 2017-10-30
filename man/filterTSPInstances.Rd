@@ -4,7 +4,7 @@
 \alias{filterTSPInstances}
 \title{Filter TSPlib instances according to its specifications.}
 \usage{
-filterTSPInstances(directory = NULL, expr, paths.only = FALSE,
+filterTSPInstances(directory = NULL, expr = NULL, paths.only = FALSE,
   opt.known = FALSE)
 }
 \arguments{
@@ -12,7 +12,8 @@ filterTSPInstances(directory = NULL, expr, paths.only = FALSE,
 Readable directory path.}
 
 \item{expr}{[\code{expression}]\cr
-Expression wrapped with the \code{quote} function.}
+Expression wrapped with the \code{quote} function. Used to filter instances.
+Default is \code{NULL}, i.e., no selection at all.}
 
 \item{paths.only}{[\code{logical(1)}]\cr
 Should only the full file names of the instances be returned?
