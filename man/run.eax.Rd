@@ -7,8 +7,9 @@
 \method{run}{eax}(solver, instance, max.trials = 1L, pop.size = 100L,
   off.size = 30L, cutoff.time = 10L, opt.tour.length = NULL,
   seed = as.integer(runif(1L) * 2^15), with.restarts = FALSE,
-  snapshot.step = 0L, full.matrix = FALSE, verbose = FALSE,
-  return.trajectory.file = FALSE, init.pop = NULL, ...)
+  with.GPX = FALSE, snapshot.step = 0L, full.matrix = FALSE,
+  verbose = FALSE, log.trajectory = TRUE, return.trajectory.file = FALSE,
+  init.pop = NULL, ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -82,6 +83,10 @@ loop starts.}
 
 \item{...}{[any]\cr
 Not used at the moment.}
+
+\item{with.gpx}{[\code{logical(1)}]\cr
+Activate GPX2 crossover?
+Default is \code{FALSE}.}
 }
 \value{
 [\code{\link{TSPSolverResult}}]

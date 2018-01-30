@@ -28,8 +28,8 @@ test_that("External solvers can be called", {
   config.path = path.expand("~/.config/salesperson/")
   solverPaths(
     list(
-      lkh = paste0(config.path, "solvers/LKH-2.0.7-incumbant/LKH"),
-      eax = paste0(config.path, "solvers/eax/jikken"),
+      lkh = paste0(config.path, "solvers/LKH-2.0.7/LKH"),
+      eax = paste0(config.path, "solvers/EAX/main"),
       concorde = paste0(config.path, "solvers/concorde/osx/concorde")
     )
   )

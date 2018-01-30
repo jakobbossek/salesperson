@@ -46,8 +46,6 @@ writeToLKHParameterFile = function(file.params, args) {
 #'
 #' @template arg_solver
 #' @template arg_instance
-#' @param runs [\code{integer(1)}]\cr
-#'   Number of independent runs. This value is fixed to 1.
 #' @template arg_seed
 #' @param cutoff.time [\code{integer(1)}]\cr
 #'   Maximal running time in seconds.
@@ -55,24 +53,32 @@ writeToLKHParameterFile = function(file.params, args) {
 #' @template arg_opt_tour_length
 #' @param max.trials [\code{integer(1)}]\cr
 #'   Maximal number of iterations.
-#'   Default is 1000.
+#'   Default is the number of nodes of the instance.
+#' @param with.restarts [\code{logical(1)}]\cr
+#'   Should LKH restart if a plateau is reached?
+#'   Default is \code{FALSE}.
 #' @template arg_full_matrix
 #' @template arg_verbose
+#' @param more.args [\code{list}]\cr
+#'   Named list of parameter which shall be written to the LKH parameter file.
+#'   Note that 1) the names should be all uppercase and 2) there is no argument
+#'   check. Default ist the empty list.
 #' @param ... [any]\cr
 #'   Not used at the moment.
 #' @template ret_TSPSolverResult
 #' @export
 run.lkh = function(solver, instance,
-  runs = 1L,
   seed = as.integer(runif(1L) * 2^15),
   cutoff.time = NULL,
   opt.tour.length = NULL,
-  max.trials = 1000L,
+  max.trials = NULL,
+  with.restarts = FALSE,
   full.matrix = FALSE,
   verbose = FALSE,
+  log.trajectory = TRUE,
+  more.args = list(),
   ...) {
 
-  runs = asInt(runs, lower = 1L)
   seed = asInt(seed, lower = 1L)
   if (!is.null(cutoff.time))
     cutoff.time = asInt(cutoff.time, lower = 0L)
@@ -80,10 +86,14 @@ run.lkh = function(solver, instance,
   if (!is.null(opt.tour.length))
     opt.tour.length = asInt(opt.tour.length, lower = 1L)
 
-  max.trials = asInt(max.trials, lower = 10L)
+  if (!is.null(max.trials))
+    max.trials = asInt(max.trials, lower = 10L)
 
+  assertFlag(with.restarts)
   assertFlag(full.matrix)
   assertFlag(verbose)
+  assertFlag(log.trajectory)
+  assertList(more.args)
 
   temp.dir = tempdir()
   cur.dir = getwd()
@@ -112,42 +122,55 @@ run.lkh = function(solver, instance,
   # in seconds.
   args = list()
   args$PROBLEM_FILE = file.input
-  args$OUTPUT_TRAJECTORY_FILE = file.trajectory
-  args$RUNS = runs
+  if (log.trajectory)
+    args$OUTPUT_TRAJECTORY_FILE = file.trajectory
+  args$RUNS = 1
   args$SEED = seed
   if (!is.null(cutoff.time))
     args$TIME_LIMIT = cutoff.time
+  args$DO_RESTARTS = as.integer(with.restarts)
 
-  args$MAX_TRIALS = max.trials
+  if (!is.null(max.trials))
+    args$MAX_TRIALS = max.trials
 
   if (!is.null(opt.tour.length)) {
     args$STOP_AT_OPTIMUM = "YES"
     args$OPTIMUM = opt.tour.length
   }
 
+  # append additional arguments
+  args = c(args, more.args)
+
   args$OUTPUT_TOUR_FILE = file.output
   writeToLKHParameterFile(file.params, args)
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
-  res = system2(solver$bin, args = file.params, stdout = verbose, stderr = verbose)
+  solver.output = system2(solver$bin, args = file.params, stdout = verbose, stderr = verbose)
+  if (verbose)
+    print(solver.output)
 
   # build tour
   tmp = readTSPlibTOURFile(file.output)
   tour = tmp$tour
   tour.length = tmp$tour.length
-  trajectory = read.table(file.trajectory, header = TRUE, sep = ",")
+  trajectory = NULL
+  if (log.trajectory) {
+    trajectory = read.table(file.trajectory, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+  }
 
   unlink(c(file.output, file.params, file.trajectory))
-  if (has.temporary.input) {
+  if (has.temporary.input)
     unlink(file.input)
-  }
+
+  if (log.trajectory)
+    unlink(file.trajectory)
 
   list(
     tour = tour,
     tour.length = tour.length,
     error = NULL,
     trajectory = trajectory,
-    solver.output = res
+    solver.output = solver.output
   )
 }
