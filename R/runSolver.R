@@ -55,14 +55,15 @@ runSolver = function(solver, instance, solver.pars = list(), solver.path = NULL,
   start.time = proc.time()
   run.fun = getS3method("run", solver)
   res = do.call(run.fun, c(list(solver = solver, instance = instance2), solver.pars))
-  end.time = as.numeric(proc.time() - start.time)
+  runtime = as.numeric(proc.time() - start.time)
 
   makeTSPSolverResult(
     instance.name = if (testClass(instance, "Network")) instance$name else basename(instance),
     solver = solver$short.name,
+    solver.id = if (!is.null(res$solver.id)) res$solver.id else NA,
     tour.length = res$tour.length,
     tour = res$tour,
-    runtime = end.time,
+    runtime = BBmisc::coalesce(res$runtime, runtime),
     error = res$error,
     solver.output = res$solver.output,
     trajectory = res$trajectory

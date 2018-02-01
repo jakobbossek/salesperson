@@ -59,6 +59,10 @@ writeToLKHParameterFile = function(file.params, args) {
 #'   Default is \code{FALSE}.
 #' @template arg_full_matrix
 #' @template arg_verbose
+#' @template arg_log_trajectory
+#' @template arg_work_dir
+#' @template arg_output_files_prefix
+#' @template arg_keep_output_files
 #' @param more.args [\code{list}]\cr
 #'   Named list of parameter which shall be written to the LKH parameter file.
 #'   Note that 1) the names should be all uppercase and 2) there is no argument
@@ -76,6 +80,9 @@ run.lkh = function(solver, instance,
   full.matrix = FALSE,
   verbose = FALSE,
   log.trajectory = TRUE,
+  work.dir = NULL,
+  output.files.prefix = NULL,
+  keep.output.files = FALSE,
   more.args = list(),
   ...) {
 
@@ -93,14 +100,17 @@ run.lkh = function(solver, instance,
   assertFlag(full.matrix)
   assertFlag(verbose)
   assertFlag(log.trajectory)
+  assertString(work.dir, null.ok = TRUE)
+  assertString(output.files.prefix, null.ok = TRUE)
+  assertFlag(keep.output.files)
   assertList(more.args)
 
-  temp.dir = tempdir()
+  work.dir = BBmisc::coalesce(work.dir, tempdir())
   cur.dir = getwd()
   on.exit(setwd(cur.dir))
-  setwd(temp.dir)
+  setwd(work.dir)
 
-  temp.file = basename(tempfile(tmpdir = temp.dir))
+  temp.file = BBmisc::coalesce(output.files.prefix, basename(tempfile(tmpdir = work.dir)))
   file.params = paste0(temp.file, ".par")
   file.output = paste0(temp.file, ".out")
   file.trajectory = paste0(temp.file, ".traj")
@@ -146,7 +156,9 @@ run.lkh = function(solver, instance,
 
   # Write specific parameter file (deleted later)
   # $ in the output file name is replaced by tour length by LKH (see USER GUIDE)
+  start.time = proc.time()
   solver.output = system2(solver$bin, args = file.params, stdout = verbose, stderr = verbose)
+  runtime = as.numeric(proc.time() - start.time)
   if (verbose)
     print(solver.output)
 
@@ -159,17 +171,25 @@ run.lkh = function(solver, instance,
     trajectory = read.table(file.trajectory, header = TRUE, sep = ",", stringsAsFactors = FALSE)
   }
 
-  unlink(c(file.output, file.params, file.trajectory))
+  if (!keep.output.files)
+    unlink(c(file.output, file.params, file.trajectory, file.trajectory))
+
   if (has.temporary.input)
     unlink(file.input)
 
-  if (log.trajectory)
-    unlink(file.trajectory)
+  #distmat.file = paste0(work.dir, "/distmat.csv")
+
+  solver.id = sprintf("LKH%s",
+    if(with.restarts) "+restart" else "")
+  if (!is.null(more.args$RECOMBINATION))
+    solver.id = paste0(solver.id, "+", more.args$RECOMBINATION)
 
   list(
+    solver.id = solver.id,
     tour = tour,
     tour.length = tour.length,
-    error = NULL,
+    error = NULL,#distmat.file,
+    runtime = runtime,
     trajectory = trajectory,
     solver.output = solver.output
   )

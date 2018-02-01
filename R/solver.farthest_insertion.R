@@ -11,6 +11,6 @@ makeTSPSolver.farthest_insertion = function() {
 }
 
 #' @export
-run.farthest_insertion = function(solver, instance, solver.pars, ...) {
-  return(runSolverFromTSPPackage(solver, instance, solver.pars))
+run.farthest_insertion = function(solver, instance, ...) {
+  return(runSolverFromTSPPackage(solver, instance, ...))
 }

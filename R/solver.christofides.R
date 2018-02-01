@@ -10,6 +10,6 @@ makeTSPSolver.christofides = function() {
 
 #' @export
 # @interface see runTSPSolver
-run.christofides = function(solver, instance, solver.pars, ...) {
-  callAustralianSolverInterface(instance, solver.pars, bin = solver$bin, solver = "CHRIS")
+run.christofides = function(solver, instance, ...) {
+  callAustralianSolverInterface(instance, bin = solver$bin, solver = "CHRIS")
 }

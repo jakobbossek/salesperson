@@ -10,6 +10,6 @@ makeTSPSolver.mst = function() {
 
 #' @export
 # @interface see runTSPSolver
-run.mst = function(solver, instance, solver.pars, ...) {
-  callAustralianSolverInterface(instance, solver.pars, bin = solver$bin, solver = "2APP")
+run.mst = function(solver, instance, ...) {
+  callAustralianSolverInterface(instance, bin = solver$bin, solver = "2APP")
 }

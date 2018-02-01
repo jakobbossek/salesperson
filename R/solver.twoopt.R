@@ -10,6 +10,6 @@ makeTSPSolver.twoopt = function() {
 
 #' @export
 # @interface see runTSPSolver
-run.twoopt = function(solver, instance, solver.pars, ...) {
-  callAustralianSolverInterface(instance, solver.pars, bin = solver$bin, solver = "2OPT")
+run.twoopt = function(solver, instance, ...) {
+  callAustralianSolverInterface(instance, bin = solver$bin, solver = "2OPT")
 }

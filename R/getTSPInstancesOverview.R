@@ -16,7 +16,7 @@
 #' @export
 getTSPInstancesOverview = function(directory, append.filename = FALSE) {
   assertDirectoryExists(directory, access = "r")
-  files = list.files(directory, full.names = TRUE, pattern = ".tsp$")
+  files = list.files(directory, full.names = TRUE, pattern = ".tsp$", recursive = TRUE)
 
   # get the raw specifications for each file extracting ets specification part
   raw.specs = lapply(files, function(file.path) {

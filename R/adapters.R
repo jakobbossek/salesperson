@@ -6,10 +6,10 @@
 #    Name of the solver.
 # @param instance [\code{Network}]\cr
 #    Netgen network.
-# @param solver.pars [\code{list}]\cr
+# @param ... [any]\cr
 #    Named list of solver parameters.
 # @return [\code{list}]
-runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
+runSolverFromTSPPackage = function(solver, instance, ...) {
   requirePackages("TSP", why = "runSolverFromTSPPackage")
   # convert to TSP file format ...
   instance2 = TSP(instance$distance.matrix)
@@ -19,7 +19,7 @@ runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
     # to the executable, we need to apply dirname here
     TSP::concorde_path(dirname(solver$bin))
   }
-  res = suppressAll(TSP::solve_TSP(instance2, method = solver$cl))
+  res = suppressAll(TSP::solve_TSP(instance2, method = solver$cl, control = list(...)))
   return(
     list(
       "tour" = as.integer(res),
@@ -42,7 +42,7 @@ runSolverFromTSPPackage = function(solver, instance, solver.pars = NULL) {
 # @param bin [\code{character(1)}]\cr
 #   Full path to the binary executable.
 # @return [\code{list}]
-callAustralianSolverInterface = function(instance, control, solver, bin) {
+callAustralianSolverInterface = function(instance, solver, bin) {
   # since this fucking Christofides implementation does not handle non-integer
   # EUC coordinates correctly we do this "transformation" here: load EUC_2D
   # instance with netgen, transform to TSP (package) instance and export again.

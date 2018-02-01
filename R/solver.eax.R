@@ -82,7 +82,7 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #' @param with.restarts [\code{logical(1)}]\cr
 #'   Should EAX restart if a plateau is reached?
 #'   Default is \code{FALSE}.
-#' @param with.gpx [\code{logical(1)}]\cr
+#' @param with.GPX [\code{logical(1)}]\cr
 #'   Activate GPX2 crossover?
 #'   Default is \code{FALSE}.
 #' @param snapshot.step [\code{integer(1)}]\cr
@@ -91,12 +91,10 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #'   Default is \code{0}, i.e., do not log at all.
 #' @template arg_full_matrix
 #' @template arg_verbose
-#' @param return.trajectory.file [\code{logical(1)}]\cr
-#'   If set to \code{FALSE} (the default), the logged optimization trace / trajectory
-#'   is returned as a data frame. However, long solver runs may produce a
-#'   trajectory of substantial size. If this is expected the user may decide
-#'   to return just the path to the csv file the trajectory is stored to instead
-#'   of importing this file.
+#' @template arg_log_trajectory
+#' @template arg_work_dir
+#' @template arg_output_files_prefix
+#' @template arg_keep_output_files
 #' @param init.pop [\code{list}]\cr
 #'   List of lists. Each sublist needs to contains three components:
 #'   \describe{
@@ -124,7 +122,9 @@ run.eax = function(solver, instance,
   full.matrix = FALSE,
   verbose = FALSE,
   log.trajectory = TRUE,
-  return.trajectory.file = FALSE,
+  work.dir = NULL,
+  output.files.prefix = NULL,
+  keep.output.files = FALSE,
   init.pop = NULL,
   ...) {
   # sanity check stuff
@@ -150,18 +150,20 @@ run.eax = function(solver, instance,
   # 0 deactivates snapshots
   snapshot.step = asInt(snapshot.step, lower = 0L)
 
+  assertString(work.dir, null.ok = TRUE)
+  assertString(output.files.prefix, null.ok = TRUE)
+  assertFlag(keep.output.files)
   assertFlag(full.matrix)
   assertFlag(verbose)
   assertFlag(log.trajectory)
-  assertFlag(return.trajectory.file)
 
   # temporary work dir
-  temp.dir = tempdir()
-  temp.file = basename(tempfile(tmpdir = temp.dir))
+  work.dir = BBmisc::coalesce(work.dir, tempdir())
+  temp.file = BBmisc::coalesce(output.files.prefix, basename(tempfile(tmpdir = work.dir)))
 
   # handle directory change
   cur.wd = getwd()
-  setwd(temp.dir)
+  setwd(work.dir)
   on.exit(setwd(cur.wd))
 
   file.init.pop = NULL
@@ -203,35 +205,38 @@ run.eax = function(solver, instance,
     args = c(args, file.init.pop)
 
   # try to call solver
+  start.time = proc.time()
   solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
+  runtime = as.numeric(proc.time() - start.time)
+
   if (verbose)
     print(solver.output)
   tour = readEAXSolution(file.sol)
 
   trajectory = NULL
-  if (log.trajectory) {
-    trajectory = if (!return.trajectory.file)
-      read.table(file.trajectory, header = TRUE, sep = ",", stringsAsFactors = FALSE)
-    else
-      file.path(temp.dir, file.trajectory)
-  }
+  if (log.trajectory)
+    trajectory = read.table(file.trajectory, header = TRUE, sep = ",", stringsAsFactors = FALSE)
 
   # cleanup
-  unlink(c(file.output, file.sol, file.result))
-  if (is.temp.input) {
+  if (is.temp.input)
     unlink(file.input)
-  }
+
+  if (!keep.output.files)
+    unlink(c(file.output, file.sol, file.result, file.trajectory))
 
   if (!is.null(init.pop))
     unlink(file.init.pop)
 
-  if (!return.trajectory.file)
-    unlink(file.trajectory)
+  solver.id = sprintf("EAX%s%s",
+    if(with.restarts) "+restart" else "",
+    if (with.GPX) "+GPX" else "")
 
   list(
+    solver.id = solver.id,
     tour = tour$tour,
     tour.length = tour$tour.length,
     trajectory = trajectory,
+    runtime = runtime,
     error = NULL,
     solver.output = solver.output
   )

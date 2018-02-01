@@ -191,7 +191,7 @@ getNetworkEdgeWeights = function(network, round.distances) {
   if (ewt %in% names(mapping)) {
     distance.matrix = as.matrix(dist(coordinates, method = mapping[[ewt]]))
     if (ewt != "CEIL_2D" && round.distances) {
-      distance.matrix = round(distance.matrix)
+      distance.matrix = floor(distance.matrix + 0.5)
     }
     # occasionally we need to ceil
     if (ewt == "CEIL_2D") {

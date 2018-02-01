@@ -9,6 +9,7 @@ Includes the following elements:
 \describe{
   \item{instance.name}{Name of the instance solved.}
   \item{solver}{Solver name used to solve the instance.}
+  \item{solver.id}{Solver ID. Basically the solver name with parameter values appended.}
   \item{tour.length}{Tour length}
   \item{tour}{Permutation of the nodes.}
   \item{runtime}{Running time measured via \code{proc.time}}

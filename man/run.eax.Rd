@@ -8,8 +8,9 @@
   off.size = 30L, cutoff.time = 10L, opt.tour.length = NULL,
   seed = as.integer(runif(1L) * 2^15), with.restarts = FALSE,
   with.GPX = FALSE, snapshot.step = 0L, full.matrix = FALSE,
-  verbose = FALSE, log.trajectory = TRUE, return.trajectory.file = FALSE,
-  init.pop = NULL, ...)
+  verbose = FALSE, log.trajectory = TRUE, work.dir = NULL,
+  output.files.prefix = NULL, keep.output.files = FALSE, init.pop = NULL,
+  ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -48,6 +49,10 @@ Defaults to a random integer between 1 and \eqn{2^15}.}
 Should EAX restart if a plateau is reached?
 Default is \code{FALSE}.}
 
+\item{with.GPX}{[\code{logical(1)}]\cr
+Activate GPX2 crossover?
+Default is \code{FALSE}.}
+
 \item{snapshot.step}{[\code{integer(1)}]\cr
 Possibility to log the entire population each \code{snapshot.step}
 times.
@@ -63,12 +68,24 @@ Default is \code{FALSE}.}
 Should the output of the solver be printed?
 Default is \code{FALSE}.}
 
-\item{return.trajectory.file}{[\code{logical(1)}]\cr
-If set to \code{FALSE} (the default), the logged optimization trace / trajectory
-is returned as a data frame. However, long solver runs may produce a
-trajectory of substantial size. If this is expected the user may decide
-to return just the path to the csv file the trajectory is stored to instead
-of importing this file.}
+\item{log.trajectory}{[\code{logical(1)}]\cr
+Should the optimization progress be logged?
+Default is \code{FALSE}.}
+
+\item{work.dir}{[\code{character(1)}]\cr
+Path to working directory of the solver.
+Defaults to temporary directory via \code{tempfile()}.}
+
+\item{output.files.prefix}{[\code{character(1)}]\cr
+Prefix for file names used by solver for storing output.
+Default is a randomly generated temporary prefix.}
+
+\item{keep.output.files}{[\code{logical(1)}]\cr
+Flag indicating whether output files shall be kept or deleted.
+Default is \code{FALSE}, i.e., output files are processed and
+output is loaded into R object. Afterwards the output files are
+deleted. This flag is particularly useful in large benchmark studies if
+\code{work.dir} and \code{output.files.prefix} is set.}
 
 \item{init.pop}{[\code{list}]\cr
 List of lists. Each sublist needs to contains three components:
@@ -83,10 +100,6 @@ loop starts.}
 
 \item{...}{[any]\cr
 Not used at the moment.}
-
-\item{with.gpx}{[\code{logical(1)}]\cr
-Activate GPX2 crossover?
-Default is \code{FALSE}.}
 }
 \value{
 [\code{\link{TSPSolverResult}}]

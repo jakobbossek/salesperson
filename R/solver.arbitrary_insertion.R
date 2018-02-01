@@ -9,6 +9,6 @@ makeTSPSolver.arbitrary_insertion = function() {
   )
 }
 
-run.arbitrary_insertion = function(solver, instance, solver.pars, ...) {
-  return(runSolverFromTSPPackage(solver, instance, solver.pars))
+run.arbitrary_insertion = function(solver, instance, ...) {
+  return(runSolverFromTSPPackage(solver, instance, ...))
 }

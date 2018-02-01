@@ -7,7 +7,8 @@
 \method{run}{lkh}(solver, instance, seed = as.integer(runif(1L) * 2^15),
   cutoff.time = NULL, opt.tour.length = NULL, max.trials = NULL,
   with.restarts = FALSE, full.matrix = FALSE, verbose = FALSE,
-  log.trajectory = TRUE, more.args = list(), ...)
+  log.trajectory = TRUE, work.dir = NULL, output.files.prefix = NULL,
+  keep.output.files = FALSE, more.args = list(), ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -48,6 +49,25 @@ Default is \code{FALSE}.}
 \item{verbose}{[\code{logical(1)}]\cr
 Should the output of the solver be printed?
 Default is \code{FALSE}.}
+
+\item{log.trajectory}{[\code{logical(1)}]\cr
+Should the optimization progress be logged?
+Default is \code{FALSE}.}
+
+\item{work.dir}{[\code{character(1)}]\cr
+Path to working directory of the solver.
+Defaults to temporary directory via \code{tempfile()}.}
+
+\item{output.files.prefix}{[\code{character(1)}]\cr
+Prefix for file names used by solver for storing output.
+Default is a randomly generated temporary prefix.}
+
+\item{keep.output.files}{[\code{logical(1)}]\cr
+Flag indicating whether output files shall be kept or deleted.
+Default is \code{FALSE}, i.e., output files are processed and
+output is loaded into R object. Afterwards the output files are
+deleted. This flag is particularly useful in large benchmark studies if
+\code{work.dir} and \code{output.files.prefix} is set.}
 
 \item{more.args}{[\code{list}]\cr
 Named list of parameter which shall be written to the LKH parameter file.

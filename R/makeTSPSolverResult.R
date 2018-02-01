@@ -7,6 +7,7 @@
 #' \describe{
 #'   \item{instance.name}{Name of the instance solved.}
 #'   \item{solver}{Solver name used to solve the instance.}
+#'   \item{solver.id}{Solver ID. Basically the solver name with parameter values appended.}
 #'   \item{tour.length}{Tour length}
 #'   \item{tour}{Permutation of the nodes.}
 #'   \item{runtime}{Running time measured via \code{proc.time}}
@@ -22,6 +23,8 @@ NULL
 #   Instance name.
 # @param solver [\code{character(1)}]\cr
 #   Solver used to solve instance.
+# @param solver [\code{character(1)}]\cr
+#   Solver ID.
 # @param tour.length [\code{numeric(1)} | \code{NA}]\cr
 #   Length of the shortest tour found or NA if unknown.
 # @param tour [\code{integer}]\cr
@@ -37,12 +40,14 @@ NULL
 makeTSPSolverResult = function(
   instance.name,
   solver,
+  solver.id = NA,
   tour.length = NA, tour = NA,
   runtime = NA, error = NULL,
   solver.output = NULL,
   trajectory = NULL) {
-  assertCharacter(instance.name, len = 1L)
-  assertCharacter(solver, len = 1L)
+  assertString(instance.name)
+  assertString(solver)
+  assertString(solver.id, na.ok = TRUE)
   !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
   !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
   !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
@@ -52,6 +57,7 @@ makeTSPSolverResult = function(
   makeS3Obj(
     instance.name = instance.name,
     solver = solver,
+    solver.id = solver.id,
     tour.length = tour.length,
     tour = tour,
     runtime = runtime,
@@ -74,8 +80,8 @@ print.TSPSolverResult = function(x, ...) {
     catf("Instance '%s' could not be solved due to an error!", x$instance.name)
     catf("Error message: %s", as.character(x$error))
   } else {
-    catf("Solved instance '%s' successfully!", x$instance.name)
-    catf("Used solver:  %s", toupper(x$solver))
+    catf("Solver run terminated on instance %s.", x$instance.name)
+    catf("Used solver:  %s%s", toupper(x$solver), if (!is.na(x$solver.id)) sprintf(" (%s)", x$solver.id) else "")
     catf("Elapsed time: %.2f [seconds]", x$runtime[3L])
     catf("Tour length:  %.2f", x$tour.length)
     max.idx = min(length(x$tour), 10L)
