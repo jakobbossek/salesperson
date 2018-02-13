@@ -82,7 +82,7 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #' @param with.restarts [\code{logical(1)}]\cr
 #'   Should EAX restart if a plateau is reached?
 #'   Default is \code{FALSE}.
-#' @param with.gpx [\code{logical(1)}]\cr
+#' @param with.GPX [\code{logical(1)}]\cr
 #'   Activate GPX2 crossover?
 #'   Default is \code{FALSE}.
 #' @param snapshot.step [\code{integer(1)}]\cr
@@ -91,6 +91,9 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #'   Default is \code{0}, i.e., do not log at all.
 #' @template arg_full_matrix
 #' @template arg_verbose
+#' @param log.trajectory [\code{logical(1)}]\cr
+#'   If set to \code{TRUE} (the default), the optimization trace / trajectory
+#'   of the solver run will be logged.
 #' @param return.trajectory.file [\code{logical(1)}]\cr
 #'   If set to \code{FALSE} (the default), the logged optimization trace / trajectory
 #'   is returned as a data frame. However, long solver runs may produce a

@@ -59,6 +59,9 @@ writeToLKHParameterFile = function(file.params, args) {
 #'   Default is \code{FALSE}.
 #' @template arg_full_matrix
 #' @template arg_verbose
+#' @param log.trajectory [\code{logical(1)}]\cr
+#'   If set to \code{TRUE} (the default), the optimization trace / trajectory
+#'   of the solver run will be logged.
 #' @param more.args [\code{list}]\cr
 #'   Named list of parameter which shall be written to the LKH parameter file.
 #'   Note that 1) the names should be all uppercase and 2) there is no argument

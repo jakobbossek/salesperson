@@ -49,6 +49,10 @@ Default is \code{FALSE}.}
 Should the output of the solver be printed?
 Default is \code{FALSE}.}
 
+\item{log.trajectory}{[\code{logical(1)}]\cr
+If set to \code{TRUE} (the default), the optimization trace / trajectory
+of the solver run will be logged.}
+
 \item{more.args}{[\code{list}]\cr
 Named list of parameter which shall be written to the LKH parameter file.
 Note that 1) the names should be all uppercase and 2) there is no argument
