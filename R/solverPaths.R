@@ -16,16 +16,16 @@
 #' @return [\code{list}] List of pathes. Used internally by \code{runTSPSolver}.
 #' @export
 solverPaths = function(paths = NULL) {
-  defaults = list("lkh" = NULL, "eax" = NULL, concorde = NULL)
+  defaults = list("lkh" = NULL, "eax" = NULL, "concorde" = NULL)
   solver.names = names(defaults)
   if (is.null(paths)) {
     if (is.null(salesperson$paths)) {
-      salesperson$paths <- defaults
+      salesperson$paths = defaults
     }
     return(salesperson$paths)
   } else {
     assertList(paths)
-    salesperson$paths <- BBmisc::insert(defaults, paths)
+    salesperson$paths = BBmisc::insert(defaults, paths)
     lapply(solver.names, function(solver.name) {
       path.to.solver = salesperson$paths[[solver.name]]
       if (!is.null(path.to.solver))

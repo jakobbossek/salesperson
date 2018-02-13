@@ -25,12 +25,31 @@ test_that("External solvers can be called", {
   cutoff.time = 1
   n.points = 200L
 
+  # extract correct os
+  get_os = function(){
+    sysinf = Sys.info()
+    if (!is.null(sysinf)){
+      os = sysinf['sysname']
+      if (os == 'Darwin') {
+        os = "osx"
+      }
+    } else { ## mystery machine
+      os = .Platform$OS.type
+      if (grepl("^darwin", R.version$os)) {
+        os = "osx"
+      } else if (grepl("linux-gnu", R.version$os)) {
+        os = "linux"
+      }
+    }
+    tolower(os)
+  }
+
   config.path = path.expand("~/.config/salesperson/")
   solverPaths(
     list(
       lkh = paste0(config.path, "solvers/LKH-2.0.7/LKH"),
       eax = paste0(config.path, "solvers/eax/main"),
-      concorde = paste0(config.path, "solvers/concorde/osx/concorde")
+      concorde = sprintf("%ssolvers/concorde/%s/concorde", config.path, get_os())
     )
   )
 
