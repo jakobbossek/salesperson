@@ -4,9 +4,10 @@
 \alias{run.lkh}
 \title{Solver: LKH}
 \usage{
-\method{run}{lkh}(solver, instance, runs = 1L, seed = as.integer(runif(1L) *
-  2^15), cutoff.time = 0, opt.tour.length = NULL, max.trials = 1000L,
-  full.matrix = FALSE, verbose = FALSE, ...)
+\method{run}{lkh}(solver, instance, seed = as.integer(runif(1L) * 2^15),
+  cutoff.time = NULL, opt.tour.length = NULL, max.trials = NULL,
+  with.restarts = FALSE, full.matrix = FALSE, verbose = FALSE,
+  log.trajectory = TRUE, more.args = list(), ...)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr
@@ -16,16 +17,13 @@ TSPSolver object.}
 Path to TSP instance in \href{https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/}{TSPlib}
 format or \code{Network} object.}
 
-\item{runs}{[\code{integer(1)}]\cr
-Number of independent runs. This value is fixed to 1.}
-
 \item{seed}{[\code{integer(1)}]\cr
 Seed for the random numbers generator.
 Defaults to a random integer between 1 and \eqn{2^15}.}
 
 \item{cutoff.time}{[\code{integer(1)}]\cr
 Maximal running time in seconds.
-Default is 0, i.e., no cutoff time.}
+Default is NULL, i.e., no cutoff time.}
 
 \item{opt.tour.length}{[\code{integer(1) | NULL}]\cr
 Length of an optimal TSP tour. This is only relevant for benchmarking.
@@ -35,7 +33,11 @@ tour is found or the cutoff time is reached.}
 
 \item{max.trials}{[\code{integer(1)}]\cr
 Maximal number of iterations.
-Default is 1000.}
+Default is the number of nodes of the instance.}
+
+\item{with.restarts}{[\code{logical(1)}]\cr
+Should LKH restart if a plateau is reached?
+Default is \code{FALSE}.}
 
 \item{full.matrix}{[\code{logical(1)}]\cr
 Only relevant if \code{instance} is a \code{Network}.
@@ -46,6 +48,11 @@ Default is \code{FALSE}.}
 \item{verbose}{[\code{logical(1)}]\cr
 Should the output of the solver be printed?
 Default is \code{FALSE}.}
+
+\item{more.args}{[\code{list}]\cr
+Named list of parameter which shall be written to the LKH parameter file.
+Note that 1) the names should be all uppercase and 2) there is no argument
+check. Default ist the empty list.}
 
 \item{...}{[any]\cr
 Not used at the moment.}

@@ -6,7 +6,7 @@ test_that("test evolveInstances: returns reasonable results", {
   n.population = 3L
 
   fitness.fun = function(x) {
-    x = netgen::makeNetwork(coordinates = x, name = "SomeTSPInstance")
+    x = makeNetwork(coordinates = x, name = "SomeTSPInstance")
     tour1 = runSolver("arbitrary_insertion", x)
     tour2 = runSolver("cheapest_insertion", x)
     return(tour1$tour.length / tour2$tour.length)

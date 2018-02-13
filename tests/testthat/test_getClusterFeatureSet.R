@@ -5,7 +5,7 @@ test_that("getClusterFeatureSet does produce reasonable results", {
     n.cluster.expected = 2L
 
     # build a simple well clustered network
-    x = netgen::generateClusteredNetwork(n.points = 100L, n.cluster = n.cluster.expected, upper = 300)
+    x = generateClusteredNetwork(n.points = 100L, n.cluster = n.cluster.expected, upper = 300)
 
     # build feature set and check structure
     feature.set = getClusterFeatureSet(x, epsilon = 0.1)

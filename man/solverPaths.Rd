@@ -2,7 +2,7 @@
 % Please edit documentation in R/solverPaths.R
 \name{solverPaths}
 \alias{solverPaths}
-\title{Set pathes to the executables of solvers only available in binary format.}
+\title{Set paths to the executables of solvers only available in binary format.}
 \usage{
 solverPaths(paths = NULL)
 }
@@ -12,9 +12,7 @@ Named list where each component indicates the path to the executable of the
 corresponding solver. Supported solvers at the momenet are
 \describe{
   \item{lkh}{Implementation of the Lin-Kernigham heuristic.}
-  \item{lkh-restart}{Implementation of the Lin-Kernigham heuristic with restart strategy}
   \item{eax}{Implementation of the evolutionary EAX algorithm.}
-  \item{lkh}{Implementation of the evolutionary EAX algorithm with restart strategy.}
 }}
 }
 \value{
@@ -22,7 +20,7 @@ corresponding solver. Supported solvers at the momenet are
 }
 \description{
 In the current version \pkg{salesperson} does not implement the source code
-of some solvers including lkh and eax, but calls the corresponding compiled
+of some solvers including LKH and EAX, but calls the corresponding compiled
 executables. Since the CRAN guidelines do not permit shipping binary executables
 one has the download these by hand and tell the \pkg{salesperson} package about
 the file path. This is done by the \code{solverPaths} function.

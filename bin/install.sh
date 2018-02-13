@@ -23,8 +23,7 @@ case $yn in
       # check for directory
       test -d "$dir" || continue
       # check for build files and execute
-      [[ -f Makefile ]] && make
-      [[ -f build.exe ]] && ./build.exe
+      [[ -f Makefile ]] && make clean && make
     done;;
   n)
     exit;;

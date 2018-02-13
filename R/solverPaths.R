@@ -1,7 +1,7 @@
-#' Set pathes to the executables of solvers only available in binary format.
+#' Set paths to the executables of solvers only available in binary format.
 #'
 #' In the current version \pkg{salesperson} does not implement the source code
-#' of some solvers including lkh and eax, but calls the corresponding compiled
+#' of some solvers including LKH and EAX, but calls the corresponding compiled
 #' executables. Since the CRAN guidelines do not permit shipping binary executables
 #' one has the download these by hand and tell the \pkg{salesperson} package about
 #' the file path. This is done by the \code{solverPaths} function.
@@ -11,14 +11,12 @@
 #'   corresponding solver. Supported solvers at the momenet are
 #'   \describe{
 #'     \item{lkh}{Implementation of the Lin-Kernigham heuristic.}
-#'     \item{lkh-restart}{Implementation of the Lin-Kernigham heuristic with restart strategy}
 #'     \item{eax}{Implementation of the evolutionary EAX algorithm.}
-#'     \item{lkh}{Implementation of the evolutionary EAX algorithm with restart strategy.}
 #'   }
 #' @return [\code{list}] List of pathes. Used internally by \code{runTSPSolver}.
 #' @export
 solverPaths = function(paths = NULL) {
-  defaults = list("lkh" = NULL, "lkh_restart" = NULL, "eax" = NULL, concorde = NULL)
+  defaults = list("lkh" = NULL, "eax" = NULL, concorde = NULL)
   solver.names = names(defaults)
   if (is.null(paths)) {
     if (is.null(salesperson$paths)) {

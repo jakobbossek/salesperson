@@ -1,13 +1,9 @@
-# Extracts tour from TSPlib file.
-#
-# Since we need only the tour and the tour length, this functions skips the
-# specification part.
-#
-# @param file.path [\code{character(1)}]\cr
-#   Path to TSPlib tour file.
-# @return [\code{integer}]
-#   Permutation of the nodes.
-# @export
+#' Extract tour from TSPlib tour file.
+#'
+#' @param file.path [\code{character(1)}]\cr
+#'   Path to TSPlib tour file.
+#' @return [\code{list}] List with components \code{tour} and \code{tour.length}.
+#' @export
 readTSPlibTOURFile = function(file.path) {
   assertFile(file.path, access = "r")
   con = file(file.path, "r")

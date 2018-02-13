@@ -2,7 +2,7 @@ context("test feature-set: ALL")
 
 test_that("getFeatureSet does produce reasonable results", {
     # build a simple well clustered network
-    x = netgen::generateClusteredNetwork(n.points = 100L, n.cluster = 2L, upper = 100)
+    x = generateClusteredNetwork(n.points = 100L, n.cluster = 2L, upper = 100)
 
     feature.set = getFeatureSet(x, black.list = c("VRP"))
     expect_feature_list(feature.set, feature.set = "ALL")

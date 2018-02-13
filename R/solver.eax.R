@@ -41,7 +41,7 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
   con = file(file.init.pop, "w")
   on.exit(close(con))
   for (i in 1:length(init.pop)) {
-    line1 = sprintf("%i %i", init.pop[[i]]$n, init.pop[[i]]$tour.length)
+    line1 = sprintf("%i %i",as.integer(init.pop[[i]]$n), as.integer(init.pop[[i]]$tour.length))
     writeLines(line1, con = con)
     line2 = collapse(init.pop[[i]]$tour, sep = " ")
     writeLines(line2, con = con)
@@ -82,6 +82,9 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #' @param with.restarts [\code{logical(1)}]\cr
 #'   Should EAX restart if a plateau is reached?
 #'   Default is \code{FALSE}.
+#' @param with.gpx [\code{logical(1)}]\cr
+#'   Activate GPX2 crossover?
+#'   Default is \code{FALSE}.
 #' @param snapshot.step [\code{integer(1)}]\cr
 #'   Possibility to log the entire population each \code{snapshot.step}
 #'   times.
@@ -108,7 +111,6 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #'   Not used at the moment.
 #' @template ret_TSPSolverResult
 #' @export
-#FIXME: handle initial population
 run.eax = function(solver, instance,
   max.trials = 1L,
   pop.size = 100L,
@@ -117,9 +119,11 @@ run.eax = function(solver, instance,
   opt.tour.length = NULL,
   seed = as.integer(runif(1L) * 2^15),
   with.restarts = FALSE,
+  with.GPX = FALSE,
   snapshot.step = 0L,
   full.matrix = FALSE,
   verbose = FALSE,
+  log.trajectory = TRUE,
   return.trajectory.file = FALSE,
   init.pop = NULL,
   ...) {
@@ -131,30 +135,25 @@ run.eax = function(solver, instance,
   # passing 0 to binary deactivates cutoff time
   if (is.null(cutoff.time))
     cutoff.time = 0L
-  else
-    cutoff.time = asInt(cutoff.time, lower = 0L)
+
+  cutoff.time = asInt(cutoff.time, lower = 0L)
 
   # passing 0 to binary means: optimum is not known
   if (is.null(opt.tour.length))
     opt.tour.length = 0L
-  else
-    opt.tour.length = asInt(opt.tour.length, lower = 1L)
+  opt.tour.length = asInt(opt.tour.length, lower = 0L)
 
   seed = asInt(seed, lower = 1L)
   assertFlag(with.restarts)
+  assertFlag(with.GPX)
 
   # 0 deactivates snapshots
   snapshot.step = asInt(snapshot.step, lower = 0L)
 
   assertFlag(full.matrix)
   assertFlag(verbose)
+  assertFlag(log.trajectory)
   assertFlag(return.trajectory.file)
-
-  if (!is.null(init.pop)) {
-    assertList(init.pop, len = pop.size, any.missing = FALSE, all.missing = FALSE)
-    file.init.pop = paste0(temp.file, "_init.pop")
-    writeInitialPopulation(init.pop)
-  }
 
   # temporary work dir
   temp.dir = tempdir()
@@ -165,6 +164,13 @@ run.eax = function(solver, instance,
   setwd(temp.dir)
   on.exit(setwd(cur.wd))
 
+  file.init.pop = NULL
+  if (!is.null(init.pop)) {
+    assertList(init.pop, max.len = pop.size, any.missing = FALSE, all.missing = FALSE)
+    file.init.pop = paste0(temp.file, "_init.pop")
+    writeInitialPopulation(init.pop, file.init.pop)
+  }
+
   # in case we pass a Network object, check whether its compatible with
   # EAX and export accordingly
   is.temp.input = FALSE
@@ -174,7 +180,7 @@ run.eax = function(solver, instance,
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
       stopf("EAX can handle only integer distances!")
     }
-    netgen::exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE)
+    exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE)
   } else {
      file.input = instance
   }
@@ -187,22 +193,28 @@ run.eax = function(solver, instance,
   file.trajectory = paste0(temp.file, ".out_Incumbant")
 
   # See solvers/eax/README.md for details
-  # Examplary call to EAX: #./jikken trials DATA pop off rat575.tsp opt cutoff seed withRestarts snapshot
+  # Generic example call: ./main trials DATA fNumOfPop fNumOfCh instance tourLength cutoff seed doRestart snapshotStep logTrajectory withGPX initPopFileName
+  # Example call: ./main 1 DATA 100 30 instances/rat575.tsp 0 20 1 0 0 1 0
   args = list(max.trials, file.output, pop.size, off.size,
     file.input, opt.tour.length, cutoff.time, seed, as.integer(with.restarts),
-    snapshot.step)
+    snapshot.step, as.integer(log.trajectory), as.integer(with.GPX))
 
   if (!is.null(init.pop))
     args = c(args, file.init.pop)
 
   # try to call solver
   solver.output = system2(solver$bin, args, stdout = verbose, stderr = verbose)
+  if (verbose)
+    print(solver.output)
   tour = readEAXSolution(file.sol)
 
-  trajectory = if (!return.trajectory.file)
-    read.table(file.trajectory, header = TRUE, sep = ",")
-  else
-    file.path(temp.dir, file.trajectory)
+  trajectory = NULL
+  if (log.trajectory) {
+    trajectory = if (!return.trajectory.file)
+      read.table(file.trajectory, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+    else
+      file.path(temp.dir, file.trajectory)
+  }
 
   # cleanup
   unlink(c(file.output, file.sol, file.result))

@@ -9,7 +9,7 @@ test_that("Solvers from TSP package can be called without problems.", {
 
   for (i in seq(n.reps)) {
     n.points = sample(10:50, size = 1L)
-    x = netgen::generateRandomNetwork(n.points)
+    x = generateRandomNetwork(n.points)
     for (solver in solvers) {
       res = runSolver(solver, instance = x)
       expect_valid_TSPSolverResult(res, n.points, info = solver)
@@ -28,8 +28,8 @@ test_that("External solvers can be called", {
   config.path = path.expand("~/.config/salesperson/")
   solverPaths(
     list(
-      lkh = paste0(config.path, "solvers/LKH-2.0.7-incumbant/LKH"),
-      eax = paste0(config.path, "solvers/eax/jikken"),
+      lkh = paste0(config.path, "solvers/LKH-2.0.7/LKH"),
+      eax = paste0(config.path, "solvers/EAX/main"),
       concorde = paste0(config.path, "solvers/concorde/osx/concorde")
     )
   )
