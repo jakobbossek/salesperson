@@ -48,6 +48,10 @@ Defaults to a random integer between 1 and \eqn{2^15}.}
 Should EAX restart if a plateau is reached?
 Default is \code{FALSE}.}
 
+\item{with.GPX}{[\code{logical(1)}]\cr
+Activate GPX2 crossover?
+Default is \code{FALSE}.}
+
 \item{snapshot.step}{[\code{integer(1)}]\cr
 Possibility to log the entire population each \code{snapshot.step}
 times.
@@ -62,6 +66,10 @@ Default is \code{FALSE}.}
 \item{verbose}{[\code{logical(1)}]\cr
 Should the output of the solver be printed?
 Default is \code{FALSE}.}
+
+\item{log.trajectory}{[\code{logical(1)}]\cr
+If set to \code{TRUE} (the default), the optimization trace / trajectory
+of the solver run will be logged.}
 
 \item{return.trajectory.file}{[\code{logical(1)}]\cr
 If set to \code{FALSE} (the default), the logged optimization trace / trajectory
@@ -83,10 +91,6 @@ loop starts.}
 
 \item{...}{[any]\cr
 Not used at the moment.}
-
-\item{with.gpx}{[\code{logical(1)}]\cr
-Activate GPX2 crossover?
-Default is \code{FALSE}.}
 }
 \value{
 [\code{\link{TSPSolverResult}}]
