@@ -15,7 +15,8 @@ Probability for reachability computation in dbscan clustering method.
 Default is 0.01.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
-Should costs be included as an additional feature? Default is \code{FALSE}.}
+Should costs be included as an additional feature?
+Default is \code{FALSE}.}
 }
 \value{
 [\code{list}]

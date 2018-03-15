@@ -7,6 +7,7 @@
 #' @param lower.bound [\code{numeric(1)}]\cr
 #'   Lower bound for the computation of the area under the curve.
 #'   Default is 0.
+#' @template arg_include_costs
 #' @param raw.data [\code{logical(1)}]\cr
 #'   Set this to \code{TRUE} if you want the raw data computed on the
 #'   trajectory instead of the statistics.
@@ -14,7 +15,7 @@
 #' @template arg_include_costs
 #' @return [\code{list}] Named list.
 #' @export
-getMonitoringFeatureSet = function(times, incumbents, lower.bound = 0, include.costs = TRUE, raw.data = FALSE) {
+getMonitoringFeatureSet = function(times, incumbents, lower.bound = 0, include.costs = FALSE, raw.data = FALSE) {
   assertNumeric(times, any.missing = FALSE, all.missing = FALSE)
   assertNumeric(incumbents, any.missing = FALSE, all.missing = FALSE)
   assertNumber(lower.bound, lower = 0, finite = TRUE, na.ok = FALSE)
