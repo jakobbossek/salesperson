@@ -72,7 +72,7 @@ writeToLKHParameterFile = function(file.params, args) {
 #' @template ret_TSPSolverResult
 #' @export
 run.lkh = function(solver, instance,
-  seed = as.integer(runif(1L) * 2^15),
+  seed = as.integer(ceiling(runif(1L) * 2^15)),
   cutoff.time = NULL,
   opt.tour.length = NULL,
   max.trials = NULL,
