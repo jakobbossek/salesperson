@@ -42,7 +42,7 @@ getkNNGFeatureSet = function(x, k, kchar) {
   # See Table I in Pihera and Musliu Features
   res = c(
     n_weak = comps.weak$no,
-    n_norm_weak. = comps.weak$no / n,
+    n_norm_weak = comps.weak$no / n,
     computeStatisticsOnNumericVector(comps.weak$csize, "weak_components"),
     n_strong = comps.strong$no,
     n_norm_strong = comps.strong$no / n,

@@ -82,7 +82,7 @@ getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
 #' @export
 getAvailableFeatureSets = function() {
   c("Angle", "BoundingBox", "Centroid", "Cluster", "ConvexHull",
-    "Distance", "Modes", "MST", "NearestNeighbour", "VRP")
+    "Distance", "Modes", "MST", "NearestNeighbour", "VRP", "NNG")
 }
 
 #' Returns list of parameters defaults for feature computation.
