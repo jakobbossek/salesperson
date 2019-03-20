@@ -9,7 +9,8 @@ makeTSPSolver.concorde = function() {
 }
 
 #' @export
-run.concorde = function(solver, instance, verbose = FALSE, ...) {
+run.concorde = function(solver, instance, verbose = FALSE,
+  initial.upperbound = NULL, ...) {
   # set concorde path
   assertFlag(verbose)
 
@@ -42,10 +43,15 @@ run.concorde = function(solver, instance, verbose = FALSE, ...) {
   file.res = paste0(temp.file, ".res")
 
   # Example call: ./concorde -x -o d657.sol d657.tsp
-  args = list("-x", "-o", file.output, file.input)
+  args = list("-x", "-o", file.output)
+  if (!is.null(initial.upperbound)) {
+    args = c(args, list("-u", as.integer(initial.upperbound)))
+  }
+  args = c(args, list(file.input))
 
   # try to call solver
   solver.output = system2(solver$bin, args, stdout = TRUE, stderr = verbose)
+  print(solver.output)
   if (verbose)
     print(solver.output)
 
