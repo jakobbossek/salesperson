@@ -39,7 +39,7 @@ autoplot.Network = function(object,
   use.opt.tour = FALSE,
   ...) {
   if (!is.null(path)) {
-    if (!testNumeric(path, min.len = 2L, any.missing = FALSE) & !testList(path, min.len = 2L, any.missing = FALSE)) {
+    if (!testNumeric(path, min.len = 2L, any.missing = FALSE) & !testList(path, min.len = 1L, any.missing = FALSE)) {
       stopf("Path argument needs to be a vector or a list.")
     }
   }
