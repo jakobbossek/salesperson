@@ -85,7 +85,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_salesperson_getDistanceFeatureSetCPP", (DL_FUNC) &_salesperson_getDistanceFeatureSetCPP, 2},
     {"_salesperson_getFractionOfPointsNearBoundingBoxCPP", (DL_FUNC) &_salesperson_getFractionOfPointsNearBoundingBoxCPP, 2},
     {"_salesperson_getNearestNeighbourDistancesCPP", (DL_FUNC) &_salesperson_getNearestNeighbourDistancesCPP, 1},
-    {"getMonitoringFeatureSetC",                           (DL_FUNC) &getMonitoringFeatureSetC,                           3},
+    {"getMonitoringFeatureSetC", (DL_FUNC) &getMonitoringFeatureSetC, 3},
     {NULL, NULL, 0}
 };
 

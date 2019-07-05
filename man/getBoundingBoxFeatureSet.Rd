@@ -4,7 +4,8 @@
 \alias{getBoundingBoxFeatureSet}
 \title{Feature: fraction of points near bounding boxplot.}
 \usage{
-getBoundingBoxFeatureSet(x, distance_fraction = 0.1, include.costs = FALSE)
+getBoundingBoxFeatureSet(x, distance_fraction = 0.1,
+  include.costs = FALSE)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -15,8 +16,7 @@ Fraction of distance between min and max coordinates of each dimension
 which should points be allowed lie inbetween.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
-Should costs be included as an additional feature?
-Default is \code{FALSE}.}
+Should costs be included as an additional feature? Default is \code{FALSE}.}
 }
 \value{
 [\code{list}]

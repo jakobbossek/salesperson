@@ -33,21 +33,30 @@ getkNNGFeatureSet = function(x, k, kchar) {
 
   # ... and its undirected version
   nng.undir = igraph::as.undirected(nng.dir, mode = "collapse")
-  n = x$number.of.nodes
+  n = getNumberOfNodes(x)
 
   # get components
   comps.strong = igraph::components(nng.dir, mode = "strong")
   comps.weak = igraph::components(nng.undir, mode = "weak")
 
   # See Table I in Pihera and Musliu Features
+  stats.on.weak = computeStatisticsOnNumericVector(comps.weak$csize, "weak_components")
+  stats.on.weak.norm = lapply(stats.on.weak, function(f) f / n)
+  names(stats.on.weak.norm) = paste(names(stats.on.weak.norm), "norm", sep = "_")
+  stats.on.strong = computeStatisticsOnNumericVector(comps.strong$csize, "strong_components")
+  stats.on.strong.norm = lapply(stats.on.strong, function(f) f / n)
+  names(stats.on.strong.norm) = paste(names(stats.on.strong.norm), "norm", sep = "_")
+
   res = c(
     n_weak = comps.weak$no,
     n_norm_weak = comps.weak$no / n,
-    computeStatisticsOnNumericVector(comps.weak$csize, "weak_components"),
     n_strong = comps.strong$no,
     n_norm_strong = comps.strong$no / n,
-    computeStatisticsOnNumericVector(comps.strong$csize, "strong_components"),
-    strong_weak_ratio = comps.strong$no / comps.weak$no
+    strong_weak_ratio = comps.strong$no / comps.weak$no,
+    stats.on.weak,
+    stats.on.weak.norm,
+    stats.on.strong,
+    stats.on.strong.norm
   )
 
   kchar = paste0("nng_", kchar, "_")

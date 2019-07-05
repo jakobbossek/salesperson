@@ -19,8 +19,7 @@ Lower bound for the computation of the area under the curve.
 Default is 0.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
-Should costs be included as an additional feature?
-Default is \code{FALSE}.}
+Should costs be included as an additional feature? Default is \code{FALSE}.}
 
 \item{raw.data}{[\code{logical(1)}]\cr
 Set this to \code{TRUE} if you want the raw data computed on the
@@ -28,8 +27,7 @@ trajectory instead of the statistics.
 Default is \code{FALSE}.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
-Should costs be included as an additional feature?
-Default is \code{FALSE}.}
+Should costs be included as an additional feature? Default is \code{FALSE}.}
 }
 \value{
 [\code{list}] Named list.
