@@ -10,7 +10,7 @@ makeTSPSolver.concorde = function() {
 
 #' @export
 run.concorde = function(solver, instance, verbose = FALSE,
-  initial.upperbound = NULL, ...) {
+  initial.upperbound = NULL, cutoff.time = 0, ...) {
   # set concorde path
   assertFlag(verbose)
 
@@ -50,8 +50,13 @@ run.concorde = function(solver, instance, verbose = FALSE,
   args = c(args, list(file.input))
 
   # try to call solver
-  solver.output = system2(solver$bin, args, stdout = TRUE, stderr = verbose)
-  print(solver.output)
+  solver.output = system2(solver$bin, args, stdout = TRUE, stderr = verbose, timeout = cutoff.time)
+
+  # on timeout (see https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/system2)
+  if (is.numeric(solver.output) & solver.output == 124) {
+    return(list(error = "timeout"))
+  }
+
   if (verbose)
     print(solver.output)
 
