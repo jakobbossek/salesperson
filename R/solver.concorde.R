@@ -53,7 +53,7 @@ run.concorde = function(solver, instance, verbose = FALSE,
   solver.output = system2(solver$bin, args, stdout = TRUE, stderr = verbose, timeout = cutoff.time)
 
   # on timeout (see https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/system2)
-  if (is.numeric(solver.output) & solver.output == 124) {
+  if (attr(solver.output, "status") == 124) {
     return(list(error = "timeout"))
   }
 
