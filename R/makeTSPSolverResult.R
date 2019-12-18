@@ -48,12 +48,16 @@ makeTSPSolverResult = function(
   assertString(instance.name)
   assertString(solver)
   assertString(solver.id, na.ok = TRUE)
-  !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
-  !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
-  !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
-  if (!isPermutation(tour))
-    stopf("Passed tour is not a permutation of the nodes!")
-  assertDataFrame(trajectory, null.ok = TRUE, min.rows = 1L, min.cols = 2L)
+
+  # sanity checks only if no error occured
+  if (!is.null(error)) {
+    !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
+    !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
+    !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
+    if (!isPermutation(tour))
+      stopf("Passed tour is not a permutation of the nodes!")
+    assertDataFrame(trajectory, null.ok = TRUE, min.rows = 1L, min.cols = 2L)
+  }
   makeS3Obj(
     instance.name = instance.name,
     solver = solver,
