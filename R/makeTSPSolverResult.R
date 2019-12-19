@@ -50,7 +50,7 @@ makeTSPSolverResult = function(
   assertString(solver.id, na.ok = TRUE)
 
   # sanity checks only if no error occured
-  if (!is.null(error)) {
+  if (is.null(error)) {
     !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
     !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
     !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
