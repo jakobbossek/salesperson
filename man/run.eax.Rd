@@ -5,7 +5,7 @@
 \title{Solver: EAX}
 \usage{
 \method{run}{eax}(solver, instance, max.trials = 1L, pop.size = 100L,
-  off.size = 30L, cutoff.time = 10L, opt.tour.length = NULL,
+  off.size = 30L, cutoff.time = 10, opt.tour.length = NULL,
   seed = as.integer(ceiling(runif(1L) * 2^15)), with.restarts = FALSE,
   with.GPX = FALSE, snapshot.step = 0L, full.matrix = FALSE,
   verbose = FALSE, log.trajectory = TRUE, work.dir = NULL,
@@ -31,7 +31,7 @@ Default is 100.}
 Number of offspring generated in each generation.
 Default is 30.}
 
-\item{cutoff.time}{[\code{integer(1)}]\cr
+\item{cutoff.time}{[\code{numeric(1)}]\cr
 Maximal running time in seconds.
 Default is 10.}
 

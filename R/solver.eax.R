@@ -74,7 +74,7 @@ writeInitialPopulation = function(init.pop, file.init.pop) {
 #' @param off.size [\code{integer(1)}]\cr
 #'   Number of offspring generated in each generation.
 #'   Default is 30.
-#' @param cutoff.time [\code{integer(1)}]\cr
+#' @param cutoff.time [\code{numeric(1)}]\cr
 #'   Maximal running time in seconds.
 #'   Default is 10.
 #' @template arg_opt_tour_length
@@ -113,7 +113,7 @@ run.eax = function(solver, instance,
   max.trials = 1L,
   pop.size = 100L,
   off.size = 30L,
-  cutoff.time = 10L,
+  cutoff.time = 10,
   opt.tour.length = NULL,
   seed = as.integer(ceiling(runif(1L) * 2^15)),
   with.restarts = FALSE,
@@ -134,9 +134,9 @@ run.eax = function(solver, instance,
 
   # passing 0 to binary deactivates cutoff time
   if (is.null(cutoff.time))
-    cutoff.time = 0L
+    cutoff.time = 0
 
-  cutoff.time = asInt(cutoff.time, lower = 0L)
+  cutoff.time = as.numeric(cutoff.time)
 
   # passing 0 to binary means: optimum is not known
   if (is.null(opt.tour.length))
