@@ -14,7 +14,7 @@
 #' \code{\link{generateGridNetwork}}
 #' @export
 addNodeWeights = function(x, weights = NULL) {
-  n = getNumberOfPoints(x)
+  n = getNumberOfNodes(x)
   checkmate::assertNumeric(weights, len = n, any.missing = FALSE, all.missing = FALSE)
   x$node.weights = weights
   return(x)

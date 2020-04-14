@@ -12,10 +12,10 @@
 #'   Set this to \code{TRUE} if you want the raw data computed on the
 #'   trajectory instead of the statistics.
 #'   Default is \code{FALSE}.
-#' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}] Named list.
 #' @export
-getMonitoringFeatureSet = function(times, incumbents, lower.bound = 0, include.costs = FALSE, raw.data = FALSE) {
+getMonitoringFeatureSet = function(times, incumbents, lower.bound = 0, include.costs = FALSE, raw.data = FALSE, ...) {
   assertNumeric(times, any.missing = FALSE, all.missing = FALSE)
   assertNumeric(incumbents, any.missing = FALSE, all.missing = FALSE)
   assertNumber(lower.bound, lower = 0, finite = TRUE, na.ok = FALSE)

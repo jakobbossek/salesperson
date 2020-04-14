@@ -4,7 +4,7 @@
 \alias{getClusterFeatureSet}
 \title{Feature: statistics of the minimum spanning tree edges.}
 \usage{
-getClusterFeatureSet(x, epsilon = 0.01, include.costs = FALSE)
+getClusterFeatureSet(x, epsilon = 0.01, include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -16,6 +16,9 @@ Default is 0.01.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

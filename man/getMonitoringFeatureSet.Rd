@@ -5,7 +5,7 @@
 \title{Feature: monitoring of algorithm runs.}
 \usage{
 getMonitoringFeatureSet(times, incumbents, lower.bound = 0,
-  include.costs = FALSE, raw.data = FALSE)
+  include.costs = FALSE, raw.data = FALSE, ...)
 }
 \arguments{
 \item{times}{[\code{numeric}]\cr
@@ -26,8 +26,8 @@ Set this to \code{TRUE} if you want the raw data computed on the
 trajectory instead of the statistics.
 Default is \code{FALSE}.}
 
-\item{include.costs}{[\code{logical(1)}]\cr
-Should costs be included as an additional feature? Default is \code{FALSE}.}
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}] Named list.

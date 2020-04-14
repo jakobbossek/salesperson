@@ -4,7 +4,7 @@
 \alias{getNearestNeighbourFeatureSet}
 \title{Feature: Statistics of Nearest-Neighbour distances.}
 \usage{
-getNearestNeighbourFeatureSet(x, include.costs = FALSE)
+getNearestNeighbourFeatureSet(x, include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -12,6 +12,9 @@ Network.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

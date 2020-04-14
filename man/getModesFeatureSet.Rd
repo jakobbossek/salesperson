@@ -4,7 +4,7 @@
 \alias{getModesFeatureSet}
 \title{Feature: modes features.}
 \usage{
-getModesFeatureSet(x, include.costs = FALSE)
+getModesFeatureSet(x, include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -12,6 +12,9 @@ Network.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

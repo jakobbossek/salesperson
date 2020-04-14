@@ -5,7 +5,7 @@
 \title{Feature: fraction of points near bounding boxplot.}
 \usage{
 getBoundingBoxFeatureSet(x, distance_fraction = 0.1,
-  include.costs = FALSE)
+  include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -17,6 +17,9 @@ which should points be allowed lie inbetween.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

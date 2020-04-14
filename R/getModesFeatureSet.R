@@ -2,9 +2,10 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getModesFeatureSet = function(x, include.costs = FALSE) {
+getModesFeatureSet = function(x, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     getModesFeatureSet2(x)

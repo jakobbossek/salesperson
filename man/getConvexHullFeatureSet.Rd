@@ -4,7 +4,8 @@
 \alias{getConvexHullFeatureSet}
 \title{Feature: number of points on convex hull and spanning area.}
 \usage{
-getConvexHullFeatureSet(x, feature.set = NULL, include.costs = FALSE)
+getConvexHullFeatureSet(x, feature.set = NULL, include.costs = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -21,6 +22,9 @@ be computed.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

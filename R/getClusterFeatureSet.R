@@ -5,9 +5,10 @@
 #'   Probability for reachability computation in dbscan clustering method.
 #'   Default is 0.01.
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE) {
+getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE, ...) {
   assertNumber(epsilon, lower = 0.001, upper = 1, na.ok = FALSE)
   # here we delegate to tspmeta
   measureTime(expression({

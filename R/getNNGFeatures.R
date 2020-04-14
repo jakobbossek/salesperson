@@ -4,9 +4,10 @@
 #' @param ks [\code{integer}]\cr
 #'   List of \eqn{k} values for \eqn{k}-Nearest-Neighbour-Graph computation.
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getNNGFeatureSet = function(x, ks = NULL, include.costs = FALSE) {
+getNNGFeatureSet = function(x, ks = NULL, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     getNNGFeatureSet2(x, ks = ks)

@@ -5,9 +5,10 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getVRPFeatureSet = function(x, include.costs = FALSE) {
+getVRPFeatureSet = function(x, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     dist.mat = as.matrix(x$distance.matrix)

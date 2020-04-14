@@ -11,6 +11,7 @@
 #'   Should duplicated node coordinates be dropped?
 #'   Default is \code{FALSE}.
 #' @template arg_include_costs
+#' @template arg_dots
 #' @details In case \code{include.costs = TRUE} the output will provide up to three
 #'   separate cost values: one for the initialization phase, and one for each of the
 #'   feature sets that were defined in \code{feature.set}. As the initialization
@@ -19,7 +20,7 @@
 #'   costs of the respective feature set(s).
 #' @return [\code{list}]
 #' @export
-getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, include.costs = FALSE) {
+getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   assertSubset(feature.set, choices = c("angle", "cos"))
   if (is.null(feature.set))
@@ -55,9 +56,9 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
       measureTime(expression({
         computeStatisticsOnNumericVector(angles$angles, "angle")
       }), "angle", include.costs)
-    ) 
+    )
   }
-  
+
   ## compute the area of the convex hull
   if ("cos" %in% feature.set) {
     feats = c(
@@ -65,7 +66,7 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
       measureTime(expression({
         computeStatisticsOnNumericVector(cos(angles$angles), "angle_cos")
       }), "angle_cos", include.costs)
-    ) 
+    )
   }
 
   return(feats)

@@ -2,9 +2,10 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getDistanceFeatureSet = function(x, include.costs = FALSE) {
+getDistanceFeatureSet = function(x, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     dist.obj = x$distance.matrix

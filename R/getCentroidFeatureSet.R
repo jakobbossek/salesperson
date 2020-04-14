@@ -2,9 +2,10 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getCentroidFeatureSet = function(x, include.costs = FALSE) {
+getCentroidFeatureSet = function(x, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     centroid.coordinates = getCentroidCoordinatesCPP(x$coordinates)

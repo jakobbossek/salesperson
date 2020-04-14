@@ -5,7 +5,7 @@
 \title{Feature: Statistics of distances between obligatory/optional customers and
 depots.}
 \usage{
-getVRPFeatureSet(x, include.costs = FALSE)
+getVRPFeatureSet(x, include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -13,6 +13,9 @@ Network.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

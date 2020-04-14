@@ -10,9 +10,10 @@
 #'   Per default (\code{NULL}), all of the four previously listed feature sets will
 #'   be computed.
 #' @template arg_include_costs
+#' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE) {
+getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE, ...) {
   assertClass(x, "Network")
   assertSubset(feature.set, choices = c("points", "area", "edges", "dists"))
   if (is.null(feature.set))
@@ -23,7 +24,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE)
     getPointsOnConvexHull(x)
   }), "hull_initialization", include.costs)
 
-  
+
   ## add the initialization costs in case we want to include the costs
   if (include.costs)
     feats = list(hull_initialization_costs = hull.list$hull_initialization_costs)
@@ -37,7 +38,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE)
       measureTime(expression({
         getConvexHullPointRatioFeatureSet(hull.list = hull.list)
       }), "hull_points", include.costs)
-    ) 
+    )
   }
 
   ## compute the area of the convex hull
@@ -47,7 +48,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE)
       measureTime(expression({
         getConvexHullAreaFeatureSet(hull.list = hull.list)
       }), "hull_area", include.costs)
-    ) 
+    )
   }
 
   ## compute statistics based on the hull's edges
@@ -164,7 +165,7 @@ getConvexHullDistanceFeatureSet = function(x, hull.list) {
 
   ## See Table I in Pihera and Musliu Features
   res = computeStatisticsOnNumericVector(hull.distances, "hull_dists")
-  
+
   ## in addition to Pihera and Musliu:
   ## ratio of points that are located on the hull (but do not necessarily define the hull)
   res = c(res, "hull_dists_point_ratio" = mean(hull.distances == 0))

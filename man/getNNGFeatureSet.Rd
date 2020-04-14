@@ -4,7 +4,7 @@
 \alias{getNNGFeatureSet}
 \title{Feature: statistics of the nearest neighbour graph}
 \usage{
-getNNGFeatureSet(x, ks = NULL, include.costs = FALSE)
+getNNGFeatureSet(x, ks = NULL, include.costs = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -15,6 +15,9 @@ List of \eqn{k} values for \eqn{k}-Nearest-Neighbour-Graph computation.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{...}{[any]\cr
+Not used.}
 }
 \value{
 [\code{list}]

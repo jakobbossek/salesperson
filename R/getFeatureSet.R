@@ -7,6 +7,11 @@
 #' @param include.costs [\code{logical(1)}]\cr
 #'   Include the times needed to compute the specific feature sets as additional
 #'   features? Default is \code{FALSE}. Time is measured via \code{proc.time}.
+#' @param drop.duplicates [\code{logical(1)}]\cr
+#'   Should duplicate nodes be deleted?
+#'   Duplicate node coordinates cause some angle features to be NA. Hence,
+#'   it is better to drop those duplicates.
+#'   Default is \code{TRUE}.
 #' @param feature.fun.args [\code{list}]\cr
 #'   List of lists. Each component of the list corresponds to one of the feature sets
 #'   and the subordered list contains vectors of values for each parameter. Name
@@ -34,6 +39,7 @@
 #' @export
 getFeatureSet = function(x, black.list = character(0),
   include.costs = FALSE,
+  drop.duplicates = TRUE,
   feature.fun.args = getDefaultFeatureFunArgs()) {
   assertClass(x, "Network")
   assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
@@ -49,10 +55,10 @@ getFeatureSet = function(x, black.list = character(0),
   feats = lapply(feature.set.names, function(feature.set.name) {
     feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
     if (is.null(feature.fun.args[[feature.set.name]])) {
-      do.call(feature.fun, list(x = x, include.costs = include.costs))
+      do.call(feature.fun, list(x = x, include.costs = include.costs, drop.duplicates = drop.duplicates))
     } else {
       feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
-        param.list = list(x = x, include.costs = include.costs)
+        param.list = list(x = x, include.costs = include.costs, drop.duplicates = drop.duplicates)
         param.list = c(param.list, param)
         do.call(feature.fun, param.list)
       })
@@ -95,3 +101,4 @@ getDefaultFeatureFunArgs = function() {
     "Cluster" = list("epsilon" = c(0.01, 0.05, 0.1))
   )
 }
+
