@@ -53,7 +53,7 @@ makeTSPSolverResult = function(
   if (is.null(error)) {
     !is.na(tour.length) && assertNumber(tour.length, na.ok = FALSE)
     !is.na(tour) && assertInteger(tour, min.len = 1L, lower = 1L, any.missing = FALSE)
-    !is.na(runtime) && assertNumeric(runtime, len = 5L, any.missing = FALSE)
+    !is.na(runtime) && assertNumeric(runtime, len = 5L)#, any.missing = FALSE) #NOTE: components 4 and 5 are NA on windows system, hence no check on missing values
     if (!isPermutation(tour))
       stopf("Passed tour is not a permutation of the nodes!")
     assertDataFrame(trajectory, null.ok = TRUE, min.rows = 1L, min.cols = 2L)
