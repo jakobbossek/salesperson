@@ -182,6 +182,8 @@ run.eax = function(solver, instance,
     if (full.matrix && any(round(instance$distance.matrix) != instance$distance.matrix)) {
       stopf("EAX can handle only integer distances!")
     }
+    # EAX fails with file path symbols in name
+    instance$name = "dummy"
     exportToTSPlibFormat(instance, filename = file.input, full.matrix = full.matrix, use.extended.format = FALSE)
   } else {
      file.input = instance
