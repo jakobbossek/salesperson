@@ -67,6 +67,9 @@ importFromTSPlibFormat = function(filename, round.distances = TRUE,
     if (file.exists(filename.opt)) {
       res = try({opt.tour = as.integer(read.csv(filename.opt, sep = ",", header = FALSE))}, silent = TRUE)
       if (inherits(res, "try-error")) {
+        res = try({opt.tour = readTSPlibTOURFile(filename.opt)$tour}, silent = TRUE)
+      }
+      if (inherits(res, "try-error")) {
         warningf("There is no optimal tour (file) for instance %s.", filename)
       }
     }
