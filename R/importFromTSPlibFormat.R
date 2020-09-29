@@ -88,7 +88,8 @@ importFromTSPlibFormat = function(filename, round.distances = TRUE,
     opt.tour.length = opt.tour.length,
     opt.tour = opt.tour,
     membership = network$membership,
-    edge.weight.type = network$edge_weight_type
+    edge.weight.type = network$edge_weight_type,
+    get.distances = get.distances
   )
 }
 
