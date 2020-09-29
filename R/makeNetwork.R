@@ -62,12 +62,15 @@ makeNetwork = function(coordinates,
     upper = max(coordinates)
   }
 
-  if (is.null(distance.matrix) & get.distances) {
+  if (is.null(distance.matrix)) {
     if (!is.null(edge.weight.type)) {
       warningf("No distance matrix passed to makeNetwork. Passed edge.weight.type '%s'
         will be replaced by 'EUC_2D'.", edge.weight.type)
     }
     edge.weight.type = "EUC_2D"
+  }
+
+  if (is.null(distance.matrix) & get.distances) {
     distance.matrix = as.matrix(dist(coordinates))
   }
 
