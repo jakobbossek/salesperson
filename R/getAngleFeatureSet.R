@@ -49,25 +49,51 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
   else
     feats = NULL
 
-  ## compute the ratio of points defining the hull
+  ## compute the statistics on the angles
   if ("angle" %in% feature.set) {
     feats = c(
       feats,
       measureTime(expression({
-        computeStatisticsOnNumericVector(angles$angles, "angle")
+        normalizeAngleCosFeatures(angles$angles, getNumberOfNodes(x))
       }), "angle", include.costs)
     )
   }
 
-  ## compute the area of the convex hull
+  ## compute the statistics on the cosine of the angles
   if ("cos" %in% feature.set) {
     feats = c(
       feats,
       measureTime(expression({
-        computeStatisticsOnNumericVector(cos(angles$angles), "angle_cos")
+        normalizeAngleCosFeatures(angles$angles, getNumberOfNodes(x))
       }), "angle_cos", include.costs)
     )
   }
 
   return(feats)
 }
+
+normalizeAngleFeatures = function(angles, n){
+  stats.on.angles = computeStatisticsOnNumericVector(angles, "angles")
+  feats = c(stats.on.angles,
+          angles_norm_mean = normalizeFeature(stats.on.angles["angles_mean"], pi * (n - 2) / n, pi / n),
+          angles_norm_median = normalizeFeature(stats.on.angles["angles_median"], pi),
+          angles_norm_min = normalizeFeature(stats.on.angles["angles_min"], pi * (n - 2) / n),
+          angles_norm_max = normalizeFeature(stats.on.angles["angles_max"], pi, pi/3),
+          angles_norm_span = normalizeFeature(stats.on.angles["angles_span"], pi) 
+          )
+  return(feats)
+}
+
+normalizeAngleCosFeatures = function(angles, n){
+  stats.on.angles.cos = computeStatisticsOnNumericVector(cos(angles), "angles_cos")
+  feats = c(stats.on.angles.cos,
+            angles_norm_mean = normalizeFeature(stats.on.angles["angles_cos_mean"], cos(pi / n), cos(pi * (n - 2) / n)),
+            angles_norm_median = normalizeFeature(stats.on.angles["angles_cos_median"], 1, -1),
+            angles_norm_min = normalizeFeature(stats.on.angles["angles_cos_min"], cos(pi/3), -1),
+            angles_norm_max = normalizeFeature(stats.on.angles["angles_cos_max"], 1, cos(pi * (n - 2) / n)),
+            angles_norm_span = normalizeFeature(stats.on.angles["angles_cos_span"], 2) 
+  )
+  return(feats)
+}
+
+  
