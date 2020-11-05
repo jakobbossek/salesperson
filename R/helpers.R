@@ -109,6 +109,6 @@ generateName = function(n.points, n.dim, n.cluster = 1L) {
 # @param min [numeric]
 #   Maximal possible value of the feature in question.
 
-normalizeFeature(value, max, min=0){
+normalizeFeature function(value, max, min=0){
   return((value - min) / (max - min))
 }
