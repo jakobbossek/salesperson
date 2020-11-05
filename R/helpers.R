@@ -99,3 +99,16 @@ generateName = function(n.points, n.dim, n.cluster = 1L) {
     sep = "_"
   )
 }
+
+# Normalize the value of a feature
+#
+# @param value [numeric]
+#   The value of the feature to normalize.
+# @param max [numeric]
+#   Maximal possible value of the feature in question.
+# @param min [numeric]
+#   Maximal possible value of the feature in question.
+
+normalizeFeature(value, max, min){
+  return((value - min) / (max - min))
+}
