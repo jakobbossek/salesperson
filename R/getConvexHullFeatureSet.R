@@ -88,15 +88,19 @@ getPointsOnConvexHull = function(x) {
 
 ## ratio of nodes that define the convex hull
 getConvexHullPointRatioFeatureSet = function(hull.list) {
+  hull.points.ratio = length(hull.list$hull) / nrow(hull.list$coordinates)
   list(
-    hull_points_ratio = length(hull.list$hull) / nrow(hull.list$coordinates)
+    hull_points_ratio = hull.points.ratio,
+    hull_norm_points_ratio = normalizeFeature(hull.points.ratio, 1, 2 / nrow(hull.list$coordinates))
   )
 }
 
 ## area of the convex hull
 getConvexHullAreaFeatureSet = function(hull.list) {
+  area = splancs::areapl(hull.list$coordinates[hull.list$hull, ])
   list(
-    hull_area = splancs::areapl(hull.list$coordinates[hull.list$hull, ])
+    hull_area = area,
+    hull_norm_area = normalizeFeature(area, getWidth(hull.list$coordinates) * getHeight(hull.list$coordinates))
   )
 }
 
@@ -109,9 +113,22 @@ getConvexHullEdgeFeatureSet = function(x, hull.list) {
   hull.edges = unlist(lapply(seq_along(hull.list$hull), function(i) {
     x$distance.matrix[hull.tour[i], hull.tour[i + 1L]]
   }))
-
+  
   # See Table I in Pihera and Musliu Features
-  computeStatisticsOnNumericVector(hull.edges, "hull_edges")
+  width = getWidth(hull.list$coordinates)
+  height = getHeight(hull.list$coordinates)
+  a = max(width, height)
+  b = min(width, height)
+  statistics.on.the.hull.edges = computeStatisticsOnNumericVector(hull.edges, "hull_edges")
+  c(
+    statistics.on.the.hull.edges,
+    "hull_norm_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3),
+    "hull_norm_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
+    "hull_norm_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2*b - sqrt(3)*a))),
+    "hull_norm_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height))),
+    "hull_norm_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height)))
+  )
+  
 }
 
 
@@ -168,7 +185,17 @@ getConvexHullDistanceFeatureSet = function(x, hull.list) {
 
   ## in addition to Pihera and Musliu:
   ## ratio of points that are located on the hull (but do not necessarily define the hull)
-  res = c(res, "hull_dists_point_ratio" = mean(hull.distances == 0))
+  width = getWidth(coords)
+  height = getHeight(coords)
+  min.asp = min(width, height)
+  n = nrow(coords)
+  res = c(res, 
+          "hull_dists_point_ratio" = mean(hull.distances == 0),
+          "hull_dists_norm_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n-4) / n),
+          "hull_dists_norm_median" = normalizeFeature(res$hull_dists_median, min.asp / 2),
+          "hull_dists_norm_max" = normalizeFeature(res$hull_dists_max, min.asp / 2),
+          "hull_dists_norm_span" = normalizeFeature(res$hull_dists_span, min.asp / 2),
+          "hull_dists_norm_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3/n))
 
   return(res)
 }
