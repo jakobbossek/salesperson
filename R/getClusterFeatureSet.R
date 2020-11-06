@@ -43,12 +43,16 @@ getClusterFeatureSet2 = function(x, epsilon) {
     distances = unlist(distances)
     res = list(
       n_clusters = length(unique(cm)),
-      mean_distance = mean(distances)
+      mean_distance = mean(distances),
+      norm_n_clusters = normalizeFeature(length(unique(cm)),floor(getNumberOfNodes(x)/5)),
+      norm_mean_distance = normalizeFeature(mean(distances), computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates))) / 2)
     )
   } else {
     res = list(
       n_clusters = 0,
-      mean_distance = NA
+      mean_distance = NA,
+      norm_n_clusters = 0,
+      norm_mean_distance = NA
     )
   }
   prefix = sprintf("cluster_%02ipct", floor(epsilon * 100))
