@@ -27,5 +27,8 @@ getModesFeatureSet2 = function(x) {
   modemass = sapply(1:(length(minidx) - 1L), function(i) {
     intdens(minidx[i], minidx[i + 1] - 1)
   })
-  list(modes_number = sum(modemass > 0.01))
+  modes.number = sum(modemass > 0.01)
+  list(modes_number = modes.number,
+       modes_norm_number = normalizeFeature(modes.number, 99)
+  )
 }
