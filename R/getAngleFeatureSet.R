@@ -54,7 +54,7 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
     feats = c(
       feats,
       measureTime(expression({
-        normalizeAngleCosFeatures(angles$angles, getNumberOfNodes(x))
+        normalizeAngleFeatures(angles$angles, getNumberOfNodes(x))
       }), "angle", include.costs)
     )
   }
