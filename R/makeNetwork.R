@@ -41,7 +41,7 @@ makeNetwork = function(coordinates,
   membership = NULL, edge.weight.type = NULL,
   depot.coordinates = NULL, lower = NULL, upper = NULL,
   opt.tour.length = NULL, opt.tour = NULL,
-  get.distances) {
+  get.distances = TRUE) {
   assertMatrix(coordinates)
   if (!is.null(name)) assertCharacter(name, len = 1L, any.missing = FALSE)
   if (!is.null(comment)) assertCharacter(comment, min.len = 1L, any.missing = FALSE)
