@@ -47,8 +47,8 @@ getDistanceFeatureSet = function(x, include.costs = FALSE, ...) {
 getDMax = function(coord){
   a = getWidth(coord)
   b = getHeight(coord)
-  p = a/2 + b/(2*sqrt(3))
+  p = a / 2 + b / (2 * sqrt(3))
   n = nrow(coord)
-  r.max = (p + sqrt(p ** 2 + 4*n*a*b/(2*sqrt(3)))) / (2 * n)
+  r.max = (p + sqrt(p ** 2 + 4 * n * a * b / (2 * sqrt(3)))) / (2 * n)
   return(2 * r.max)
 }

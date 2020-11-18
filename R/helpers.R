@@ -109,7 +109,7 @@ generateName = function(n.points, n.dim, n.cluster = 1L) {
 # @param min [numeric]
 #   Maximal possible value of the feature in question.
 # @return [numeric]
-normalizeFeature = function(value, max, min=0){
+normalizeFeature = function(value, max, min = 0){
   return((value - min) / (max - min))
 }
 
@@ -119,7 +119,7 @@ normalizeFeature = function(value, max, min=0){
 #   The coordinates matrix from the instance.
 # @return [numeric]
 getWidth = function(coord){
-  return(max(coord[,1]) - min(coord[,1]))
+  return(max(coord[, 1]) - min(coord[, 1]))
 }
 
 # Get the height of an instance
@@ -128,5 +128,5 @@ getWidth = function(coord){
 #   The coordinates matrix from the instance.
 # @return [numeric]
 getHeight = function(coord){
-  return(max(coord[,2]) - min(coord[,2]))
+  return(max(coord[, 2]) - min(coord[, 2]))
 }
