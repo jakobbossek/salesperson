@@ -13,8 +13,8 @@ computeStatisticsOnNumericVector = function(x, type) {
   x.var.norm = NA
   if (x.min > 0) {
     x.harm.mean = 1 / mean(1 / x)
-    x.var.upper = (x.max*(x.mean-x.harm.mean)*(x.max-x.mean))/(x.max-x.harm.mean)
-    x.var.lower = (x.min*(x.mean-x.harm.mean)*(x.mean-x.min))/(x.harm.mean-x.min)
+    x.var.upper = (x.max * (x.mean - x.harm.mean) * (x.max - x.mean)) / (x.max - x.harm.mean)
+    x.var.lower = (x.min * (x.mean - x.harm.mean) * (x.mean - x.min)) / (x.harm.mean - x.min)
     x.var.norm = normalizeFeature(var(x) * (length(x) - 1) / length(x), x.var.upper, x.var.lower)
   }
   feats = list(

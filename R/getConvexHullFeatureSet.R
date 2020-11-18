@@ -124,7 +124,7 @@ getConvexHullEdgeFeatureSet = function(x, hull.list) {
     statistics.on.the.hull.edges,
     "hull_norm_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3),
     "hull_norm_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
-    "hull_norm_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2*b - sqrt(3)*a))),
+    "hull_norm_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2 * b - sqrt(3) * a))),
     "hull_norm_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height))),
     "hull_norm_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height)))
   )
@@ -191,11 +191,11 @@ getConvexHullDistanceFeatureSet = function(x, hull.list) {
   n = nrow(coords)
   res = c(res, 
           "hull_dists_point_ratio" = mean(hull.distances == 0),
-          "hull_dists_norm_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n-4) / n),
+          "hull_dists_norm_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n - 4) / n),
           "hull_dists_norm_median" = normalizeFeature(res$hull_dists_median, min.asp / 2),
           "hull_dists_norm_max" = normalizeFeature(res$hull_dists_max, min.asp / 2),
           "hull_dists_norm_span" = normalizeFeature(res$hull_dists_span, min.asp / 2),
-          "hull_dists_norm_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3/n))
+          "hull_dists_norm_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3 / n))
 
   return(res)
 }
