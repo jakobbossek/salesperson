@@ -10,8 +10,9 @@ getCentroidFeatureSet = function(x, include.costs = FALSE, ...) {
   measureTime(expression({
     centroid.coordinates = getCentroidCoordinatesCPP(x$coordinates)
     distances.to.centroid = getDistancesToCentroidCPP(x$coordinates, centroid.coordinates)
-    width = getWidth(x$coordinates)
-    height = getHeight(x$coordinates)
+    coord = x$coordinates
+    width = getWidth(coord)
+    height = getHeight(coord)
     statistics.on.distances.to.centroid = computeStatisticsOnNumericVector(distances.to.centroid, "centroid")
     n_cities = getNumberOfNodes(x)
 
@@ -20,13 +21,13 @@ getCentroidFeatureSet = function(x, include.costs = FALSE, ...) {
       "centroid_y" = centroid.coordinates[2]
       ), statistics.on.distances.to.centroid, 
       list(
-      "centroid_norm_x" = centroid.coordinates[1] / width,
-      "centroid_norm_y" = centroid.coordinates[2] / height,
-      "centroid_norm_mean" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_mean"]], norm(c(width, height), type="2") / 2),
+      "centroid_norm_x" = normalizeFeature(centroid.coordinates[1], max(coord[, 1]) * (n_cities - 1) / n_cities + min(coord[, 1]) / n_cities, min(coord[, 1]) * (n_cities - 1) / n_cities + max(coord[, 1]) / n_cities),
+      "centroid_norm_y" = normalizeFeature(centroid.coordinates[2], max(coord[, 2]) * (n_cities - 1) / n_cities + min(coord[, 2]) / n_cities, min(coord[, 2]) * (n_cities - 1) / n_cities + max(coord[, 2]) / n_cities),
+      "centroid_norm_mean" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_mean"]], norm(c(width, height), type = "2") / 2, norm(c(width, height), type = "2") / n_cities),
       "centroid_norm_median" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_median"]], computeMaxMedian(n_cities, width, height)),
-      "centroid_norm_min" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_min"]], norm(c(width, height), type="2") / 2),
-      "centroid_norm_max" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_max"]], norm(c(width, height), type="2") * ((n_cities - 1) / n_cities)),
-      "centroid_norm_span" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_span"]], norm(c(width, height), type="2") * ((n_cities - 2) / n_cities))
+      "centroid_norm_min" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_min"]], norm(c(width, height), type = "2") / 2),
+      "centroid_norm_max" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_max"]], norm(c(width, height), type = "2") * ((n_cities - 1) / n_cities), max(width, height) / 2),
+      "centroid_norm_span" = normalizeFeature(statistics.on.distances.to.centroid[["centroid_span"]], norm(c(width, height), type = "2") * ((n_cities - 2) / n_cities))
       ))
   }), "centroid", include.costs)
 }

@@ -117,15 +117,16 @@ getConvexHullEdgeFeatureSet = function(x, hull.list) {
   # See Table I in Pihera and Musliu Features
   width = getWidth(hull.list$coordinates)
   height = getHeight(hull.list$coordinates)
+  n.cities = nrow(hull.list$coordinates)
   a = max(width, height)
   b = min(width, height)
   statistics.on.the.hull.edges = computeStatisticsOnNumericVector(hull.edges, "hull_edges")
   c(
     statistics.on.the.hull.edges,
-    "hull_norm_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3),
+    "hull_norm_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3, computeL2Norm(c(width, height)) / n.cities),
     "hull_norm_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
     "hull_norm_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2 * b - sqrt(3) * a))),
-    "hull_norm_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height))),
+    "hull_norm_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height)), computeL2Norm(c(width, height)) / n.cities),
     "hull_norm_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height)))
   )
   
