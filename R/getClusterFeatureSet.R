@@ -8,16 +8,16 @@
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE, ...) {
+getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE, normalize = FALSE, ...) {
   assertNumber(epsilon, lower = 0.001, upper = 1, na.ok = FALSE)
   # here we delegate to tspmeta
   measureTime(expression({
-    getClusterFeatureSet2(x, epsilon = epsilon)
+    getClusterFeatureSet2(x, epsilon = epsilon, normalize = normalize)
   }), paste("cluster", epsilon, sep = "_"), include.costs)
 }
 
 
-getClusterFeatureSet2 = function(x, epsilon) {
+getClusterFeatureSet2 = function(x, epsilon, normalize) {
   coordinates = x$coordinates
   d = as.vector(x$distance.matrix)
   # FIXME: Really strip 0 distances?
@@ -41,19 +41,33 @@ getClusterFeatureSet2 = function(x, epsilon) {
       })
     })
     distances = unlist(distances)
-    res = list(
-      n_clusters = length(unique(cm)),
-      mean_distance = mean(distances),
-      norm_n_clusters = normalizeFeature(length(unique(cm)), floor(getNumberOfNodes(x) / 5)),
-      norm_mean_distance = normalizeFeature(mean(distances), computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates))) / 2)
-    )
+    if (!normalize) {
+      res = list(
+        n_clusters = length(unique(cm)),
+        mean_distance = mean(distances)
+      )
+    } else{
+      res = list(
+        n_clusters = length(unique(cm)),
+        mean_distance = mean(distances),
+        norm_n_clusters = normalizeFeature(length(unique(cm)), floor(getNumberOfNodes(x) / 5)),
+        norm_mean_distance = normalizeFeature(mean(distances), computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates))) / 2)
+      )
+    }
   } else {
-    res = list(
-      n_clusters = 0,
-      mean_distance = NA,
-      norm_n_clusters = 0,
-      norm_mean_distance = NA
-    )
+    if (!normalize) {
+      res = list(
+        n_clusters = 0,
+        mean_distance = NA
+      )
+    } else{
+        res = list(
+          n_clusters = 0,
+          mean_distance = NA,
+          norm_n_clusters = 0,
+          norm_mean_distance = NA
+        )
+    }
   }
   prefix = sprintf("cluster_%02ipct", floor(epsilon * 100))
   names(res) = paste(prefix, names(res), sep = "_")

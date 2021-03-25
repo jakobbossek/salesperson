@@ -11,6 +11,9 @@
 #'   Should duplicated node coordinates be dropped?
 #'   Default is \code{FALSE}.
 #' @template arg_include_costs
+#' @param normalize [\code{logical(1)}]\cr
+#'   Additionally calculate the normalization for the features? The default is
+#'   \code{FALSE}.
 #' @template arg_dots
 #' @details In case \code{include.costs = TRUE} the output will provide up to three
 #'   separate cost values: one for the initialization phase, and one for each of the
@@ -20,7 +23,7 @@
 #'   costs of the respective feature set(s).
 #' @return [\code{list}]
 #' @export
-getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, include.costs = FALSE, ...) {
+getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, include.costs = FALSE, normalize = FALSE, ...) {
   assertClass(x, "Network")
   assertSubset(feature.set, choices = c("angle", "cos"))
   if (is.null(feature.set))
@@ -54,7 +57,7 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
     feats = c(
       feats,
       measureTime(expression({
-        normalizeAngleFeatures(angles$angles, getNumberOfNodes(x))
+        normalizeAngleFeatures(angles$angles, getNumberOfNodes(x), normalize)
       }), "angle", include.costs)
     )
   }
@@ -64,7 +67,7 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
     feats = c(
       feats,
       measureTime(expression({
-        normalizeAngleCosFeatures(angles$angles, getNumberOfNodes(x))
+        normalizeAngleCosFeatures(angles$angles, getNumberOfNodes(x), normalize)
       }), "angle_cos", include.costs)
     )
   }
@@ -72,8 +75,11 @@ getAngleFeatureSet = function(x, feature.set = NULL, drop.duplicates = FALSE, in
   return(feats)
 }
 
-normalizeAngleFeatures = function(angles, n){
-  stats.on.angles = computeStatisticsOnNumericVector(angles, "angles")
+normalizeAngleFeatures = function(angles, n, normalize){
+  stats.on.angles = computeStatisticsOnNumericVector(angles, "angles", normalize = normalize)
+  if (!normalize) {
+    return(stats.on.angles)
+  }
   feats = c(stats.on.angles,
           angles_norm_mean = normalizeFeature(stats.on.angles[["angles_mean"]], pi * (n - 2) / n, pi / n),
           angles_norm_median = normalizeFeature(stats.on.angles[["angles_median"]], pi),
@@ -84,8 +90,11 @@ normalizeAngleFeatures = function(angles, n){
   return(feats)
 }
 
-normalizeAngleCosFeatures = function(angles, n){
-  stats.on.angles.cos = computeStatisticsOnNumericVector(cos(angles), "angles_cos")
+normalizeAngleCosFeatures = function(angles, n, normalize){
+  stats.on.angles.cos = computeStatisticsOnNumericVector(cos(angles), "angles_cos", normalize = normalize)
+  if (!normalize) {
+    return(stats.on.angles.cos)
+  }
   feats = c(stats.on.angles.cos,
             angles_norm_cos_mean = normalizeFeature(stats.on.angles.cos[["angles_cos_mean"]], cos(pi / n), cos(pi * (n - 2) / n)),
             angles_norm_cos_median = normalizeFeature(stats.on.angles.cos[["angles_cos_median"]], 1, -1),

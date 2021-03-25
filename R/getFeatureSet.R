@@ -7,6 +7,9 @@
 #' @param include.costs [\code{logical(1)}]\cr
 #'   Include the times needed to compute the specific feature sets as additional
 #'   features? Default is \code{FALSE}. Time is measured via \code{proc.time}.
+#' @param normalize [\code{logical(1)}]\cr
+#'   Additionally calculate the normalization for the features? The default is
+#'   \code{FALSE}.
 #' @param drop.duplicates [\code{logical(1)}]\cr
 #'   Should duplicate nodes be deleted?
 #'   Duplicate node coordinates cause some angle features to be NA. Hence,
@@ -39,12 +42,14 @@
 #' @export
 getFeatureSet = function(x, black.list = character(0),
   include.costs = FALSE,
+  normalize = FALSE,
   drop.duplicates = TRUE,
   feature.fun.args = getDefaultFeatureFunArgs()) {
   assertClass(x, "Network")
   assertSubset(black.list, choices = getAvailableFeatureSets(), empty.ok = TRUE)
   assertList(feature.fun.args, types = "list", any.missing = FALSE)
   assertFlag(include.costs)
+  assertFlag(normalize)
 
   feature.set.names = getAvailableFeatureSets()
   feature.set.names = setdiff(feature.set.names, black.list)
@@ -55,10 +60,10 @@ getFeatureSet = function(x, black.list = character(0),
   feats = lapply(feature.set.names, function(feature.set.name) {
     feature.fun = paste("get", feature.set.name, "FeatureSet", sep = "")
     if (is.null(feature.fun.args[[feature.set.name]])) {
-      do.call(feature.fun, list(x = x, include.costs = include.costs, drop.duplicates = drop.duplicates))
+      do.call(feature.fun, list(x = x, include.costs = include.costs, normalize = normalize, drop.duplicates = drop.duplicates))
     } else {
       feats2 = lapply(feature.fun.args[[feature.set.name]][[1]], function(param) {
-        param.list = list(x = x, include.costs = include.costs, drop.duplicates = drop.duplicates)
+        param.list = list(x = x, include.costs = include.costs, normalize = normalize, drop.duplicates = drop.duplicates)
         param.list = c(param.list, param)
         do.call(feature.fun, param.list)
       })
@@ -73,10 +78,10 @@ getFeatureSet = function(x, black.list = character(0),
 #FIXME: x is a rather ugly name. Use instance.set or something similar?
 #FIXME: how to best store times? As an numeric attribute? Maybe add logical parameter
 # times.are.features which decides whether times are stored as features or separately?
-getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE) {
+getFeatureSetMultiple = function(x, black.list = c(), include.costs = FALSE, normalize = FALSE) {
   assertList(x, types = "Network", any.missing = FALSE, min.len = 1L)
   feats = lapply(x, function(instance) {
-    getFeatureSet(instance, black.list, include.costs)
+    getFeatureSet(instance, black.list, include.costs, normalize)
   })
   feats = as.data.frame(do.call(rbind, feats))
   return(feats)

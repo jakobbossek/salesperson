@@ -17,8 +17,8 @@ getDistanceFeatureSetCPP <- function(d, dd) {
     .Call('_salesperson_getDistanceFeatureSetCPP', PACKAGE = 'salesperson', d, dd)
 }
 
-getFractionOfPointsNearBoundingBoxCPP <- function(coords, distanceFraction) {
-    .Call('_salesperson_getFractionOfPointsNearBoundingBoxCPP', PACKAGE = 'salesperson', coords, distanceFraction)
+getFractionOfPointsNearBoundingBoxCPP <- function(coords, distanceFraction, normalize) {
+    .Call('_salesperson_getFractionOfPointsNearBoundingBoxCPP', PACKAGE = 'salesperson', coords, distanceFraction, normalize)
 }
 
 getNearestNeighbourDistancesCPP <- function(dist_mat) {

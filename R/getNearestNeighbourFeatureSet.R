@@ -5,11 +5,14 @@
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getNearestNeighbourFeatureSet = function(x, include.costs = FALSE, ...) {
+getNearestNeighbourFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     nn.dists = getNearestNeighbourDistancesCPP(x$distance.matrix)
-    statistics.on.nn.dists = computeStatisticsOnNumericVector(nn.dists, "nearest_neighbour")
+    statistics.on.nn.dists = computeStatisticsOnNumericVector(nn.dists, "nearest_neighbour", normalize = normalize)
+    if (!normalize) {
+      return(statistics.on.nn.dists)
+    }    
     d.max = getDMax(x$coordinates)
     dist.max = computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates)))
     c(statistics.on.nn.dists,

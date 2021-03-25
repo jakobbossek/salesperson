@@ -2,10 +2,13 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @param normalize [\code{logical(1)}]\cr
+#'   Additionally calculate the normalization for the features? The default is
+#'   \code{FALSE}.
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getCentroidFeatureSet = function(x, include.costs = FALSE, ...) {
+getCentroidFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
     centroid.coordinates = getCentroidCoordinatesCPP(x$coordinates)
@@ -13,9 +16,14 @@ getCentroidFeatureSet = function(x, include.costs = FALSE, ...) {
     coord = x$coordinates
     width = getWidth(coord)
     height = getHeight(coord)
-    statistics.on.distances.to.centroid = computeStatisticsOnNumericVector(distances.to.centroid, "centroid")
+    statistics.on.distances.to.centroid = computeStatisticsOnNumericVector(distances.to.centroid, "centroid", normalize = normalize)
     n_cities = getNumberOfNodes(x)
-
+    if (!normalize){
+      return(c(list(
+        "centroid_x" = centroid.coordinates[1],
+        "centroid_y" = centroid.coordinates[2]
+      ), statistics.on.distances.to.centroid))
+    }
     c(list(
       "centroid_x" = centroid.coordinates[1],
       "centroid_y" = centroid.coordinates[2]
