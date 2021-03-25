@@ -20,14 +20,14 @@ getDistanceFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ..
     if (!normalize) {
       feat.set = c(feat.set, statistics.on.distances)
     } else {
-      feat.set = c(feat.set, statistics.on.distances,
-                   "fraction_shorter_mean_distance_norm" = normalizeFeature(feat.set$fraction_shorter_mean_distance, 1 - 2 / n.cities, n.cities * (n.cities / 4 - 1) / (n.cities * (n.cities - 1))),
+      feat.set = c("fraction_shorter_mean_distance_norm" = normalizeFeature(feat.set$fraction_shorter_mean_distance, 1 - 2 / n.cities, n.cities * (n.cities / 4 - 1) / (n.cities * (n.cities - 1))),
                    "fraction_of_distinct_distances_norm" = normalizeFeature(feat.set$fraction_of_distinct_distances, 1, 2 / (n.cities * (n.cities - 1) / 2)),
                    "mode_frequency_norm" = normalizeFeature(feat.set$mode_frequency, (n.cities - 2) * (n.cities - 1) / 2, 1),
                    "mode_quantity_norm" = normalizeFeature(feat.set$mode_quantity, n.cities * (n.cities - 1) / 2, 1),
                    "mode_mean_norm" = normalizeFeature(feat.set$mode_mean, computeL2Norm(c(width, height))),
                    "mean_tour_length_norm" = normalizeFeature(feat.set$mean_tour_length, (n.cities ** 2 * (width + height + computeL2Norm(c(width, height)))) / (4 * (n.cities - 1)), 2 * computeL2Norm(c(width, height))),
                    "sum_of_lowest_edge_values_norm" = normalizeFeature(feat.set$sum_of_lowest_edge_values, n.cities * d.max),
+                   "distance_var_norm" = statistics.on.distances$distance_norm_var,
                    "distance_mean_norm" = normalizeFeature(statistics.on.distances$distance_mean, (n.cities * (width + height + computeL2Norm(c(width, height)))) / (4 * (n.cities - 1)), (2 * computeL2Norm(c(width, height))) / n.cities),
                    "distance_median_norm" = normalizeFeature(statistics.on.distances$distance_median, computeL2Norm(c(width, height))),
                    "distance_min_norm" = normalizeFeature(statistics.on.distances$distance_min, d.max),

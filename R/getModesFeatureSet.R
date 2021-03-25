@@ -31,7 +31,7 @@ getModesFeatureSet2 = function(x, normalize) {
   if (!normalize) {
     return(list(modes_number = modes.number))
   }
-  list(modes_number = modes.number,
-       modes_norm_number = normalizeFeature(modes.number, 99)
+  list(
+    modes_norm_number = normalizeFeature(modes.number, 99)
   )
 }

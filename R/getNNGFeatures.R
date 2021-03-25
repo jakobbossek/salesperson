@@ -43,6 +43,7 @@ getkNNGFeatureSet = function(x, k, kchar, normalize = FALSE) {
   # See Table I in Pihera and Musliu Features
   stats.on.weak = computeStatisticsOnNumericVector(comps.weak$csize, "weak_components", normalize = normalize)
   stats.on.weak.norm = c(
+    "weak_components_norm_var" = stats.on.weak$weak_components_norm_var,
     "weak_components_norm_mean" = normalizeFeature(stats.on.weak$weak_components_mean, n, n / floor(n/(k + 1))),
     "weak_components_norm_median" = normalizeFeature(stats.on.weak$weak_components_median, n, k + 1),
     "weak_components_norm_min" = normalizeFeature(stats.on.weak$weak_components_min, n, k + 1),
@@ -51,6 +52,7 @@ getkNNGFeatureSet = function(x, k, kchar, normalize = FALSE) {
   )
   stats.on.strong = computeStatisticsOnNumericVector(comps.strong$csize, "strong_components", normalize = normalize)
   stats.on.strong.norm = c(
+    "strong_components_norm_var" = stats.on.strong$strong_components_norm_var,
     "strong_components_norm_mean" = normalizeFeature(stats.on.strong$strong_components_mean, n, n / (n - k)),
     "strong_components_norm_median" = normalizeFeature(stats.on.strong$strong_components_median, n, 1),
     "strong_components_norm_min" = normalizeFeature(stats.on.strong$strong_components_min, n, 1),
@@ -67,14 +69,9 @@ getkNNGFeatureSet = function(x, k, kchar, normalize = FALSE) {
     )
   } else {
     res = c(
-      n_weak = comps.weak$no,
       n_norm_weak = normalizeFeature(comps.weak$no, floor(n / (k + 1)), 1),
-      n_strong = comps.strong$no,
       n_norm_strong = normalizeFeature(comps.strong$no, n - k, 1),
-      strong_weak_ratio = comps.strong$no / comps.weak$no,
-      stats.on.weak,
       stats.on.weak.norm,
-      stats.on.strong,
       stats.on.strong.norm
     )
   }

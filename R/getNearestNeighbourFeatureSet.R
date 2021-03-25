@@ -15,7 +15,7 @@ getNearestNeighbourFeatureSet = function(x, include.costs = FALSE, normalize = F
     }    
     d.max = getDMax(x$coordinates)
     dist.max = computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates)))
-    c(statistics.on.nn.dists,
+    c("nearest_neighbour_norm_var" = statistics.on.nn.dists$nearest_neighbour_norm_var,
       "nearest_neighbour_norm_mean" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_mean, d.max),
       "nearest_neighbour_norm_median" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_median, d.max),
       "nearest_neighbour_norm_min" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_min, d.max),

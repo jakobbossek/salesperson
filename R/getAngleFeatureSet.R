@@ -80,7 +80,7 @@ normalizeAngleFeatures = function(angles, n, normalize){
   if (!normalize) {
     return(stats.on.angles)
   }
-  feats = c(stats.on.angles,
+  feats = c(angles_norm_var = stats.on.angles[["angles_norm_var"]],
           angles_norm_mean = normalizeFeature(stats.on.angles[["angles_mean"]], pi * (n - 2) / n, pi / n),
           angles_norm_median = normalizeFeature(stats.on.angles[["angles_median"]], pi),
           angles_norm_min = normalizeFeature(stats.on.angles[["angles_min"]], pi * (n - 2) / n),
@@ -95,7 +95,7 @@ normalizeAngleCosFeatures = function(angles, n, normalize){
   if (!normalize) {
     return(stats.on.angles.cos)
   }
-  feats = c(stats.on.angles.cos,
+  feats = c(angles.on.angles.cos = stats.on.angles.cos[["angles_cos_norm_var"]],
             angles_norm_cos_mean = normalizeFeature(stats.on.angles.cos[["angles_cos_mean"]], cos(pi / n), cos(pi * (n - 2) / n)),
             angles_norm_cos_median = normalizeFeature(stats.on.angles.cos[["angles_cos_median"]], 1, -1),
             angles_norm_cos_min = normalizeFeature(stats.on.angles.cos[["angles_cos_min"]], cos(pi / 3), -1),
