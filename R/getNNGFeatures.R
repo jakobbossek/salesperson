@@ -4,6 +4,7 @@
 #' @param ks [\code{integer}]\cr
 #'   List of \eqn{k} values for \eqn{k}-Nearest-Neighbour-Graph computation.
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export

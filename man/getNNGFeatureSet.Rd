@@ -4,7 +4,8 @@
 \alias{getNNGFeatureSet}
 \title{Feature: statistics of the nearest neighbour graph}
 \usage{
-getNNGFeatureSet(x, ks = NULL, include.costs = FALSE, normalize = FALSE, ...)
+getNNGFeatureSet(x, ks = NULL, include.costs = FALSE,
+  normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -15,6 +16,12 @@ List of \eqn{k} values for \eqn{k}-Nearest-Neighbour-Graph computation.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{normalize}{[\code{logical(1)}]\cr
+Should the features be normalized?
+Note that normalization is not available for all features. E.g. skew, sd
+and varcoeff features as well as the VRP features are not normalized.
+Default is \code{FALSE}.}
 
 \item{...}{[any]\cr
 Not used.}

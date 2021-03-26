@@ -4,19 +4,10 @@
 \alias{makeNetwork}
 \title{Generate network based on coordinates.}
 \usage{
-makeNetwork(
-  coordinates,
-  distance.matrix = NULL,
-  name = NULL,
-  comment = NULL,
-  membership = NULL,
-  edge.weight.type = NULL,
-  depot.coordinates = NULL,
-  lower = NULL,
-  upper = NULL,
-  opt.tour.length = NULL,
-  opt.tour = NULL,
-  get.distances = TRUE)
+makeNetwork(coordinates, distance.matrix = NULL, name = NULL,
+  comment = NULL, membership = NULL, edge.weight.type = NULL,
+  depot.coordinates = NULL, lower = NULL, upper = NULL,
+  opt.tour.length = NULL, opt.tour = NULL, get.distances = TRUE)
 }
 \arguments{
 \item{coordinates}{[\code{matrix}]\cr

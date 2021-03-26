@@ -4,7 +4,8 @@
 \alias{getNearestNeighbourFeatureSet}
 \title{Feature: Statistics of Nearest-Neighbour distances.}
 \usage{
-getNearestNeighbourFeatureSet(x, include.costs = FALSE, normalize = FALSE, ...)
+getNearestNeighbourFeatureSet(x, include.costs = FALSE,
+  normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -12,6 +13,12 @@ Network.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{normalize}{[\code{logical(1)}]\cr
+Should the features be normalized?
+Note that normalization is not available for all features. E.g. skew, sd
+and varcoeff features as well as the VRP features are not normalized.
+Default is \code{FALSE}.}
 
 \item{...}{[any]\cr
 Not used.}

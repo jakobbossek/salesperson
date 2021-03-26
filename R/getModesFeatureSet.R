@@ -2,6 +2,7 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export

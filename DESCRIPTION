@@ -4,30 +4,31 @@ Title: Computation of Instance Features and R Interface to the State-of-the-Art 
 Description: Comprehensive collection of functions for solving and analizing the symmetric Traveling Salesperson Problem (TSP) by means of instance characteristics.
 Version: 1.0.0
 Date: 2017-10-16
-Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")), person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "ctb"))
+Authors@R: c(person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")), person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "ctb"), person("Jonathan", "Heins", email = "jonathan.heins@uni-muenster.de", role = "ctb"))
 Maintainer: Jakob Bossek <j.bossek@gmail.com>
 URL: https://github.com/jakobbossek/salesperson
 BugReports: https://github.com/jakobbossek/salesperson/issues
 License: BSD_3_clause + file LICENSE
 Depends:
-    BBmisc (>= 1.6)
+  BBmisc (>= 1.6)
 Imports:
-    lhs (>= 0.10),
-    checkmate (>= 1.8.0),
-    Rcpp (>= 0.11.3),
-    TSP (>= 1.1-2),
-    mvtnorm (>= 1.0-2),
-    ggplot2,
-    lpSolve,
-    igraph (>= 0.7.1),
-    stringr (>= 0.6.2),
-    fpc,
-    splancs,
-    vegan,
-    cccd
+  lhs (>= 0.10),
+  checkmate (>= 1.8.0),
+  Rcpp (>= 0.11.3),
+  TSP (>= 1.1-2),
+  mvtnorm (>= 1.0-2),
+  ggplot2,
+  lpSolve,
+  igraph (>= 0.7.1),
+  stringr (>= 0.6.2),
+  fpc,
+  splancs,
+  vegan,
+  cccd
 Suggests:
-    testthat
+  testthat
 LinkingTo: Rcpp
 LazyData: yes
 ByteCompile: yes
 RoxygenNote: 7.1.1
+Encoding: UTF-8

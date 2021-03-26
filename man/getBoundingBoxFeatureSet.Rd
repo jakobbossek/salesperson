@@ -4,13 +4,8 @@
 \alias{getBoundingBoxFeatureSet}
 \title{Feature: fraction of points near bounding boxplot.}
 \usage{
-getBoundingBoxFeatureSet(
-  x,
-  distance_fraction = 0.1,
-  include.costs = FALSE,
-  normalize = FALSE,
-  ...
-)
+getBoundingBoxFeatureSet(x, distance_fraction = 0.1,
+  include.costs = FALSE, normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

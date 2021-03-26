@@ -5,6 +5,7 @@
 #'   Probability for reachability computation in dbscan clustering method.
 #'   Default is 0.01.
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export

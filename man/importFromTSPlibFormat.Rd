@@ -6,6 +6,7 @@
 \usage{
 importFromTSPlibFormat(filename, round.distances = TRUE,
   read.opt = TRUE, get.distances = TRUE)
+}
 \arguments{
 \item{filename}{[\code{character(1)}]\cr
 Path to TSPlib file.}

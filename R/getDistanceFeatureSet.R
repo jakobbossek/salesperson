@@ -2,6 +2,7 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
@@ -36,7 +37,7 @@ getDistanceFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ..
                    "distance_max" = normalizeFeature(statistics.on.distances$distance_max, computeL2Norm(c(width, height)), max(width, height)),
                    "distance_span" = normalizeFeature(statistics.on.distances$distance_span, computeL2Norm(c(width, height)), max(width, height) - d.max),
                    "distance_skew" = NA
-                   
+
       )
     }
     return(feat.set)

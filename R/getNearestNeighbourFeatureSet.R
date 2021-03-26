@@ -2,6 +2,7 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
@@ -12,7 +13,7 @@ getNearestNeighbourFeatureSet = function(x, include.costs = FALSE, normalize = F
     statistics.on.nn.dists = computeStatisticsOnNumericVector(nn.dists, "nearest_neighbour", normalize = normalize)
     if (!normalize) {
       return(statistics.on.nn.dists)
-    }    
+    }
     d.max = getDMax(x$coordinates)
     dist.max = computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates)))
     list(

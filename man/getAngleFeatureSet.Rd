@@ -4,14 +4,8 @@
 \alias{getAngleFeatureSet}
 \title{Feature: statistics of angles between nodes and their two nearest neighbors.}
 \usage{
-getAngleFeatureSet(
-  x,
-  feature.set = NULL,
-  drop.duplicates = FALSE,
-  include.costs = FALSE,
-  normalize = FALSE,
-  ...
-)
+getAngleFeatureSet(x, feature.set = NULL, drop.duplicates = FALSE,
+  include.costs = FALSE, normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

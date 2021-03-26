@@ -10,6 +10,7 @@
 #'   Per default (\code{NULL}), all of the four previously listed feature sets will
 #'   be computed.
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
@@ -119,7 +120,7 @@ getConvexHullEdgeFeatureSet = function(x, hull.list, normalize = FALSE) {
   hull.edges = unlist(lapply(seq_along(hull.list$hull), function(i) {
     x$distance.matrix[hull.tour[i], hull.tour[i + 1L]]
   }))
-  
+
   # See Table I in Pihera and Musliu Features
   width = getWidth(hull.list$coordinates)
   height = getHeight(hull.list$coordinates)
@@ -141,7 +142,7 @@ getConvexHullEdgeFeatureSet = function(x, hull.list, normalize = FALSE) {
     "hull_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height))),
     "hull_edges_skew" = NA
   )
-  
+
 }
 
 
@@ -199,8 +200,8 @@ getConvexHullDistanceFeatureSet = function(x, hull.list, normalize = FALSE) {
   ## in addition to Pihera and Musliu:
   ## ratio of points that are located on the hull (but do not necessarily define the hull)
 
-  if (!normalize) { 
-    return(c(res, 
+  if (!normalize) {
+    return(c(res,
              "hull_dists_point_ratio" = mean(hull.distances == 0))
            )
   }

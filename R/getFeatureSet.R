@@ -7,11 +7,7 @@
 #' @param include.costs [\code{logical(1)}]\cr
 #'   Include the times needed to compute the specific feature sets as additional
 #'   features? Default is \code{FALSE}. Time is measured via \code{proc.time}.
-#' @param normalize [\code{logical(1)}]\cr
-#'   Calculate the normalization for the features instead of the unnormalized values? 
-#'   Not for all features normalizations are available, i.e. the skew, the sd 
-#'   and the varcoeff features as well as the VRP features are not normalized.
-#'   The default is \code{FALSE}.
+#' @template arg_normalize
 #' @param drop.duplicates [\code{logical(1)}]\cr
 #'   Should duplicate nodes be deleted?
 #'   Duplicate node coordinates cause some angle features to be NA. Hence,

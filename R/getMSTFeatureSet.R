@@ -2,6 +2,7 @@
 #'
 #' @template arg_network
 #' @template arg_include_costs
+#' @template arg_normalize
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
@@ -20,7 +21,7 @@ getMSTFeatureSet2 = function(x, normalize = FALSE) {
   span_tree_depth = spandepth(span_tree)
   # distances within MST
   span_tree_dists = span_tree$dist
-  
+
 
   statistics.on.mst.depth = computeStatisticsOnNumericVector(span_tree_depth, "mst_depth", normalize = normalize)
   statistics.on.mst.dists = computeStatisticsOnNumericVector(span_tree_dists, "mst_dists", normalize = normalize)
@@ -29,7 +30,7 @@ getMSTFeatureSet2 = function(x, normalize = FALSE) {
     res$mst_dists_sum = sum(span_tree_dists) / sum(d)
     return(res)
   }
-  
+
   n.cities = getNumberOfNodes(x)
   L = ceiling(log((n.cities - 1) / 5, base = 4)) + 1
   R = n.cities - (1 + sum(sapply(1:(L - 1), function(x) {5 * 4 ** (x - 1)})))
@@ -37,7 +38,7 @@ getMSTFeatureSet2 = function(x, normalize = FALSE) {
   d.max = getDMax(x$coordinates)
   width = getWidth(x$coordinates)
   height = getHeight(x$coordinates)
-  
+
   res = list(
     "mst_depth_mean" = normalizeMSTDepthMean(statistics.on.mst.depth$mst_depth_mean, n.cities, R, L),
     "mst_depth_sd" = NA,
