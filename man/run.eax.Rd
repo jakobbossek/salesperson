@@ -4,13 +4,27 @@
 \alias{run.eax}
 \title{Solver: EAX}
 \usage{
-\method{run}{eax}(solver, instance, max.trials = 1L, pop.size = 100L,
-  off.size = 30L, cutoff.time = 10, opt.tour.length = NULL,
-  seed = as.integer(ceiling(runif(1L) * 2^15)), with.restarts = FALSE,
-  with.GPX = FALSE, snapshot.step = 0L, full.matrix = FALSE,
-  verbose = FALSE, log.trajectory = TRUE, work.dir = NULL,
-  output.files.prefix = NULL, keep.output.files = FALSE,
-  init.pop = NULL, ...)
+\method{run}{eax}(
+  solver,
+  instance,
+  max.trials = 1L,
+  pop.size = 100L,
+  off.size = 30L,
+  cutoff.time = 10,
+  opt.tour.length = NULL,
+  seed = as.integer(ceiling(runif(1L) * 2^15)),
+  with.restarts = FALSE,
+  with.GPX = FALSE,
+  snapshot.step = 0L,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  log.trajectory = TRUE,
+  work.dir = NULL,
+  output.files.prefix = NULL,
+  keep.output.files = FALSE,
+  init.pop = NULL,
+  ...
+)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr

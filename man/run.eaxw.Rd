@@ -4,13 +4,28 @@
 \alias{run.eaxw}
 \title{Solver: EAX weighted}
 \usage{
-\method{run}{eaxw}(solver, instance, max.trials = 1L, pop.size = 100L,
-  off.size = 30L, cutoff.time = 10L, opt.tour.length = NULL,
-  seed = as.integer(ceiling(runif(1L) * 2^15)), with.restarts = FALSE,
-  with.GPX = FALSE, fitness.type = "classic", snapshot.step = 0L,
-  full.matrix = FALSE, verbose = FALSE, log.trajectory = TRUE,
-  work.dir = NULL, output.files.prefix = NULL,
-  keep.output.files = FALSE, init.pop = NULL, ...)
+\method{run}{eaxw}(
+  solver,
+  instance,
+  max.trials = 1L,
+  pop.size = 100L,
+  off.size = 30L,
+  cutoff.time = 10L,
+  opt.tour.length = NULL,
+  seed = as.integer(ceiling(runif(1L) * 2^15)),
+  with.restarts = FALSE,
+  with.GPX = FALSE,
+  fitness.type = "classic",
+  snapshot.step = 0L,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  log.trajectory = TRUE,
+  work.dir = NULL,
+  output.files.prefix = NULL,
+  keep.output.files = FALSE,
+  init.pop = NULL,
+  ...
+)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr

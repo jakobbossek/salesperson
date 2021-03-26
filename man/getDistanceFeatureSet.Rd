@@ -4,7 +4,7 @@
 \alias{getDistanceFeatureSet}
 \title{Feature: Statistics of Nearest-Neighbour distances.}
 \usage{
-getDistanceFeatureSet(x, include.costs = FALSE, ...)
+getDistanceFeatureSet(x, include.costs = FALSE, normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

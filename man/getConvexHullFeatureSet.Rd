@@ -4,8 +4,13 @@
 \alias{getConvexHullFeatureSet}
 \title{Feature: number of points on convex hull and spanning area.}
 \usage{
-getConvexHullFeatureSet(x, feature.set = NULL, include.costs = FALSE,
-  ...)
+getConvexHullFeatureSet(
+  x,
+  feature.set = NULL,
+  include.costs = FALSE,
+  normalize = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

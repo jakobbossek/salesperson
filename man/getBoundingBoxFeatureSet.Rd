@@ -4,8 +4,13 @@
 \alias{getBoundingBoxFeatureSet}
 \title{Feature: fraction of points near bounding boxplot.}
 \usage{
-getBoundingBoxFeatureSet(x, distance_fraction = 0.1,
-  include.costs = FALSE, ...)
+getBoundingBoxFeatureSet(
+  x,
+  distance_fraction = 0.1,
+  include.costs = FALSE,
+  normalize = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -17,6 +22,10 @@ which should points be allowed lie inbetween.}
 
 \item{include.costs}{[\code{logical(1)}]\cr
 Should costs be included as an additional feature? Default is \code{FALSE}.}
+
+\item{normalize}{[\code{logical(1)}]\cr
+Additionally calculate the normalization for the features? The default is
+\code{FALSE}.}
 
 \item{...}{[any]\cr
 Not used.}

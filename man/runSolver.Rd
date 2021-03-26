@@ -4,8 +4,7 @@
 \alias{runSolver}
 \title{Apply TSP solver to instance.}
 \usage{
-runSolver(solver, instance, solver.pars = list(), solver.path = NULL,
-  ...)
+runSolver(solver, instance, solver.pars = list(), solver.path = NULL, ...)
 }
 \arguments{
 \item{solver}{[\code{character(1)} || \code{TSPSolver}]\cr

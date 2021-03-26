@@ -4,8 +4,14 @@
 \alias{getMonitoringFeatureSet}
 \title{Feature: monitoring of algorithm runs.}
 \usage{
-getMonitoringFeatureSet(times, incumbents, lower.bound = 0,
-  include.costs = FALSE, raw.data = FALSE, ...)
+getMonitoringFeatureSet(
+  times,
+  incumbents,
+  lower.bound = 0,
+  include.costs = FALSE,
+  raw.data = FALSE,
+  ...
+)
 }
 \arguments{
 \item{times}{[\code{numeric}]\cr
