@@ -15,8 +15,8 @@ makeNetwork(
   lower = NULL,
   upper = NULL,
   opt.tour.length = NULL,
-  opt.tour = NULL
-)
+  opt.tour = NULL,
+  get.distances = TRUE)
 }
 \arguments{
 \item{coordinates}{[\code{matrix}]\cr
@@ -58,6 +58,13 @@ Default is \code{NULL}, which means the tour length is unknown.}
 \item{opt.tour}{[\code{integer}]\cr
 Optional optimal permutation of node indizes.
 Default is \code{NULL}, which means the optimal tour is unknown.}
+
+\item{get.distances}{[\code{logical(1)}]\cr
+Should distances be loaded?
+For really large instances the distance matrix may be very large.
+In certain situations it is thus desirable to load the instance without
+loading/generating the distance matrix itself.
+Default is \code{TRUE}.}
 }
 \value{
 [\code{Network}]

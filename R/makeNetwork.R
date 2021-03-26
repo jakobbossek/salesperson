@@ -32,7 +32,7 @@
 #'   and EUC\_2D is assigned. Otherwise the edge weight type must be one of the
 #'   following \code{{EUC\_2D, EUC\_3D, MAX\_2D, MAX\_3D, MAN\_2D, MAN\_3D, CEIL\_2D,
 #'   GEO, ATT, EXPLICIT}}.
-#'
+#' @template arg_get_distances
 #' @return [\code{Network}]
 #' @export
 makeNetwork = function(coordinates,
@@ -40,7 +40,8 @@ makeNetwork = function(coordinates,
   name = NULL, comment = NULL,
   membership = NULL, edge.weight.type = NULL,
   depot.coordinates = NULL, lower = NULL, upper = NULL,
-  opt.tour.length = NULL, opt.tour = NULL) {
+  opt.tour.length = NULL, opt.tour = NULL,
+  get.distances = TRUE) {
   assertMatrix(coordinates)
   if (!is.null(name)) assertCharacter(name, len = 1L, any.missing = FALSE)
   if (!is.null(comment)) assertCharacter(comment, min.len = 1L, any.missing = FALSE)
@@ -50,6 +51,7 @@ makeNetwork = function(coordinates,
   if (!is.null(edge.weight.type)) assertChoice(edge.weight.type, getValidEdgeWeightTypes())
   if (!is.null(opt.tour.length)) assertNumber(opt.tour.length, na.ok = FALSE)
   if (!is.null(opt.tour)) assertInteger(opt.tour, len = nrow(coordinates), any.missing = FALSE, all.missing = FALSE)
+  assertFlag(get.distances)
 
   if (!is.null(opt.tour) && !is.null(depot.coordinates)) {
     stopf("Optimal tours for instances with depots not supported at the moment.")
@@ -66,15 +68,20 @@ makeNetwork = function(coordinates,
         will be replaced by 'EUC_2D'.", edge.weight.type)
     }
     edge.weight.type = "EUC_2D"
+  }
+
+  if (is.null(distance.matrix) & get.distances) {
     distance.matrix = as.matrix(dist(coordinates))
   }
 
   # check for duplicated node coordinates
-  tmp = distance.matrix
-  diag(tmp) = Inf
-  if (any(tmp == 0)) {
-    warningf("There are zero distances in the distance matrix. Maybe there are
-      duplicate node coordinates.")
+  if (get.distances) {
+    tmp = distance.matrix
+    diag(tmp) = Inf
+    if (any(tmp == 0)) {
+      warningf("There are zero distances in the distance matrix. Maybe there are
+        duplicate node coordinates.")
+    }
   }
 
   network = makeS3Obj(

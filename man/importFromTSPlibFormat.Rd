@@ -4,8 +4,8 @@
 \alias{importFromTSPlibFormat}
 \title{Import network from (extended) TSPlib format.}
 \usage{
-importFromTSPlibFormat(filename, round.distances = TRUE, read.opt = TRUE)
-}
+importFromTSPlibFormat(filename, round.distances = TRUE,
+  read.opt = TRUE, get.distances = TRUE)
 \arguments{
 \item{filename}{[\code{character(1)}]\cr
 Path to TSPlib file.}
@@ -17,6 +17,13 @@ Default is \code{TRUE}.}
 \item{read.opt}{[\code{logical(1)}]\cr
 Should the optimal tour length (in file filename.opt) and the optimal
 tour (in file filename.tour) be loaded if avialable?
+Default is \code{TRUE}.}
+
+\item{get.distances}{[\code{logical(1)}]\cr
+Should distances be loaded?
+For really large instances the distance matrix may be very large.
+In certain situations it is thus desirable to load the instance without
+loading/generating the distance matrix itself.
 Default is \code{TRUE}.}
 }
 \value{

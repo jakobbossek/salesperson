@@ -12,15 +12,17 @@
 #'   Should the optimal tour length (in file filename.opt) and the optimal
 #'   tour (in file filename.tour) be loaded if avialable?
 #'   Default is \code{TRUE}.
+#' @template arg_get_distances
 #' @return [\code{Network}]
 #'   Network object.
 #' @export
 importFromTSPlibFormat = function(filename, round.distances = TRUE,
-  read.opt = TRUE) {
+  read.opt = TRUE, get.distances = TRUE) {
   requirePackages("stringr", why = "salesperson::importFromTSPlibFormat")
   assertFileExists(filename, access = "r")
   assertFlag(round.distances)
   assertFlag(read.opt)
+  assertFlag(get.distances)
 
   fh = file(filename, open = "r")
   on.exit(close(fh))
@@ -49,7 +51,7 @@ importFromTSPlibFormat = function(filename, round.distances = TRUE,
   }
 
   # postprocessing
-  network$edge_weights = getNetworkEdgeWeights(network, round.distances)
+  network$edge_weights = getNetworkEdgeWeights(network, round.distances, get.distances)
   network$coordinates = getNetworkCoordinates(network)
 
   # check if optimal tour length / tour itself is available
@@ -86,7 +88,8 @@ importFromTSPlibFormat = function(filename, round.distances = TRUE,
     opt.tour.length = opt.tour.length,
     opt.tour = opt.tour,
     membership = network$membership,
-    edge.weight.type = network$edge_weight_type
+    edge.weight.type = network$edge_weight_type,
+    get.distances = get.distances
   )
 }
 
@@ -180,7 +183,11 @@ getNetworkCoordinates = function(network) {
 #   List of key-values pairs.
 # @return [list]
 #   Modified network.
-getNetworkEdgeWeights = function(network, round.distances) {
+getNetworkEdgeWeights = function(network, round.distances, get.distances) {
+  # skip if distance matrix should not be loaded
+  if (!get.distances)
+    return(NULL)
+
   edge_weights = network$edge_weights
   # if there is an EDGE_WEIGHT_SECTION
   if (!is.null(edge_weights)) {

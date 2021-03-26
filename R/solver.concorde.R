@@ -10,7 +10,7 @@ makeTSPSolver.concorde = function() {
 
 #' @export
 run.concorde = function(solver, instance, verbose = FALSE,
-  initial.upperbound = NULL, cutoff.time = 0, ...) {
+  initial.upperbound = NULL, cutoff.time = 0, seed = NULL, ...) {
   # set concorde path
   assertFlag(verbose)
 
@@ -46,6 +46,9 @@ run.concorde = function(solver, instance, verbose = FALSE,
   args = list("-x", "-o", file.output)
   if (!is.null(initial.upperbound)) {
     args = c(args, list("-u", as.integer(initial.upperbound)))
+  }
+  if (!is.null(seed)) {
+    args = c(args, list("-s", as.integer(seed)))
   }
   args = c(args, list(file.input))
 
