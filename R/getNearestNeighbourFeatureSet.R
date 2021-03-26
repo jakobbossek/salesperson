@@ -15,12 +15,16 @@ getNearestNeighbourFeatureSet = function(x, include.costs = FALSE, normalize = F
     }    
     d.max = getDMax(x$coordinates)
     dist.max = computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates)))
-    c("nearest_neighbour_norm_var" = statistics.on.nn.dists$nearest_neighbour_norm_var,
-      "nearest_neighbour_norm_mean" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_mean, d.max),
-      "nearest_neighbour_norm_median" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_median, d.max),
-      "nearest_neighbour_norm_min" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_min, d.max),
-      "nearest_neighbour_norm_max" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_max, dist.max),
-      "nearest_neighbour_norm_span" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_span, dist.max)
+    list(
+      "nearest_neighbour_mean" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_mean, d.max),
+      "nearest_neighbour_sd" = NA,
+      "nearest_neighbour_var" = statistics.on.nn.dists$nearest_neighbour_norm_var,
+      "nearest_neighbour_median" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_median, d.max),
+      "nearest_neighbour_varcoeff" = NA,
+      "nearest_neighbour_min" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_min, d.max),
+      "nearest_neighbour_max" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_max, dist.max),
+      "nearest_neighbour_span" = normalizeFeature(statistics.on.nn.dists$nearest_neighbour_span, dist.max),
+      "nearest_neighbour_skew" = NA
       )
   }), "nearest_neighbor", include.costs)
 }

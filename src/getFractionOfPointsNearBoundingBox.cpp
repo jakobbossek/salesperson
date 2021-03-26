@@ -50,10 +50,8 @@ List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distance
   std::string distanceFractionString = os.str();
   std::string feature_name = "fraction_of_nodes_outside_near_bounding_box_" + distanceFractionString;
   if (normalize) {
-    std::string feature_norm_name = "fraction_of_nodes_outside_near_bounding_box_norm_" + distanceFractionString;
-
     return List::create(
-      _[feature_norm_name] = NumericVector::create((n_out_of_bounds - 2) / (n_cities - 2))
+      _[feature_name] = NumericVector::create((n_out_of_bounds - 2) / (n_cities - 2))
     );
   }
   return List::create(

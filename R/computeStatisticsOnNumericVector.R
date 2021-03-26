@@ -24,12 +24,15 @@ computeStatisticsOnNumericVector = function(x, type, normalize = FALSE) {
     "span" = x.max - x.min,
     "skew" = skew(x)
   )
-  if (x.min > 0 && normalize) {
-    x.harm.mean = 1 / mean(1 / x)
-    x.var.upper = (x.max * (x.mean - x.harm.mean) * (x.max - x.mean)) / (x.max - x.harm.mean)
-    x.var.lower = (x.min * (x.mean - x.harm.mean) * (x.mean - x.min)) / (x.harm.mean - x.min)
-    x.var.norm = normalizeFeature(var(x) * (length(x) - 1) / length(x), x.var.upper, x.var.lower)
-    feats$norm_var = x.var.norm
+  if (normalize) {
+    feats$norm_var = NA
+    if (x.min > 0) {
+      x.harm.mean = 1 / mean(1 / x)
+      x.var.upper = (x.max * (x.mean - x.harm.mean) * (x.max - x.mean)) / (x.max - x.harm.mean)
+      x.var.lower = (x.min * (x.mean - x.harm.mean) * (x.mean - x.min)) / (x.harm.mean - x.min)
+      x.var.norm = normalizeFeature(var(x) * (length(x) - 1) / length(x), x.var.upper, x.var.lower)
+      feats$norm_var = x.var.norm
+    }
   }
   names(feats) = paste(type, names(feats), sep = "_")
   return(feats)

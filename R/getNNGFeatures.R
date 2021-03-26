@@ -42,23 +42,7 @@ getkNNGFeatureSet = function(x, k, kchar, normalize = FALSE) {
 
   # See Table I in Pihera and Musliu Features
   stats.on.weak = computeStatisticsOnNumericVector(comps.weak$csize, "weak_components", normalize = normalize)
-  stats.on.weak.norm = c(
-    "weak_components_norm_var" = stats.on.weak$weak_components_norm_var,
-    "weak_components_norm_mean" = normalizeFeature(stats.on.weak$weak_components_mean, n, n / floor(n/(k + 1))),
-    "weak_components_norm_median" = normalizeFeature(stats.on.weak$weak_components_median, n, k + 1),
-    "weak_components_norm_min" = normalizeFeature(stats.on.weak$weak_components_min, n, k + 1),
-    "weak_components_norm_max" = normalizeFeature(stats.on.weak$weak_components_max, n, k + 1 + ceiling((n %% (k + 1)) / floor(n / (k + 1)))),
-    "weak_components_norm_span" = normalizeFeature(stats.on.weak$weak_components_span, n - 2 * (k + 1))
-  )
   stats.on.strong = computeStatisticsOnNumericVector(comps.strong$csize, "strong_components", normalize = normalize)
-  stats.on.strong.norm = c(
-    "strong_components_norm_var" = stats.on.strong$strong_components_norm_var,
-    "strong_components_norm_mean" = normalizeFeature(stats.on.strong$strong_components_mean, n, n / (n - k)),
-    "strong_components_norm_median" = normalizeFeature(stats.on.strong$strong_components_median, n, 1),
-    "strong_components_norm_min" = normalizeFeature(stats.on.strong$strong_components_min, n, 1),
-    "strong_components_norm_max" = normalizeFeature(stats.on.strong$strong_components_max, n, k + 1),
-    "strong_components_norm_span" = normalizeFeature(stats.on.strong$strong_components_span, n - 2)
-  )
   if (!normalize) {
     res = c(
       n_weak = comps.weak$no,
@@ -67,10 +51,36 @@ getkNNGFeatureSet = function(x, k, kchar, normalize = FALSE) {
       stats.on.weak,
       stats.on.strong
     )
+    kchar = paste0("nng_", kchar, "_")
+    names(res) = paste0(kchar, names(res))
+    return(res)
   } else {
+  stats.on.weak.norm = c(
+    "weak_components_mean" = normalizeFeature(stats.on.weak$weak_components_mean, n, n / floor(n/(k + 1))),
+    "weak_components_sd" = NA,
+    "weak_components_var" = stats.on.weak$weak_components_norm_var,
+    "weak_components_median" = normalizeFeature(stats.on.weak$weak_components_median, n, k + 1),
+    "weak_components_varcoeff" = NA,
+    "weak_components_min" = normalizeFeature(stats.on.weak$weak_components_min, n, k + 1),
+    "weak_components_max" = normalizeFeature(stats.on.weak$weak_components_max, n, k + 1 + ceiling((n %% (k + 1)) / floor(n / (k + 1)))),
+    "weak_components_span" = normalizeFeature(stats.on.weak$weak_components_span, n - 2 * (k + 1)),
+    "weak_components_skew" = NA
+  )
+  stats.on.strong.norm = c(
+    "strong_components_mean" = normalizeFeature(stats.on.strong$strong_components_mean, n, n / (n - k)),
+    "strong_components_sd" = NA,
+    "strong_components_var" = stats.on.strong$strong_components_norm_var,
+    "strong_components_median" = normalizeFeature(stats.on.strong$strong_components_median, n, 1),
+    "strong_components_varcoeff" = NA,
+    "strong_components_min" = normalizeFeature(stats.on.strong$strong_components_min, n, 1),
+    "strong_components_max" = normalizeFeature(stats.on.strong$strong_components_max, n, k + 1),
+    "strong_components_span" = normalizeFeature(stats.on.strong$strong_components_span, n - 2),
+    "strong_components_skew" = NA
+  )
     res = c(
-      n_norm_weak = normalizeFeature(comps.weak$no, floor(n / (k + 1)), 1),
-      n_norm_strong = normalizeFeature(comps.strong$no, n - k, 1),
+      n_weak = normalizeFeature(comps.weak$no, floor(n / (k + 1)), 1),
+      n_strong = normalizeFeature(comps.strong$no, n - k, 1),
+      strong_weak_ratio = NA,
       stats.on.weak.norm,
       stats.on.strong.norm
     )

@@ -91,7 +91,7 @@ getConvexHullPointRatioFeatureSet = function(hull.list, normalize = FALSE) {
   hull.points.ratio = length(hull.list$hull) / nrow(hull.list$coordinates)
   if (normalize) {
     return(list(
-      hull_norm_points_ratio = normalizeFeature(hull.points.ratio, 1, 2 / nrow(hull.list$coordinates))
+      hull_points_ratio = normalizeFeature(hull.points.ratio, 1, 2 / nrow(hull.list$coordinates))
     ))
   }
   list(
@@ -104,7 +104,7 @@ getConvexHullAreaFeatureSet = function(hull.list, normalize = FALSE) {
   area = splancs::areapl(hull.list$coordinates[hull.list$hull, ])
   if (normalize) {
     return(list(
-      hull_norm_area = normalizeFeature(area, getWidth(hull.list$coordinates) * getHeight(hull.list$coordinates))
+      hull_area = normalizeFeature(area, getWidth(hull.list$coordinates) * getHeight(hull.list$coordinates))
     ))
   }
   list(hull_area = area)
@@ -130,13 +130,16 @@ getConvexHullEdgeFeatureSet = function(x, hull.list, normalize = FALSE) {
   if (!normalize) {
     return(statistics.on.the.hull.edges)
   }
-  c(
-    "hull_norm_edges_var" = statistics.on.the.hull.edges$hull_edges_norm_var,
-    "hull_norm_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3, computeL2Norm(c(width, height)) / n.cities),
-    "hull_norm_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
-    "hull_norm_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2 * b - sqrt(3) * a))),
-    "hull_norm_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height)), computeL2Norm(c(width, height)) / n.cities),
-    "hull_norm_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height)))
+  list(
+    "hull_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3, computeL2Norm(c(width, height)) / n.cities),
+    "hull_edges_sd" = NA,
+    "hull_edges_var" = statistics.on.the.hull.edges$hull_edges_norm_var,
+    "hull_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
+    "hull_edges_varcoeff" = NA,
+    "hull_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2 * b - sqrt(3) * a))),
+    "hull_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height)), computeL2Norm(c(width, height)) / n.cities),
+    "hull_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height))),
+    "hull_edges_skew" = NA
   )
   
 }
@@ -205,12 +208,17 @@ getConvexHullDistanceFeatureSet = function(x, hull.list, normalize = FALSE) {
   height = getHeight(coords)
   min.asp = min(width, height)
   n = nrow(coords)
-  res = list("hull_dists_point_ratio" = mean(hull.distances == 0),
-          "hull_dists_norm_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n - 4) / n),
-          "hull_dists_norm_median" = normalizeFeature(res$hull_dists_median, min.asp / 2),
-          "hull_dists_norm_max" = normalizeFeature(res$hull_dists_max, min.asp / 2),
-          "hull_dists_norm_span" = normalizeFeature(res$hull_dists_span, min.asp / 2),
-          "hull_dists_norm_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3 / n))
+  res = list(
+          "hull_dists_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n - 4) / n),
+          "hull_dists_sd" = NA,
+          "hull_dists_var" = res$hull_dists_norm_var,
+          "hull_dists_median" = normalizeFeature(res$hull_dists_median, min.asp / 2),
+          "hull_dists_varcoeff" = NA,
+          "hull_dists_min" = 0,
+          "hull_dists_max" = normalizeFeature(res$hull_dists_max, min.asp / 2),
+          "hull_dists_span" = normalizeFeature(res$hull_dists_span, min.asp / 2),
+          "hull_dists_skew" = NA,
+          "hull_dists_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3 / n))
 
   return(res)
 }
