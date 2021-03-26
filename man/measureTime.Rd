@@ -4,8 +4,12 @@
 \alias{measureTime}
 \title{Helper for measuring time.}
 \usage{
-measureTime(expr, feature.set.name, append.as.feature = FALSE,
-  envir = parent.frame())
+measureTime(
+  expr,
+  feature.set.name,
+  append.as.feature = FALSE,
+  envir = parent.frame()
+)
 }
 \arguments{
 \item{expr}{[\code{expression}]\cr

@@ -5,14 +5,14 @@
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getModesFeatureSet = function(x, include.costs = FALSE, ...) {
+getModesFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ...) {
   assertClass(x, "Network")
   measureTime(expression({
-    getModesFeatureSet2(x)
+    getModesFeatureSet2(x, normalize = normalize)
   }), "modes", include.costs)
 }
 
-getModesFeatureSet2 = function(x) {
+getModesFeatureSet2 = function(x, normalize) {
   distances = as.numeric(x$distance.matrix)
 
   intdens = function(a, b) {
@@ -27,5 +27,11 @@ getModesFeatureSet2 = function(x) {
   modemass = sapply(1:(length(minidx) - 1L), function(i) {
     intdens(minidx[i], minidx[i + 1] - 1)
   })
-  list(modes_number = sum(modemass > 0.01))
+  modes.number = sum(modemass > 0.01)
+  if (!normalize) {
+    return(list(modes_number = modes.number))
+  }
+  list(
+    modes_number = normalizeFeature(modes.number, 99)
+  )
 }

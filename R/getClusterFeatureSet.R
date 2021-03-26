@@ -8,16 +8,16 @@
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE, ...) {
+getClusterFeatureSet = function(x, epsilon = 0.01, include.costs = FALSE, normalize = FALSE, ...) {
   assertNumber(epsilon, lower = 0.001, upper = 1, na.ok = FALSE)
   # here we delegate to tspmeta
   measureTime(expression({
-    getClusterFeatureSet2(x, epsilon = epsilon)
+    getClusterFeatureSet2(x, epsilon = epsilon, normalize = normalize)
   }), paste("cluster", epsilon, sep = "_"), include.costs)
 }
 
 
-getClusterFeatureSet2 = function(x, epsilon) {
+getClusterFeatureSet2 = function(x, epsilon, normalize) {
   coordinates = x$coordinates
   d = as.vector(x$distance.matrix)
   # FIXME: Really strip 0 distances?
@@ -41,10 +41,17 @@ getClusterFeatureSet2 = function(x, epsilon) {
       })
     })
     distances = unlist(distances)
-    res = list(
-      n_clusters = length(unique(cm)),
-      mean_distance = mean(distances)
-    )
+    if (!normalize) {
+      res = list(
+        n_clusters = length(unique(cm)),
+        mean_distance = mean(distances)
+      )
+    } else {
+      res = list(
+        n_clusters = normalizeFeature(length(unique(cm)), floor(getNumberOfNodes(x) / 5)),
+        mean_distance = normalizeFeature(mean(distances), computeL2Norm(c(getWidth(x$coordinates), getHeight(x$coordinates))) / 2)
+      )
+    }
   } else {
     res = list(
       n_clusters = 0,

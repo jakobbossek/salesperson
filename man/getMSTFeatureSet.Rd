@@ -4,7 +4,7 @@
 \alias{getMSTFeatureSet}
 \title{Feature: statistics of the minimum spanning tree edges.}
 \usage{
-getMSTFeatureSet(x, include.costs = FALSE, ...)
+getMSTFeatureSet(x, include.costs = FALSE, normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

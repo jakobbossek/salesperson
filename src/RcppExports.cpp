@@ -53,14 +53,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // getFractionOfPointsNearBoundingBoxCPP
-List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distanceFraction);
-RcppExport SEXP _salesperson_getFractionOfPointsNearBoundingBoxCPP(SEXP coordsSEXP, SEXP distanceFractionSEXP) {
+List getFractionOfPointsNearBoundingBoxCPP(NumericMatrix coords, double distanceFraction, bool normalize);
+RcppExport SEXP _salesperson_getFractionOfPointsNearBoundingBoxCPP(SEXP coordsSEXP, SEXP distanceFractionSEXP, SEXP normalizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type coords(coordsSEXP);
     Rcpp::traits::input_parameter< double >::type distanceFraction(distanceFractionSEXP);
-    rcpp_result_gen = Rcpp::wrap(getFractionOfPointsNearBoundingBoxCPP(coords, distanceFraction));
+    Rcpp::traits::input_parameter< bool >::type normalize(normalizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(getFractionOfPointsNearBoundingBoxCPP(coords, distanceFraction, normalize));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -83,7 +84,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_salesperson_getCentroidCoordinatesCPP", (DL_FUNC) &_salesperson_getCentroidCoordinatesCPP, 1},
     {"_salesperson_getDistancesToCentroidCPP", (DL_FUNC) &_salesperson_getDistancesToCentroidCPP, 2},
     {"_salesperson_getDistanceFeatureSetCPP", (DL_FUNC) &_salesperson_getDistanceFeatureSetCPP, 2},
-    {"_salesperson_getFractionOfPointsNearBoundingBoxCPP", (DL_FUNC) &_salesperson_getFractionOfPointsNearBoundingBoxCPP, 2},
+    {"_salesperson_getFractionOfPointsNearBoundingBoxCPP", (DL_FUNC) &_salesperson_getFractionOfPointsNearBoundingBoxCPP, 3},
     {"_salesperson_getNearestNeighbourDistancesCPP", (DL_FUNC) &_salesperson_getNearestNeighbourDistancesCPP, 1},
     {"getMonitoringFeatureSetC", (DL_FUNC) &getMonitoringFeatureSetC, 3},
     {NULL, NULL, 0}

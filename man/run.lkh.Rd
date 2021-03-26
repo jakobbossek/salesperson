@@ -4,12 +4,23 @@
 \alias{run.lkh}
 \title{Solver: LKH}
 \usage{
-\method{run}{lkh}(solver, instance, seed = as.integer(ceiling(runif(1L) *
-  2^15)), cutoff.time = NULL, opt.tour.length = NULL,
-  max.trials = NULL, with.restarts = FALSE, full.matrix = FALSE,
-  verbose = FALSE, log.trajectory = TRUE, work.dir = NULL,
-  output.files.prefix = NULL, keep.output.files = FALSE,
-  more.args = list(), ...)
+\method{run}{lkh}(
+  solver,
+  instance,
+  seed = as.integer(ceiling(runif(1L) * 2^15)),
+  cutoff.time = NULL,
+  opt.tour.length = NULL,
+  max.trials = NULL,
+  with.restarts = FALSE,
+  full.matrix = FALSE,
+  verbose = FALSE,
+  log.trajectory = TRUE,
+  work.dir = NULL,
+  output.files.prefix = NULL,
+  keep.output.files = FALSE,
+  more.args = list(),
+  ...
+)
 }
 \arguments{
 \item{solver}{[\code{TSPSolver}]\cr

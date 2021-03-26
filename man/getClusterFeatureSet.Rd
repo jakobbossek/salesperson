@@ -4,7 +4,13 @@
 \alias{getClusterFeatureSet}
 \title{Feature: statistics of the minimum spanning tree edges.}
 \usage{
-getClusterFeatureSet(x, epsilon = 0.01, include.costs = FALSE, ...)
+getClusterFeatureSet(
+  x,
+  epsilon = 0.01,
+  include.costs = FALSE,
+  normalize = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

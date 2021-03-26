@@ -5,11 +5,13 @@
 # @param type [character(1)]
 #   Type of statistics.
 # @return [list]
-computeStatisticsOnNumericVector = function(x, type) {
+computeStatisticsOnNumericVector = function(x, type, normalize = FALSE) {
   x.mean = mean(x)
   x.sd = sd(x)
   x.min = min(x)
   x.max = max(x)
+  x.var.norm = NA
+
   feats = list(
     "mean" = x.mean,
     "sd" = x.sd,
@@ -22,6 +24,16 @@ computeStatisticsOnNumericVector = function(x, type) {
     "span" = x.max - x.min,
     "skew" = skew(x)
   )
+  if (normalize) {
+    feats$norm_var = NA
+    if (x.min > 0) {
+      x.harm.mean = 1 / mean(1 / x)
+      x.var.upper = (x.max * (x.mean - x.harm.mean) * (x.max - x.mean)) / (x.max - x.harm.mean)
+      x.var.lower = (x.min * (x.mean - x.harm.mean) * (x.mean - x.min)) / (x.harm.mean - x.min)
+      x.var.norm = normalizeFeature(var(x) * (length(x) - 1) / length(x), x.var.upper, x.var.lower)
+      feats$norm_var = x.var.norm
+    }
+  }
   names(feats) = paste(type, names(feats), sep = "_")
   return(feats)
 }

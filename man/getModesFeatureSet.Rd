@@ -4,7 +4,7 @@
 \alias{getModesFeatureSet}
 \title{Feature: modes features.}
 \usage{
-getModesFeatureSet(x, include.costs = FALSE, ...)
+getModesFeatureSet(x, include.costs = FALSE, normalize = FALSE, ...)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr

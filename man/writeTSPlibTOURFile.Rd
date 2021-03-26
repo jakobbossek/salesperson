@@ -4,8 +4,13 @@
 \alias{writeTSPlibTOURFile}
 \title{Export tour.}
 \usage{
-writeTSPlibTOURFile(file.path, instance = NULL, n = NULL,
-  name = "Some tour", tour)
+writeTSPlibTOURFile(
+  file.path,
+  instance = NULL,
+  n = NULL,
+  name = "Some tour",
+  tour
+)
 }
 \arguments{
 \item{file.path}{[\code{character(1)}]\cr

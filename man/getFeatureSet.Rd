@@ -4,9 +4,14 @@
 \alias{getFeatureSet}
 \title{Feature: all features.}
 \usage{
-getFeatureSet(x, black.list = character(0), include.costs = FALSE,
+getFeatureSet(
+  x,
+  black.list = character(0),
+  include.costs = FALSE,
+  normalize = FALSE,
   drop.duplicates = TRUE,
-  feature.fun.args = getDefaultFeatureFunArgs())
+  feature.fun.args = getDefaultFeatureFunArgs()
+)
 }
 \arguments{
 \item{x}{[\code{Network}]\cr
@@ -19,6 +24,12 @@ is the empty character vector.}
 \item{include.costs}{[\code{logical(1)}]\cr
 Include the times needed to compute the specific feature sets as additional
 features? Default is \code{FALSE}. Time is measured via \code{proc.time}.}
+
+\item{normalize}{[\code{logical(1)}]\cr
+Calculate the normalization for the features instead of the unnormalized values? 
+Not for all features normalizations are available, i.e. the skew, the sd 
+and the varcoeff features as well as the VRP features are not normalized.
+The default is \code{FALSE}.}
 
 \item{drop.duplicates}{[\code{logical(1)}]\cr
 Should duplicate nodes be deleted?

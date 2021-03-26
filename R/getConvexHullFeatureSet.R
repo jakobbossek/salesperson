@@ -13,7 +13,7 @@
 #' @template arg_dots
 #' @return [\code{list}]
 #' @export
-getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE, ...) {
+getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE, normalize = FALSE, ...) {
   assertClass(x, "Network")
   assertSubset(feature.set, choices = c("points", "area", "edges", "dists"))
   if (is.null(feature.set))
@@ -36,7 +36,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE,
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullPointRatioFeatureSet(hull.list = hull.list)
+        getConvexHullPointRatioFeatureSet(hull.list = hull.list, normalize = normalize)
       }), "hull_points", include.costs)
     )
   }
@@ -46,7 +46,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE,
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullAreaFeatureSet(hull.list = hull.list)
+        getConvexHullAreaFeatureSet(hull.list = hull.list, normalize = normalize)
       }), "hull_area", include.costs)
     )
   }
@@ -56,7 +56,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE,
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullEdgeFeatureSet(x = x, hull.list = hull.list)
+        getConvexHullEdgeFeatureSet(x = x, hull.list = hull.list, normalize = normalize)
       }), "hull_edges", include.costs)
     )
   }
@@ -66,7 +66,7 @@ getConvexHullFeatureSet = function(x, feature.set = NULL, include.costs = FALSE,
     feats = c(
       feats,
       measureTime(expression({
-        getConvexHullDistanceFeatureSet(x = x, hull.list = hull.list)
+        getConvexHullDistanceFeatureSet(x = x, hull.list = hull.list, normalize = normalize)
       }), "hull_dists", include.costs)
     )
   }
@@ -87,21 +87,31 @@ getPointsOnConvexHull = function(x) {
 
 
 ## ratio of nodes that define the convex hull
-getConvexHullPointRatioFeatureSet = function(hull.list) {
+getConvexHullPointRatioFeatureSet = function(hull.list, normalize = FALSE) {
+  hull.points.ratio = length(hull.list$hull) / nrow(hull.list$coordinates)
+  if (normalize) {
+    return(list(
+      hull_points_ratio = normalizeFeature(hull.points.ratio, 1, 2 / nrow(hull.list$coordinates))
+    ))
+  }
   list(
-    hull_points_ratio = length(hull.list$hull) / nrow(hull.list$coordinates)
+    hull_points_ratio = hull.points.ratio
   )
 }
 
 ## area of the convex hull
-getConvexHullAreaFeatureSet = function(hull.list) {
-  list(
-    hull_area = splancs::areapl(hull.list$coordinates[hull.list$hull, ])
-  )
+getConvexHullAreaFeatureSet = function(hull.list, normalize = FALSE) {
+  area = splancs::areapl(hull.list$coordinates[hull.list$hull, ])
+  if (normalize) {
+    return(list(
+      hull_area = normalizeFeature(area, getWidth(hull.list$coordinates) * getHeight(hull.list$coordinates))
+    ))
+  }
+  list(hull_area = area)
 }
 
 ## summary statistics of the lengths of the hull's *edges*
-getConvexHullEdgeFeatureSet = function(x, hull.list) {
+getConvexHullEdgeFeatureSet = function(x, hull.list, normalize = FALSE) {
   ## city indices for round trip along the hull
   hull.tour = c(hull.list$hull, hull.list$hull[1L])
 
@@ -109,14 +119,34 @@ getConvexHullEdgeFeatureSet = function(x, hull.list) {
   hull.edges = unlist(lapply(seq_along(hull.list$hull), function(i) {
     x$distance.matrix[hull.tour[i], hull.tour[i + 1L]]
   }))
-
+  
   # See Table I in Pihera and Musliu Features
-  computeStatisticsOnNumericVector(hull.edges, "hull_edges")
+  width = getWidth(hull.list$coordinates)
+  height = getHeight(hull.list$coordinates)
+  n.cities = nrow(hull.list$coordinates)
+  a = max(width, height)
+  b = min(width, height)
+  statistics.on.the.hull.edges = computeStatisticsOnNumericVector(hull.edges, "hull_edges", normalize = normalize)
+  if (!normalize) {
+    return(statistics.on.the.hull.edges)
+  }
+  list(
+    "hull_edges_mean" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_mean, (width + height + computeL2Norm(c(width, height))) / 3, computeL2Norm(c(width, height)) / n.cities),
+    "hull_edges_sd" = NA,
+    "hull_edges_var" = statistics.on.the.hull.edges$hull_edges_norm_var,
+    "hull_edges_median" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_median, computeL2Norm(c(width, height))),
+    "hull_edges_varcoeff" = NA,
+    "hull_edges_min" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_min, computeL2Norm(c(a, 2 * b - sqrt(3) * a))),
+    "hull_edges_max" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_max, computeL2Norm(c(width, height)), computeL2Norm(c(width, height)) / n.cities),
+    "hull_edges_span" = normalizeFeature(statistics.on.the.hull.edges$hull_edges_span, computeL2Norm(c(width, height))),
+    "hull_edges_skew" = NA
+  )
+  
 }
 
 
 ## summary statistics of *distances* from all points to the closest edge on the hull
-getConvexHullDistanceFeatureSet = function(x, hull.list) {
+getConvexHullDistanceFeatureSet = function(x, hull.list, normalize = FALSE) {
   ## city indices for round trip along the hull
   hull.tour = c(hull.list$hull, hull.list$hull[1L])
   n.hull = length(hull.list$hull)
@@ -164,11 +194,31 @@ getConvexHullDistanceFeatureSet = function(x, hull.list) {
   }, double(1L))
 
   ## See Table I in Pihera and Musliu Features
-  res = computeStatisticsOnNumericVector(hull.distances, "hull_dists")
+  res = computeStatisticsOnNumericVector(hull.distances, "hull_dists", normalize = normalize)
 
   ## in addition to Pihera and Musliu:
   ## ratio of points that are located on the hull (but do not necessarily define the hull)
-  res = c(res, "hull_dists_point_ratio" = mean(hull.distances == 0))
+
+  if (!normalize) { 
+    return(c(res, 
+             "hull_dists_point_ratio" = mean(hull.distances == 0))
+           )
+  }
+  width = getWidth(coords)
+  height = getHeight(coords)
+  min.asp = min(width, height)
+  n = nrow(coords)
+  res = list(
+          "hull_dists_mean" = normalizeFeature(res$hull_dists_mean, (min.asp / 2) * (n - 4) / n),
+          "hull_dists_sd" = NA,
+          "hull_dists_var" = res$hull_dists_norm_var,
+          "hull_dists_median" = normalizeFeature(res$hull_dists_median, min.asp / 2),
+          "hull_dists_varcoeff" = NA,
+          "hull_dists_min" = 0,
+          "hull_dists_max" = normalizeFeature(res$hull_dists_max, min.asp / 2),
+          "hull_dists_span" = normalizeFeature(res$hull_dists_span, min.asp / 2),
+          "hull_dists_skew" = NA,
+          "hull_dists_point_ratio" = normalizeFeature( mean(hull.distances == 0), 1, 3 / n))
 
   return(res)
 }
