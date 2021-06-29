@@ -17,3 +17,7 @@ TODO.md
 benchmark
 ^docs$
 todo
+^\.github$
+^codecov\.yml$
+^_pkgdown\.yml$
+^pkgdown$
