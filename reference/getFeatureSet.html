@@ -137,13 +137,13 @@ is the empty character vector.</p></td>
     </tr>
     <tr>
       <th>include.costs</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Include the times needed to compute the specific feature sets as additional
 features? Default is <code>FALSE</code>. Time is measured via <code>proc.time</code>.</p></td>
     </tr>
     <tr>
       <th>normalize</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Should the features be normalized?
 Note that normalization is not available for all features. E.g. skew, sd
 and varcoeff features as well as the VRP features are not normalized.
@@ -151,7 +151,7 @@ Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>drop.duplicates</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Should duplicate nodes be deleted?
 Duplicate node coordinates cause some angle features to be NA. Hence,
 it is better to drop those duplicates.
@@ -172,31 +172,37 @@ the sublists according to <a href='getAvailableFeatureSets.html'>getAvailableFea
   Named list of features.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='generateRandomNetwork.html'>generateRandomNetwork</a></span><span class='op'>(</span>n.points <span class='op'>=</span> <span class='fl'>50L</span><span class='op'>)</span>
-  <span class='co'># get all features available in salesperson with default parameters</span>
-  <span class='co'># Note that we always exclude the VRP problem specific VRP features, since</span>
-  <span class='co'># we are operating on a simple euclidean TSP instance without depots and</span>
-  <span class='co'># arrival times.</span>
-  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: igraph</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘igraph’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:BBmisc’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    normalize</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    decompose, spectrum</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    union</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: cccd</span></div><div class='input'>
-  <span class='co'># now include the costs of computing (in seconds) for each set of parameters</span>
-  <span class='co'># as additional features</span>
-  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span>, include.costs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-  <span class='co'># compute all but MST and distance features</span>
-  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"VRP"</span>, <span class='st'>"MST"</span>, <span class='st'>"Distance"</span><span class='op'>)</span><span class='op'>)</span>
-
-  <span class='co'># now set user-defined parameter values for cluster</span>
-  <span class='va'>args</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Cluster"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"epsilon"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span>, feature.fun.args <span class='op'>=</span> <span class='va'>args</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'>  <span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='generateRandomNetwork.html'>generateRandomNetwork</a></span><span class='op'>(</span>n.points <span class='op'>=</span> <span class='fl'>50L</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='co'># get all features available in salesperson with default parameters</span></span>
+<span class='r-in'>  <span class='co'># Note that we always exclude the VRP problem specific VRP features, since</span></span>
+<span class='r-in'>  <span class='co'># we are operating on a simple euclidean TSP instance without depots and</span></span>
+<span class='r-in'>  <span class='co'># arrival times.</span></span>
+<span class='r-in'>  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: igraph</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘igraph’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:BBmisc’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     normalize</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     decompose, spectrum</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:base’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     union</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: cccd</span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># now include the costs of computing (in seconds) for each set of parameters</span></span>
+<span class='r-in'>  <span class='co'># as additional features</span></span>
+<span class='r-in'>  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span>, include.costs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># compute all but MST and distance features</span></span>
+<span class='r-in'>  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"VRP"</span>, <span class='st'>"MST"</span>, <span class='st'>"Distance"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># now set user-defined parameter values for cluster</span></span>
+<span class='r-in'>  <span class='va'>args</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Cluster"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"epsilon"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.2</span>, <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>fs</span> <span class='op'>=</span> <span class='fu'>getFeatureSet</span><span class='op'>(</span><span class='va'>x</span>, black.list <span class='op'>=</span> <span class='st'>"VRP"</span>, feature.fun.args <span class='op'>=</span> <span class='va'>args</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

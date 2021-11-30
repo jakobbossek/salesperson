@@ -135,19 +135,19 @@ TSPSolver object.</p></td>
     </tr>
     <tr>
       <th>instance</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code>Network</code>]<br />
+      <td><p>[<code>character(1)</code> | <code>Network</code>]<br />
 Path to TSP instance in <a href='https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/'>TSPlib</a>
 format or <code>Network</code> object.</p></td>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Seed for the random numbers generator.
 Defaults to a random integer between 1 and \(2^15\).</p></td>
     </tr>
     <tr>
       <th>cutoff.time</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Maximal running time in seconds.
 Default is NULL, i.e., no cutoff time.</p></td>
     </tr>
@@ -161,19 +161,19 @@ tour is found or the cutoff time is reached.</p></td>
     </tr>
     <tr>
       <th>max.trials</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Maximal number of iterations.
 Default is the number of nodes of the instance.</p></td>
     </tr>
     <tr>
       <th>with.restarts</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Should LKH restart if a plateau is reached?
 Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>full.matrix</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Only relevant if <code>instance</code> is a <code>Network</code>.
 If <code>TRUE</code>, the network is exported to TSPlib format
 with explicit edge weight definition.
@@ -181,31 +181,31 @@ Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Should the output of the solver be printed?
 Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>log.trajectory</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Should the optimization progress be logged?
 Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>work.dir</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>]<br />
+      <td><p>[<code>character(1)</code>]<br />
 Path to working directory of the solver.
 Defaults to temporary directory via <code><a href='https://rdrr.io/r/base/tempfile.html'>tempfile()</a></code>.</p></td>
     </tr>
     <tr>
       <th>output.files.prefix</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>]<br />
+      <td><p>[<code>character(1)</code>]<br />
 Prefix for file names used by solver for storing output.
 Default is a randomly generated temporary prefix.</p></td>
     </tr>
     <tr>
       <th>keep.output.files</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>]<br />
+      <td><p>[<code>logical(1)</code>]<br />
 Flag indicating whether output files shall be kept or deleted.
 Default is <code>FALSE</code>, i.e., output files are processed and
 output is loaded into R object. Afterwards the output files are

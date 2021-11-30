@@ -125,17 +125,17 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n.points</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Number of points.</p></td>
     </tr>
     <tr>
       <th>n.dim</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Number of dimensions. Default ist 2.</p></td>
     </tr>
     <tr>
       <th>n.depots</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>]<br />
+      <td><p>[<code>integer(1)</code>]<br />
 Number of depots in instances for the Vehicle Routing Problem (VRP).
 Default is NULL, i. e., no depots. The proceeding is as follows:
 If <code>n.depots</code> is 1, a random cluster center is defined to be the depot.
@@ -145,17 +145,17 @@ matrix.</p></td>
     </tr>
     <tr>
       <th>lower</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code>]<br />
+      <td><p>[<code>numeric(1)</code>]<br />
 Lower box constraint of cube.</p></td>
     </tr>
     <tr>
       <th>upper</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/numeric.html'>numeric(1)</a></code>]<br />
+      <td><p>[<code>numeric(1)</code>]<br />
 Upper box constraint of cube. Default is 100.</p></td>
     </tr>
     <tr>
       <th>name</th>
-      <td><p>[<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> | <code>NULL</code>]<br />
+      <td><p>[<code>character(1)</code> | <code>NULL</code>]<br />
 Optional name for the generated network. Default is <code>NULL</code>. In this case
 a random name is generated.</p></td>
     </tr>
@@ -166,8 +166,8 @@ a random name is generated.</p></td>
     <p>[<code>Network</code>]</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'>generateRandomNetwork</span><span class='op'>(</span>n.points <span class='op'>=</span> <span class='fl'>100L</span>, n.depots <span class='op'>=</span> <span class='fl'>2L</span>, upper <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'>generateRandomNetwork</span><span class='op'>(</span>n.points <span class='op'>=</span> <span class='fl'>100L</span>, n.depots <span class='op'>=</span> <span class='fl'>2L</span>, upper <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
