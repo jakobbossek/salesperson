@@ -52,7 +52,7 @@ getMSTFeatureSet2 = function(x, normalize = FALSE) {
     "mst_dists_mean" = normalizeFeature(statistics.on.mst.dists$mst_dists_mean, d.max, computeL2Norm(c(width, height)) / (n.cities - 1)),
     "mst_dists_sd" = NA,
     "mst_dists_var" = statistics.on.mst.dists$mst_dists_norm_var,
-    "mst_dists_median" = normalizeFeature(statistics.on.mst.dists$mst_dists_median, d.max),
+    "mst_dists_median" = normalizeFeature(statistics.on.mst.dists$mst_dists_median, getDMax(x$coordinates, ceiling(n.cities / 2) + 1)),
     "mst_dists_varcoeff" = NA,
     "mst_dists_min" = normalizeFeature(statistics.on.mst.dists$mst_dists_min, d.max),
     "mst_dists_max" = normalizeFeature(statistics.on.mst.dists$mst_dists_max, computeL2Norm(c(width, height)), computeL2Norm(c(width, height)) / (n.cities - 1)),

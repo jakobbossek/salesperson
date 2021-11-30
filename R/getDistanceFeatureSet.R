@@ -47,16 +47,23 @@ getDistanceFeatureSet = function(x, include.costs = FALSE, normalize = FALSE, ..
 
 
 
-# Get the maximal possible minimal distance of one city two another city
+# Get the maximal possible minimal distance of one city to another city
 #
 # @param coord [matrix]
-#   The coordinates matrix from the instance.
+#   The coordinate matrix of the instance.
+# @param n [numeric]
+#   The number of nodes that should be used for the calculation 
+#   if deviating from the number of nodes in the coordinate matrix. 
+#   If it is <= 1 (default) assume no deviation.
 # @return [numeric]
-getDMax = function(coord) {
+getDMax = function(coord, n = 0) {
   a = getWidth(coord)
   b = getHeight(coord)
-  p = a / 2 + b / (2 * sqrt(3))
-  n = nrow(coord)
-  r.max = (p + sqrt(p ** 2 + 4 * n * a * b / (2 * sqrt(3)))) / (2 * n)
+  if(n <= 1){
+    n = nrow(coord)
+  }
+  p = (a + b) / 2
+  r.max = (p + sqrt(p ** 2 + 4 * (n - 1) * a * b / (2 * sqrt(3)))) / (2 * (n - 1))
   return(2 * r.max)
 }
+
